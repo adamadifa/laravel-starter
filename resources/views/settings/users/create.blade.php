@@ -5,6 +5,7 @@
     <x-input-with-icon icon="ti ti-mail" label="Email" name="email" />
     <x-input-with-icon icon="ti ti-key" label="Password" name="password" type="password" />
     <x-select label="Role" name="role" :data="$roles" key="name" textShow="name" />
+    <x-select label="Unit" name="kode_unit" :data="$unit" key="kode_unit" textShow="nama_unit" upperCase="true" />
     <div class="form-group">
         <button class="btn btn-primary w-100" type="submit">
             <ion-icon name="send-outline" class="me-1"></ion-icon>

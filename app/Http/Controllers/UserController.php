@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -10,16 +11,20 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('roles')->paginate(10);
+        $query = User::query();
+        $query->with('roles');
+        $query->leftjoin('unit', 'users.kode_unit', '=', 'unit.kode_unit');
+        $users = $query->paginate(10);
         return view('settings.users.index', compact('users'));
     }
 
     public function create()
     {
         $roles = Role::orderBy('name')->get();
-        return view('settings.users.create', compact('roles'));
+        $unit = Unit::orderBy('kode_unit')->get();
+        return view('settings.users.create', compact('roles', 'unit'));
     }
 
     public function edit($id)
@@ -27,7 +32,8 @@ class UserController extends Controller
         $id = Crypt::decrypt($id);
         $user = User::with('roles')->where('id', $id)->first();
         $roles = Role::orderBy('name')->get();
-        return view('settings.users.edit', compact('user', 'roles'));
+        $unit = Unit::orderBy('kode_unit')->get();
+        return view('settings.users.edit', compact('user', 'roles', 'unit'));
     }
 
     public function store(Request $request)
@@ -37,7 +43,8 @@ class UserController extends Controller
             'username' => 'required',
             'email' => 'required|email',
             'password' => 'required',
-            'role' => 'required'
+            'role' => 'required',
+            'kode_unit' => 'required',
         ]);
 
         try {
@@ -46,6 +53,7 @@ class UserController extends Controller
                 'username' => $request->username,
                 'email' => $request->email,
                 'password' => $request->password,
+                'kode_unit' => $request->kode_unit
             ]);
 
             $user->assignRole($request->role);
@@ -66,6 +74,7 @@ class UserController extends Controller
             'name' => 'required',
             'username' => 'required',
             'email' => 'required|email',
+            'kode_unit' => 'required'
         ]);
 
         try {
@@ -75,13 +84,15 @@ class UserController extends Controller
                     'name' => $request->name,
                     'username' => $request->username,
                     'email' => $request->email,
-                    'password' => bcrypt($request->password)
+                    'password' => bcrypt($request->password),
+                    'kode_unit' => $request->kode_unit,
                 ]);
             } else {
                 User::where('id', $id)->update([
                     'name' => $request->name,
                     'username' => $request->username,
                     'email' => $request->email,
+                    'kode_unit' => $request->kode_unit
                 ]);
             }
 

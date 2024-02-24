@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\Permission_groupController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
@@ -72,6 +73,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/users/{id}/edit', 'edit')->name('users.edit');
         Route::put('/users/{id}/update', 'update')->name('users.update');
         Route::delete('/users/{id}/delete', 'destroy')->name('users.delete');
+    });
+
+    Route::controller(KaryawanController::class)->group(function () {
+        Route::get('/karyawan', 'index')->name('karyawan.index')->can('karyawan.index');
+        Route::get('/karyawan/create', 'create')->name('karyawan.create')->can('karyawan.create');
+        Route::post('/karyawan', 'store')->name('karyawan.store')->can('karyawan.store');
+        Route::get('/karyawan/{npp}/edit', 'edit')->name('karyawan.edit')->can('karyawan.edit');
+        Route::get('/karyawan/{npp}/show', 'show')->name('karyawan.show')->can('karyawan.show');
+        Route::put('/karyawan/{npp}/update', 'update')->name('karyawan.update')->can('karyawan.update');
+        Route::delete('/karyawan/{npp}/delete', 'destroy')->name('karyawan.delete')->can('karyawan.delete');
     });
 });
 

@@ -40,6 +40,7 @@
                                         <th>Username</th>
                                         <th>Email</th>
                                         <th>Role</th>
+                                        <th>Unit</th>
                                         <th>#</th>
                                     </tr>
                                 </thead>
@@ -55,6 +56,7 @@
                                                     {{ ucwords($role->name) }}
                                                 @endforeach
                                             </td>
+                                            <td>{{ $d->nama_unit }}</td>
                                             <td>
                                                 <div class="d-flex">
                                                     <div>

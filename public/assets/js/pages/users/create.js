@@ -45,6 +45,14 @@
                             message: 'Silahkan Pilih Role'
                         }
                     }
+                },
+
+                kode_unit: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Unit Harus Dipilih'
+                        }
+                    }
                 }
 
 

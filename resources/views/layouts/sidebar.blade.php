@@ -4,9 +4,9 @@
      <div class="app-brand demo">
          <a href="index.html" class="app-brand-link">
              <span class="app-brand-logo demo">
-                 <img src="{{ asset('assets/img/logo/hibah.png') }}" alt="" width="64">
+                 <img src="{{ asset('assets/img/logo/persisalamin.png') }}" alt="" width="52">
              </span>
-             <span class="app-brand-text demo menu-text fw-bold"><i><b>e</b></i>Hibah</span>
+             <span class="app-brand-text demo menu-text fw-bold"><i><b></b></i>SIP 80</span>
          </a>
 
          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
@@ -16,9 +16,25 @@
      </div>
 
      <div class="menu-inner-shadow"></div>
-
      <ul class="menu-inner py-1">
-         <!-- Dashboards -->
+         <li class="menu-item {{ request()->is(['karyawan', 'karyawan/*']) ? 'open' : '' }}">
+             @if (auth()->user()->hasAnyPermission(['karyawan.index']))
+                 <a href="javascript:void(0);" class="menu-link menu-toggle">
+                     <i class="menu-icon tf-icons ti ti-database"></i>
+                     <div>Data Master</div>
+                 </a>
+                 <ul class="menu-sub">
+                     @can('karyawan.index')
+                         <li class="menu-item {{ request()->is(['karyawan', 'karyawan/*']) ? 'active' : '' }}">
+                             <a href="{{ route('karyawan.index') }}" class="menu-link">
+                                 <div>Karyawan</div>
+                             </a>
+                         </li>
+                     @endcan
+                 </ul>
+             @endif
+         </li>
+         <!-- Setting -->
          <li
              class="menu-item {{ request()->is([
                  'roles',
@@ -35,7 +51,7 @@
              <a href="javascript:void(0);" class="menu-link menu-toggle">
                  <i class="menu-icon tf-icons ti ti-settings"></i>
                  <div>Settings</div>
-                 <div class="badge bg-primary rounded-pill ms-auto">5</div>
+
              </a>
              <ul class="menu-sub">
                  <li class="menu-item {{ request()->is(['users', 'users/*']) ? 'active' : '' }}">
@@ -53,7 +69,8 @@
                          <div>Permission</div>
                      </a>
                  </li>
-                 <li class="menu-item  {{ request()->is(['permissiongroups', 'permissiongroups/*']) ? 'active' : '' }}">
+                 <li
+                     class="menu-item  {{ request()->is(['permissiongroups', 'permissiongroups/*']) ? 'active' : '' }}">
                      <a href="{{ route('permissiongroups.index') }}" class="menu-link">
                          <div>Group Permission</div>
                      </a>

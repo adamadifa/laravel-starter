@@ -31,6 +31,14 @@
                     }
                 },
 
+                kode_unit: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Unit Harus Dipilih'
+                        }
+                    }
+                }
+
 
 
 

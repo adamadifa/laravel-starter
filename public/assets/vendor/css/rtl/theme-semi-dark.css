@@ -127,8 +127,8 @@ a.bg-primary:hover, a.bg-primary:focus {
 
 .page-item.active .page-link,
 .pagination li.active > a:not(.page-link) {
-  border-color: #7367f0;
-  background-color: #7367f0;
+  border-color: #144725;
+  background-color: #144725;
   color: #fff;
 }
 
@@ -293,24 +293,24 @@ button.list-group-item-primary.active {
 
 .btn-primary {
   color: #fff;
-  background-color: #7367f0;
-  border-color: #7367f0;
+  background-color: #144725;
+  border-color: #135d2c;
 }
 .btn-primary:hover {
   color: #fff !important;
-  background-color: #685dd8 !important;
-  border-color: #685dd8 !important;
+  background-color: #28b858 !important;
+  border-color: #28b858 !important;
 }
 .btn-check:focus + .btn-primary, .btn-primary:focus, .btn-primary.focus {
   color: #fff;
-  background-color: #685dd8;
-  border-color: #685dd8;
+  background-color: #0f953c;
+  border-color: #0f953c;
   box-shadow: none;
 }
 .btn-check:checked + .btn-primary, .btn-check:active + .btn-primary, .btn-primary:active, .btn-primary.active, .btn-primary.show.dropdown-toggle, .show > .btn-primary.dropdown-toggle {
   color: #fff !important;
-  background-color: #685dd8 !important;
-  border-color: #685dd8 !important;
+  background-color: #0f953c !important;
+  border-color: #0f953c !important;
 }
 .btn-primary.disabled, .btn-primary:disabled {
   color: #fff !important;
@@ -1335,7 +1335,7 @@ li.ui-timepicker-selected,
 }
 
 .bg-menu-theme {
-  background-color: #242745 !important;
+  background-color: #144725 !important;
   color: #c9c8ce;
 }
 .bg-menu-theme.menu-horizontal {
@@ -1368,15 +1368,15 @@ li.ui-timepicker-selected,
   color: #dbdade;
 }
 .bg-menu-theme.menu-vertical .menu-item.active > .menu-link:not(.menu-toggle) {
-  background: linear-gradient(72.47deg, #7367f0 22.16%, rgba(115, 103, 240, 0.7) 76.47%);
-  box-shadow: 0px 2px 6px 0px rgba(115, 103, 240, 0.48);
+  background: linear-gradient(72.47deg, #ff9f43 22.16%, #e88322 76.47%);
+  box-shadow: 0px 2px 3px 0px #ff9f43;
   color: #fff !important;
 }
 [dir=rtl] .bg-menu-theme.menu-vertical .menu-item.active > .menu-link:not(.menu-toggle) {
   background: linear-gradient(72.47deg, rgba(115, 103, 240, 0.7) 22.16%, #7367f0 76.47%) !important;
 }
 .bg-menu-theme.menu-horizontal .menu-inner > .menu-item.active > .menu-link.menu-toggle {
-  background: linear-gradient(72.47deg, #7367f0 22.16%, rgba(115, 103, 240, 0.7) 76.47%);
+  background: linear-gradient(72.47deg, #144725 22.16%, rgba(85, 203, 132, 0.695) 76.47%);
   color: #fff !important;
   box-shadow: 0px 2px 6px 0px rgba(115, 103, 240, 0.48);
 }
@@ -1421,10 +1421,10 @@ li.ui-timepicker-selected,
 }
 
 .bg-menu-theme .menu-inner .menu-item.open > .menu-link.menu-toggle, .layout-menu-hover.layout-menu-collapsed .bg-menu-theme .menu-inner .menu-item.open > .menu-link.menu-toggle, .bg-menu-theme .menu-inner .menu-item.active > .menu-link.menu-toggle, .layout-menu-hover.layout-menu-collapsed .bg-menu-theme .menu-inner .menu-item.active > .menu-link.menu-toggle {
-  background: #2d3253;
+  background: #64cd868a;
 }
 html:not(.layout-menu-collapsed) .bg-menu-theme .menu-inner .menu-item:not(.active) > .menu-link:hover, .layout-menu-hover.layout-menu-collapsed .bg-menu-theme .menu-inner .menu-item:not(.active) > .menu-link:hover {
-  background: #2d3253;
+  background: #45d472c0;
 }
 .bg-menu-theme .menu-inner .menu-sub .menu-item:not(.active) > .menu-link::before {
   color: #a5a3ae !important;
