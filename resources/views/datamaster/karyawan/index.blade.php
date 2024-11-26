@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive mb-2">
-                            <table class="table table-striped table-hover">
+                            <table class="table table-striped table-hover table-bordered">
                                 <thead class="table-dark">
                                     <tr>
                                         <th>No.</th>
@@ -45,6 +45,7 @@
                                         <th>TMT</th>
                                         <th>No. HP</th>
                                         <th>Foto</th>
+                                        <th>PIN</th>
                                         <th>#</th>
                                     </tr>
                                 </thead>
@@ -81,6 +82,7 @@
                                                 @endif
 
                                             </td>
+                                            <td>{{ $d->pin }}</td>
                                             <td>
                                                 <div class="d-flex">
                                                     @can('karyawan.edit')
@@ -114,6 +116,7 @@
 
 
                                                 </div>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -136,15 +139,16 @@
 <script>
     $(function() {
         $("#btncreateKaryawan").click(function(e) {
+            e.preventDefault();
             $('#mdlcreateKaryawan').modal("show");
             $("#loadcreateKaryawan").load('/karyawan/create');
         });
 
         $(".editKaryawan").click(function(e) {
-            var id = $(this).attr("id");
+            var npp = $(this).attr("npp");
             e.preventDefault();
             $('#mdleditKaryawan').modal("show");
-            $("#loadeditKaryawan").load('/karyawan/' + id + '/edit');
+            $("#loadeditKaryawan").load('/karyawan/' + npp + '/edit');
         });
     });
 </script>

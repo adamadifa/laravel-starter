@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\Produk;
+use App\Models\Tutuplaporan;
+use Illuminate\Support\Facades\Redirect;
+
 function buatkode($nomor_terakhir, $kunci, $jumlah_karakter = 0)
 {
     /* mencari nomor baru dengan memecah nomor terakhir dan menambahkan 1
@@ -38,6 +42,14 @@ function textCamelCase($value)
 
 
 
+
+function getFotosiswa($file)
+{
+    $url = url('/storage/pelanggan/' . $file);
+    return $url;
+}
+
+
 function getfotoKaryawan($file)
 {
     $url = url('/storage/karyawan/' . $file);
@@ -47,7 +59,11 @@ function getfotoKaryawan($file)
 
 function toNumber($value)
 {
-    return str_replace(".", "", $value);
+    if (!empty($value)) {
+        return str_replace([".", ","], ["", "."], $value);
+    } else {
+        return 0;
+    }
 }
 
 
@@ -55,6 +71,29 @@ function formatRupiah($nilai)
 {
     return number_format($nilai, '0', ',', '.');
 }
+
+function formatAngka($nilai)
+{
+    if (!empty($nilai)) {
+        return number_format($nilai, '0', ',', '.');
+    }
+}
+
+
+function formatAngkaDesimal($nilai)
+{
+    if (!empty($nilai)) {
+        return number_format($nilai, '2', ',', '.');
+    }
+}
+
+function formatAngkaDesimal3($nilai)
+{
+    if (!empty($nilai)) {
+        return number_format($nilai, '3', ',', '.');
+    }
+}
+
 
 
 function DateToIndo($date2)

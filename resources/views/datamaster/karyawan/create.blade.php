@@ -17,7 +17,8 @@
             <x-input-with-icon-label icon="ti ti-map-pin" label="Tempat Lahir" name="tempat_lahir" />
         </div>
         <div class="col-lg-6 col-md-12 col-sm-12">
-            <x-input-with-icon-label icon="ti ti-calendar" label="Tanggal Lahir" name="tanggal_lahir" />
+            <x-input-with-icon-label icon="ti ti-calendar" label="Tanggal Lahir" name="tanggal_lahir"
+                datepicker="flatpickr-date" />
         </div>
     </div>
     <div class="form-group mb-3">
@@ -33,7 +34,7 @@
     <x-input-with-icon-label icon="ti ti-phone" label="No. HP" name="no_hp" />
     <x-textarea-label name="alamat_ktp" label="Alamat KTP" />
     <x-textarea-label name="alamat_tinggal" label="Alamat Tinggal" />
-    <x-input-with-icon-label icon="ti ti-calendar" label="TMT" name="tmt" />
+    <x-input-with-icon-label icon="ti ti-calendar" label="TMT" name="tmt" datepicker="flatpickr-date" />
     <div class="form-group mb-3">
         <label for="exampleFormControlInput1" style="font-weight: 600" class="form-label">Status Karyawan</label>
         <select name="status_karyawan" id="status_karyawan" class="form-select">
@@ -72,8 +73,15 @@
         </button>
     </div>
 </form>
-
+<script src="{{ asset('assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
 <script src="{{ asset('/assets/vendor/libs/@form-validation/umd/bundle/popular.min.js') }}"></script>
 <script src="{{ asset('/assets/vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js') }}"></script>
 <script src="{{ asset('/assets/vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js') }}"></script>
 <script src="{{ asset('assets/js/pages/karyawan/create.js') }}"></script>
+<script>
+    $(function() {
+        $(".flatpickr-date").flatpickr({
+
+        });
+    });
+</script>
