@@ -105,7 +105,7 @@
 <x-modal-form id="modalmutasi" size="" show="loadmodalmutasi" title="" />
 <x-modal-form id="modalrencanaspp" size="" show="loadmodalrencanaspp" title="" />
 <x-modal-form id="modaleditrencanaspp" size="" show="loadeditrencanaspp" title="" />
-<x-modal-form id="modalpembayaran" size="modal-xl" show="loadmodalpembayaran" title="" />
+<x-modal-form id="modalpembayaran" size="modal-lg" show="loadmodalpembayaran" title="" />
 @endsection
 @push('myscript')
 <script>
@@ -540,9 +540,8 @@
                 return false;
             } else {
                 let data = `<tr id="index_${kode_biaya+kode_jenis_biaya}">
-                <td>${no}</td>
                 <td>${jenis_biaya}</td>
-                <td class='text-end'>${jumlah}</td>
+                <td class='text-end jmlbayar'>${jumlah}</td>
                 <td>${keterangan}</td>
                 <td>
                     <input type="hidden" name="kode_biaya[]" value="${kode_biaya}" />
@@ -559,6 +558,7 @@
                 $(document).find("#formDetailbayar").find("#kode_biaya").val("").trigger("change");
                 $(document).find("#formDetailbayar").find("#jumlah").val("");
                 $(document).find("#formDetailbayar").find("#keterangan").val("");
+                hitungTotalBayar();
             }
         });
 
@@ -584,6 +584,14 @@
                 }
             });
         });
+
+        function hitungTotalBayar() {
+            let totalBayar = 0;
+            $(document).find(".jmlbayar").each(function() {
+                totalBayar += parseInt($(this).text().replace(/[^0-9]/g, ''));
+            });
+            $("#totalbayar").text(totalBayar);
+        }
     });
 </script>
 @endpush

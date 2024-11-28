@@ -30,7 +30,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <a href="#" id="btnTambahdetailbayar" class="btn btn-primary w-100"><i class="ti ti-plus"></i></a>
+            <a href="#" id="btnTambahdetailbayar" class="btn btn-primary w-100"><i class="ti ti-plus me-1"></i>Tambah</a>
         </div>
     </div>
 
@@ -39,7 +39,6 @@
             <table class="table table-bordered">
                 <thead class="table-dark">
                     <tr>
-                        <th>No</th>
                         <th>Jenis Biaya</th>
                         <th>Jumlah</th>
                         <th>Keterangan</th>
@@ -47,6 +46,14 @@
                     </tr>
                 </thead>
                 <tbody id="detailbayar"></tbody>
+                <tfoot class="table-dark">
+                    <tr>
+                        <td class="text-end">Total Bayar</td>
+                        <td class="text-end" id="totalbayar"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
