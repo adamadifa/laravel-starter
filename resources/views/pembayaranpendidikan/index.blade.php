@@ -139,6 +139,7 @@
                     $('#loadmodal').html(response);
                     getbiaya(no_pendaftaran);
                     getrencanaspp(no_pendaftaran);
+                    gethistoribayar(no_pendaftaran);
 
                 },
                 error: function(error) {
@@ -581,16 +582,156 @@
                 /* Read more about isConfirmed, isDenied below */
                 if (result.isConfirmed) {
                     $(document).find(`#index_${key}`).remove();
+                    hitungTotalBayar();
                 }
             });
         });
+
+
+        $(document).on('click', '.btnDeletebayar', function(e) {
+            e.preventDefault();
+            let key = $(this).attr("key");
+            event.preventDefault();
+            Swal.fire({
+                title: `Apakah Anda Yakin Ingin Menghapus Data Ini ?`,
+                text: "Jika dihapus maka data akan hilang permanent.",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                showCancelButton: true,
+                confirmButtonColor: "#554bbb",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Hapus Saja!"
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ route('pembayaranpendidikan.delete') }}",
+                        data: {
+                            '_token': "{{ csrf_token() }}",
+                            'no_bukti': key
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: 'Data Berhasil Dihapus',
+                                didClose: (e) => {
+                                    gethistoribayar(response.no_pendaftaran);
+                                }
+                            })
+                        },
+                        error: function(response) {
+                            Swal.fire({
+                                title: "Error!",
+                                text: response.responseJSON.message,
+                                icon: "error",
+                                showConfirmButton: true,
+                                didClose: (e) => {
+
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        function convertToRupiah(number) {
+            if (number) {
+                var rupiah = "";
+                var numberrev = number
+                    .toString()
+                    .split("")
+                    .reverse()
+                    .join("");
+                for (var i = 0; i < numberrev.length; i++)
+                    if (i % 3 == 0) rupiah += numberrev.substr(i, 3) + ".";
+                return (
+                    rupiah
+                    .split("", rupiah.length - 1)
+                    .reverse()
+                    .join("")
+                );
+            } else {
+                return number;
+            }
+        }
 
         function hitungTotalBayar() {
             let totalBayar = 0;
             $(document).find(".jmlbayar").each(function() {
                 totalBayar += parseInt($(this).text().replace(/[^0-9]/g, ''));
             });
-            $("#totalbayar").text(totalBayar);
+            $("#totalbayar").text(convertToRupiah(totalBayar));
+        }
+
+        $(document).on('submit', '#formDetailbayar', function(e) {
+            e.preventDefault();
+            let tanggal = $(this).find("#tanggal").val();
+            let cekdetail = $(this).find('#tableDetailbayar').find('#detailbayar tr').length;
+            if (tanggal == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Tanggal tidak boleh kosong!',
+                    didClose: (e) => {
+                        $(this).find("#tanggal").focus();
+                    }
+                });
+                return false;
+            } else if (cekdetail == 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Detail Bayar tidak boleh kosong!',
+                    didClose: (e) => {
+                        $(this).find("#kode_biaya").focus();
+                    }
+                });
+                return false;
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('pembayaranpendidikan.store') }}",
+                    cache: false,
+                    data: $(this).serialize(),
+                    success: function(respond) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: respond.message,
+                            didClose: (e) => {
+                                $("#modalpembayaran").modal("hide");
+                                gethistoribayar(respond.no_pendaftaran);
+                            }
+                        });
+                    },
+                    error: function(respond) {
+                        Swal.fire({
+                            title: "Error!",
+                            text: respond.responseJSON.message,
+                            icon: "error",
+                            showConfirmButton: true,
+                            didClose: (e) => {
+                                $("#modalpembayaran").modal("hide");
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        function gethistoribayar(no_pendaftaran) {
+            $.ajax({
+                type: 'GET',
+                url: `/pembayaranpendidikan/${no_pendaftaran}/gethistoribayar`,
+                cache: false,
+                success: function(res) {
+                    $(document).find("#tabelhistoribayar").html(res);
+                }
+            });
         }
     });
 </script>

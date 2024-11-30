@@ -1,5 +1,7 @@
-<form action="#" id="formDetailbayar">
-    <x-input-with-icon label="No. Bukti" icon="ti ti-barcode" name="no_bukti" placeholeder="Auto" disabled />
+<form action="#" id="formDetailbayar" method="POST">
+    @csrf
+    <input type="hidden" name="no_pendaftaran" value="{{ Crypt::encrypt($no_pendaftaran) }}">
+    <x-input-with-icon label="Auto" icon="ti ti-barcode" name="no_bukti" placeholeder="Auto" disabled />
     <x-input-with-icon label="Tanggal" icon="ti ti-calendar" name="tanggal" datepicker="flatpickr-date" />
     <hr>
 
@@ -10,7 +12,7 @@
                     <option value="">Pilih Biaya</option>
                     @foreach ($biaya as $d)
                         <option value="{{ $d->kode_jenis_biaya . '|' . $d->kode_biaya }}">{{ $d->jenis_biaya }}
-                            {{ $d->kode_jenis_biaya == 'B07' ? $d->tahun_ajaran : '' }}
+                            {{ in_array($d->kode_jenis_biaya, ['B01', 'B07']) ? $d->tahun_ajaran : '' }}
                         </option>
                     @endforeach
                 </select>
@@ -30,13 +32,13 @@
     </div>
     <div class="row">
         <div class="col">
-            <a href="#" id="btnTambahdetailbayar" class="btn btn-primary w-100"><i class="ti ti-plus me-1"></i>Tambah</a>
+            <a href="#" id="btnTambahdetailbayar" class="btn btn-warning w-100"><i class="ti ti-plus me-1"></i>Tambah</a>
         </div>
     </div>
 
     <div class="row mt-3">
         <div class="col">
-            <table class="table table-bordered">
+            <table class="table table-bordered" id="tableDetailbayar">
                 <thead class="table-dark">
                     <tr>
                         <th>Jenis Biaya</th>
@@ -55,6 +57,11 @@
                     </tr>
                 </tfoot>
             </table>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <button class="btn btn-primary w-100" type="submit" id="btnSimpan"><i class="ti ti-send me-1"></i>Simpan</button>
         </div>
     </div>
 </form>

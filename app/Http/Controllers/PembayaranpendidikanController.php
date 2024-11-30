@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Biaya;
 use App\Models\Biayasiswa;
 use App\Models\Detailbiaya;
+use App\Models\Detailhistoribayarpendidikan;
+use App\Models\Detailrencanaspp;
+use App\Models\Historibayarpendidikan;
 use App\Models\Mutasipembayaranpendidikan;
 use App\Models\Pendaftaran;
 use App\Models\Potonganpendaftaran;
@@ -12,7 +15,9 @@ use App\Models\Siswa;
 use App\Models\Tahunajaran;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class PembayaranpendidikanController extends Controller
@@ -88,12 +93,22 @@ class PembayaranpendidikanController extends Controller
         //     ->orderBy('konfigurasi_biaya_detail.kode_jenis_biaya')
         //     ->get();
 
+        $historibayar = Detailhistoribayarpendidikan::where('no_pendaftaran', $no_pendaftaran)
+            ->join('pendidikan_historibayar', 'pendidikan_historibayar_detail.no_bukti', '=', 'pendidikan_historibayar.no_bukti')
+            ->select(
+                'no_pendaftaran',
+                'kode_biaya',
+                'kode_jenis_biaya',
+                DB::raw('SUM(jumlah) as jmlbayar')
+            )
+            ->groupBy('no_pendaftaran', 'kode_biaya', 'kode_jenis_biaya');
         $biaya = Biayasiswa::where('siswa_biaya.no_pendaftaran', $no_pendaftaran)
             ->select(
                 'konfigurasi_biaya_detail.*',
                 'pendaftaran_potongan.jumlah as jumlah_potongan',
                 'pembayaran_pendidikan_mutasi.jumlah as jumlah_mutasi',
                 'jenis_biaya',
+                'jmlbayar',
                 'tahun_ajaran'
             )
             ->join('konfigurasi_biaya', 'konfigurasi_biaya.kode_biaya', '=', 'siswa_biaya.kode_biaya')
@@ -109,6 +124,11 @@ class PembayaranpendidikanController extends Controller
                 $join->on('pembayaran_pendidikan_mutasi.kode_biaya', '=', 'konfigurasi_biaya.kode_biaya')
                     ->on('pembayaran_pendidikan_mutasi.kode_jenis_biaya', '=', 'konfigurasi_biaya_detail.kode_jenis_biaya')
                     ->on('pembayaran_pendidikan_mutasi.no_pendaftaran', '=', 'siswa_biaya.no_pendaftaran');
+            })
+            ->leftJoinSub($historibayar, 'historibayar', function ($join) {
+                $join->on('historibayar.no_pendaftaran', '=', 'siswa_biaya.no_pendaftaran')
+                    ->on('historibayar.kode_biaya', '=', 'konfigurasi_biaya.kode_biaya')
+                    ->on('historibayar.kode_jenis_biaya', '=', 'konfigurasi_biaya_detail.kode_jenis_biaya');
             })
             ->orderBy('konfigurasi_biaya.kode_biaya', 'asc')
             ->orderBy('konfigurasi_biaya_detail.kode_jenis_biaya', 'asc')
@@ -282,6 +302,160 @@ class PembayaranpendidikanController extends Controller
             ->orderBy('konfigurasi_biaya_detail.kode_jenis_biaya', 'asc')
             ->get();
         $data['biaya'] = $biaya;
+        $data['no_pendaftaran'] = $no_pendaftaran;
         return view('pembayaranpendidikan.create', $data);
+    }
+
+
+    public function store(Request $request)
+    {
+        $no_pendaftaran = Crypt::decrypt($request->no_pendaftaran);
+        $tahun = date('Y', strtotime($request->tanggal));
+        $bulan = date('m', strtotime($request->tanggal));
+        $kode_biaya = $request->kode_biaya;
+        $kode_jenis_biaya = $request->kode_jenis_biaya;
+        $jumlah = $request->jumlah;
+        $keterangan = $request->keterangan;
+
+        DB::beginTransaction();
+        try {
+            $lastpembayaran = Historibayarpendidikan::select('no_bukti')
+                ->whereRaw('MONTH(tanggal) = ' . $bulan . ' AND YEAR(tanggal) = ' . $tahun)
+                ->orderBy('no_bukti', 'desc')
+                ->first();
+            $last_no_bukti = $lastpembayaran ? $lastpembayaran->no_bukti : '';
+            $no_bukti = buatkode($last_no_bukti, substr($tahun, 2, 2) . $bulan, 5);
+            Historibayarpendidikan::create([
+                'no_bukti' => $no_bukti,
+                'tanggal' => $request->tanggal,
+                'no_pendaftaran' => $no_pendaftaran,
+                'id_user' => Auth::user()->id,
+            ]);
+            for ($i = 0; $i < count($kode_biaya); $i++) {
+                Detailhistoribayarpendidikan::create([
+                    'no_bukti' => $no_bukti,
+                    'kode_biaya' => $kode_biaya[$i],
+                    'kode_jenis_biaya' => $kode_jenis_biaya[$i],
+                    'jumlah' => toNumber($jumlah[$i]),
+                    'keterangan' => $keterangan[$i],
+                ]);
+
+                if ($kode_jenis_biaya[$i] == 'B07') {
+                    $rencana = Detailrencanaspp::join('spp_rencana', 'spp_rencana_detail.kode_rencana_spp', '=', 'spp_rencana.kode_rencana_spp')
+                        ->where('no_pendaftaran', $no_pendaftaran)
+                        ->where('kode_biaya', $kode_biaya[$i])
+                        ->whereRaw('jumlah != realisasi')
+                        ->orderBy('tahun', 'asc')
+                        ->orderBy('bulan', 'asc')
+                        ->get();
+
+                    $mulaibulan = Detailrencanaspp::join('spp_rencana', 'spp_rencana_detail.kode_rencana_spp', '=', 'spp_rencana.kode_rencana_spp')
+                        ->where('no_pendaftaran', $no_pendaftaran)
+                        ->where('kode_biaya', $kode_biaya[$i])
+                        ->whereRaw('jumlah != realisasi')
+                        ->orderBy('tahun', 'asc')
+                        ->orderBy('bulan', 'asc')
+                        ->first();
+
+                    // dd($mulaibulan);
+                    $sisa = $jumlah[$i];
+                    $cicilan = "";
+                    $a = $mulaibulan->cicilan_ke;
+                    foreach ($rencana as $d) {
+                        if ($sisa >= $d->jumlah) {
+                            Detailrencanaspp::where('kode_rencana_spp', $mulaibulan->kode_rencana_spp)
+                                ->where('cicilan_ke', $a)
+                                ->update([
+                                    'jumlah' => $d->jumlah
+                                ]);
+                            //$cicilan .=  $d->cicilan_ke . ",";
+                            $sisapercicilan = $d->jumlah - $d->realisasi;
+                            $sisa = $sisa - $sisapercicilan;
+
+                            if ($sisa == 0) {
+                                $cicilan .=  $d->cicilan_ke;
+                            } else {
+                                $cicilan .=  $d->cicilan_ke . ",";
+                            }
+
+                            $coba = $cicilan;
+                        } else {
+                            if ($sisa != 0) {
+                                $sisapercicilan = $d->jumlah - $d->realisasi;
+                                if ($d->bayar != 0) {
+                                    if ($sisa >= $sisapercicilan) {
+                                        Detailrencanaspp::where('kode_rencana_spp', $mulaibulan->kode_rencana_spp)
+                                            ->where('cicilan_ke', $a)
+                                            ->update([
+                                                'realisasi' =>  DB::raw('realisasi +' . $sisapercicilan)
+                                            ]);
+                                        $cicilan .= $d->cicilan_ke . ",";
+                                        $sisa = $sisa - $sisapercicilan;
+                                    } else {
+                                        Detailrencanaspp::where('kode_rencana_spp', $mulaibulan->kode_rencana_spp)
+                                            ->where('cicilan_ke', $a)
+                                            ->update([
+                                                'realisasi' =>  DB::raw('realisasi +' . $sisa)
+                                            ]);
+                                        //$cicilan .= $d->cicilan_ke . ",";
+                                        $sisa = $sisa - $sisa;
+                                        if ($sisa == 0) {
+                                            $cicilan .=  $d->cicilan_ke;
+                                        } else {
+                                            $cicilan .=  $d->cicilan_ke . ",";
+                                        }
+                                    }
+                                } else {
+                                    Detailrencanaspp::where('kode_rencana_spp', $mulaibulan->kode_rencana_spp)
+                                        ->where('cicilan_ke', $a)
+                                        ->update([
+                                            'realisasi' =>  DB::raw('realisasi +' . $sisa)
+                                        ]);
+                                    //$cicilan .= $d->cicilan_ke;
+                                    $sisa = $sisa - $sisa;
+                                    if ($sisa == 0) {
+                                        $cicilan .=  $d->cicilan_ke;
+                                    } else {
+                                        $cicilan .=  $d->cicilan_ke . ",";
+                                    }
+                                }
+                            }
+                        }
+                        $i++;
+                    }
+                }
+            }
+            DB::commit();
+            return response()->json(['success' => true, 'message' => 'Pembayaran berhasil ditambahkan', 'no_pendaftaran' => Crypt::encrypt($no_pendaftaran)], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Pembayaran gagal ditambahkan ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function gethistoribayar($no_pendaftaran)
+    {
+        $no_pendaftaran = Crypt::decrypt($no_pendaftaran);
+        $data['historibayar'] = Detailhistoribayarpendidikan::where('no_pendaftaran', $no_pendaftaran)
+            ->select('pendidikan_historibayar_detail.no_bukti', 'tanggal', 'name', DB::raw('SUM(jumlah) as jumlah'))
+            ->join('pendidikan_historibayar', 'pendidikan_historibayar_detail.no_bukti', '=', 'pendidikan_historibayar.no_bukti')
+            ->join('users', 'pendidikan_historibayar.id_user', '=', 'users.id')
+            ->groupBy('no_bukti', 'tanggal', 'name')
+            ->orderBy('no_bukti', 'desc')
+            ->get();
+        return view('pembayaranpendidikan.gethistoribayar', $data);
+    }
+
+    public function destroy(Request $request)
+    {
+        $no_bukti = Crypt::decrypt($request->no_bukti);
+        $pembayaran = Historibayarpendidikan::where('no_bukti', $no_bukti)->first();
+        try {
+            //code...
+            Historibayarpendidikan::where('no_bukti', $no_bukti)->delete();
+            return response()->json(['success' => true, 'message' => 'Pembayaran berhasil dihapus', 'no_pendaftaran' => Crypt::encrypt($pembayaran->no_pendaftaran)], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Pembayaran gagal dihapus ' . $e->getMessage()], 500);
+        }
     }
 }

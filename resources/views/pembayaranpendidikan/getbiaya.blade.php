@@ -13,7 +13,7 @@
         $total_biaya += $b->jumlah;
         $total_potongan += $b->jumlah_potongan;
         $total_biaya_bersih += $jumlah_biaya;
-        $sisa_tagihan = $jumlah_biaya - $b->jumlah_mutasi;
+        $sisa_tagihan = $jumlah_biaya - $b->jumlah_mutasi - $b->jmlbayar;
         $total_sisa_tagihan += $sisa_tagihan;
         $total_mutasi += $b->jumlah_mutasi;
     @endphp
@@ -64,7 +64,9 @@
                 </a>
             </td>
         @endif
-        <td></td>
+        <td class="text-end">
+            {{ formatAngka($b->jmlbayar) }}
+        </td>
         <td class="text-end">
             {{ formatAngka($sisa_tagihan) }}
         </td>

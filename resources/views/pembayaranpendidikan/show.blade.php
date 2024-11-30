@@ -81,7 +81,7 @@
                                 <th>Total</th>
                                 <th>Mutasi</th>
                                 <th>Bayar</th>
-                                <th>Sisa Tagihan</th>
+                                <th>Tagihan</th>
                             </tr>
                         </thead>
                         <tbody class="tabelbiaya"></tbody>
@@ -133,10 +133,11 @@
                                         <th>Tanggal</th>
                                         <th>Jumlah</th>
                                         <th>Keterangan</th>
+                                        <th>Petugas</th>
                                         <th>#</th>
                                     </tr>
                                 </thead>
-                                <tbody></tbody>
+                                <tbody id="tabelhistoribayar"></tbody>
                             </table>
                         </div>
                     </div>
