@@ -619,6 +619,8 @@
                                 text: 'Data Berhasil Dihapus',
                                 didClose: (e) => {
                                     gethistoribayar(response.no_pendaftaran);
+                                    getbiaya(response.no_pendaftaran);
+                                    getrencanaspp(response.no_pendaftaran);
                                 }
                             })
                         },
@@ -671,6 +673,7 @@
             e.preventDefault();
             let tanggal = $(this).find("#tanggal").val();
             let cekdetail = $(this).find('#tableDetailbayar').find('#detailbayar tr').length;
+
             if (tanggal == "") {
                 Swal.fire({
                     icon: 'warning',
@@ -692,6 +695,9 @@
                 });
                 return false;
             } else {
+                $(this).find("#btnSimpan").prop('disabled', true);
+                $(this).find("#btnSimpan").html(
+                    '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Loading...');
                 $.ajax({
                     type: "POST",
                     url: "{{ route('pembayaranpendidikan.store') }}",
@@ -705,18 +711,19 @@
                             didClose: (e) => {
                                 $("#modalpembayaran").modal("hide");
                                 gethistoribayar(respond.no_pendaftaran);
+                                getrencanaspp(respond.no_pendaftaran);
+                                getbiaya(respond.no_pendaftaran);
+
                             }
                         });
                     },
                     error: function(respond) {
+                        $(this).find("#btnSimpan").prop('disabled', false);
                         Swal.fire({
                             title: "Error!",
                             text: respond.responseJSON.message,
                             icon: "error",
                             showConfirmButton: true,
-                            didClose: (e) => {
-                                $("#modalpembayaran").modal("hide");
-                            }
                         });
                     }
                 });

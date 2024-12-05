@@ -89,5 +89,20 @@
             });
         }
 
+
+        function getsisatagihan() {
+            let biaya = $("#formDetailbayar").find("#kode_biaya").val().split("|");
+            let kode_jenis_biaya = biaya[0];
+            let kode_biaya = biaya[1];
+            let no_pendaftaran = $("#formDetailbayar").find("#no_pendaftaran").val();
+
+            alert(kode_jenis_biaya);
+
+        }
+
+        $("#kode_biaya").change(function() {
+            getsisatagihan();
+        })
+
     });
 </script>

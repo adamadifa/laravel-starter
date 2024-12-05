@@ -24,8 +24,13 @@
     <tr>
         <td>{{ $listbulan[$d->bulan] }} {{ $d->tahun }}</td>
         <td class="text-end">{{ formatAngka($d->jumlah) }}</td>
-        <td></td>
-        <td></td>
+        <td class="text-end">{{ formatAngka($d->realisasi) }}</td>
+        <td class="text-end">
+            @php
+                $sisa_tagihan = $d->jumlah - $d->realisasi;
+            @endphp
+            {{ formatAngka($sisa_tagihan) }}
+        </td>
         <td>{{ date('d-m-Y', strtotime($jatuh_tempo)) }}</td>
     </tr>
 
