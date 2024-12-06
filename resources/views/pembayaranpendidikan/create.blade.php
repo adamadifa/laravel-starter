@@ -1,6 +1,6 @@
 <form action="#" id="formDetailbayar" method="POST">
     @csrf
-    <input type="hidden" name="no_pendaftaran" value="{{ Crypt::encrypt($no_pendaftaran) }}">
+    <input type="hidden" name="no_pendaftaran" id="no_pendaftaran" value="{{ Crypt::encrypt($no_pendaftaran) }}">
     <x-input-with-icon label="Auto" icon="ti ti-barcode" name="no_bukti" placeholeder="Auto" disabled />
     <x-input-with-icon label="Tanggal" icon="ti ti-calendar" name="tanggal" datepicker="flatpickr-date" />
     <hr>
@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="col">
-            <x-input-with-icon label="Sisa Tagihan" icon="ti ti-moneybag" name="sisa_tagihan" money="true" textalign="right" />
+            <x-input-with-icon label="Sisa Tagihan" icon="ti ti-moneybag" name="sisa_tagihan" disabled="true" money="true" textalign="right" />
         </div>
         <div class="col">
             <x-input-with-icon label="Jumlah Bayar" icon="ti ti-moneybag" name="jumlah" money="true" textalign="right" />
@@ -72,6 +72,28 @@
 </style>
 <script>
     $(function() {
+        let sisatagihan;
+
+        function convertToRupiah(number) {
+            if (number) {
+                var rupiah = "";
+                var numberrev = number
+                    .toString()
+                    .split("")
+                    .reverse()
+                    .join("");
+                for (var i = 0; i < numberrev.length; i++)
+                    if (i % 3 == 0) rupiah += numberrev.substr(i, 3) + ".";
+                return (
+                    rupiah
+                    .split("", rupiah.length - 1)
+                    .reverse()
+                    .join("")
+                );
+            } else {
+                return number;
+            }
+        }
         $("#jumlah").maskMoney();
         $(".flatpickr-date").flatpickr({
 
@@ -96,12 +118,30 @@
             let kode_biaya = biaya[1];
             let no_pendaftaran = $("#formDetailbayar").find("#no_pendaftaran").val();
 
-            alert(kode_jenis_biaya);
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('pembayaranpendidikan.getsisatagihan') }}",
+                cache: false,
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    no_pendaftaran: no_pendaftaran,
+                    kode_jenis_biaya: kode_jenis_biaya,
+                    kode_biaya: kode_biaya
+                },
+                success: function(data) {
+                    $("#formDetailbayar").find("#sisa_tagihan").val(convertToRupiah(data.sisatagihan));
+                    sisatagihan = data.sisatagihan;
+                }
+            });
+
 
         }
 
         $("#kode_biaya").change(function() {
-            getsisatagihan();
+            if ($(this).val() != "") {
+                getsisatagihan();
+            }
         })
 
     });

@@ -316,6 +316,8 @@ class PembayaranpendidikanController extends Controller
         $kode_jenis_biaya = $request->kode_jenis_biaya;
         $jumlah = $request->jumlah;
         $keterangan = $request->keterangan;
+        $cicilan = "";
+        $listbln = "";
         $nama_bulan = [
             '',
             'Januari',
@@ -369,8 +371,7 @@ class PembayaranpendidikanController extends Controller
 
                     // dd($mulaibulan);
                     $sisa = toNumber($jumlah[$i]);
-                    $cicilan = "";
-                    $listbln = "";
+
                     $a = $mulaibulan->cicilan_ke;
 
                     foreach ($rencana as $d) {
@@ -381,7 +382,7 @@ class PembayaranpendidikanController extends Controller
                                 ->update([
                                     'realisasi' => $d->jumlah
                                 ]);
-                            //$cicilan .=  $d->cicilan_ke . ",";
+                            //$cicilan .=  $d->cicilan_ke . ", ";
                             $sisapercicilan = $d->jumlah - $d->realisasi; //0
                             $sisa = $sisa - $sisapercicilan;
 
@@ -389,8 +390,8 @@ class PembayaranpendidikanController extends Controller
                                 $cicilan .=  $d->cicilan_ke;
                                 $listbln .= $nama_bulan[$d->bulan];
                             } else {
-                                $cicilan .=  $d->cicilan_ke . ",";
-                                $listbln .= $nama_bulan[$d->bulan] . $ket . ",";
+                                $cicilan .=  $d->cicilan_ke . ", ";
+                                $listbln .= $nama_bulan[$d->bulan] . $ket . ", ";
                             }
 
                             $coba = $cicilan;
@@ -404,8 +405,8 @@ class PembayaranpendidikanController extends Controller
                                             ->update([
                                                 'realisasi' =>  DB::raw('realisasi +' . $sisapercicilan)
                                             ]);
-                                        $cicilan .= $d->cicilan_ke . ",";
-                                        $listbln .= $nama_bulan[$d->bulan] . ",";
+                                        $cicilan .= $d->cicilan_ke . ", ";
+                                        $listbln .= $nama_bulan[$d->bulan] . ", ";
                                         $sisa = $sisa - $sisapercicilan;
                                     } else {
                                         Detailrencanaspp::where('kode_rencana_spp', $mulaibulan->kode_rencana_spp)
@@ -413,14 +414,14 @@ class PembayaranpendidikanController extends Controller
                                             ->update([
                                                 'realisasi' =>  DB::raw('realisasi +' . $sisa)
                                             ]);
-                                        //$cicilan .= $d->cicilan_ke . ",";
+                                        //$cicilan .= $d->cicilan_ke . ", ";
                                         $sisa = $sisa - $sisa;
                                         if ($sisa == 0) {
                                             $cicilan .=  $d->cicilan_ke;
                                             $listbln .= $nama_bulan[$d->bulan] . "(Sebagian)";
                                         } else {
-                                            $cicilan .=  $d->cicilan_ke . ",";
-                                            $listbln .= $nama_bulan[$d->bulan] . ",";
+                                            $cicilan .=  $d->cicilan_ke . ", ";
+                                            $listbln .= $nama_bulan[$d->bulan] . ", ";
                                         }
                                     }
                                 } else {
@@ -435,14 +436,15 @@ class PembayaranpendidikanController extends Controller
                                         $cicilan .=  $d->cicilan_ke;
                                         $listbln .= $nama_bulan[$d->bulan] . "(Sebagian)";
                                     } else {
-                                        $cicilan .=  $d->cicilan_ke . ",";
-                                        $listbln .= $nama_bulan[$d->bulan] . ",";
+                                        $cicilan .=  $d->cicilan_ke . ", ";
+                                        $listbln .= $nama_bulan[$d->bulan] . ", ";
                                     }
                                 }
                             }
                         }
                         $a++;
                     }
+
                     Detailhistoribayarpendidikan::create([
                         'no_bukti' => $no_bukti,
                         'kode_biaya' => $kode_biaya[$i],
@@ -450,6 +452,14 @@ class PembayaranpendidikanController extends Controller
                         'jumlah' => toNumber($jumlah[$i]),
                         'keterangan' => $keterangan[$i] . " " . $listbln,
                         'cicilan_ke' => $cicilan
+                    ]);
+                } else {
+                    Detailhistoribayarpendidikan::create([
+                        'no_bukti' => $no_bukti,
+                        'kode_biaya' => $kode_biaya[$i],
+                        'kode_jenis_biaya' => $kode_jenis_biaya[$i],
+                        'jumlah' => toNumber($jumlah[$i]),
+                        'keterangan' => $keterangan[$i],
                     ]);
                 }
             }
@@ -538,5 +548,77 @@ class PembayaranpendidikanController extends Controller
             DB::rollBack();
             return response()->json(['success' => false, 'message' => 'Pembayaran gagal dihapus ' . $e->getMessage()], 500);
         }
+    }
+
+
+    public function getsisatagihan(Request $request)
+    {
+        $no_pendaftaran = Crypt::decrypt($request->no_pendaftaran);
+        $kode_biaya = $request->kode_biaya;
+        $kode_jenis_biaya = $request->kode_jenis_biaya;
+
+        $historibayar = Detailhistoribayarpendidikan::where('no_pendaftaran', $no_pendaftaran)
+            ->join('pendidikan_historibayar', 'pendidikan_historibayar_detail.no_bukti', '=', 'pendidikan_historibayar.no_bukti')
+            ->select(
+                'no_pendaftaran',
+                'kode_biaya',
+                'kode_jenis_biaya',
+                DB::raw('SUM(jumlah) as jmlbayar')
+            )
+            ->groupBy('no_pendaftaran', 'kode_biaya', 'kode_jenis_biaya');
+
+        $biaya = Biayasiswa::where('siswa_biaya.no_pendaftaran', $no_pendaftaran)
+            ->select(
+                'konfigurasi_biaya_detail.*',
+                'pendaftaran_potongan.jumlah as jumlah_potongan',
+                'pembayaran_pendidikan_mutasi.jumlah as jumlah_mutasi',
+                'jenis_biaya',
+                'jmlbayar',
+                'tahun_ajaran'
+            )
+            ->join('konfigurasi_biaya', 'konfigurasi_biaya.kode_biaya', '=', 'siswa_biaya.kode_biaya')
+            ->join('konfigurasi_biaya_detail', 'konfigurasi_biaya_detail.kode_biaya', '=', 'konfigurasi_biaya.kode_biaya')
+            ->join('jenis_biaya', 'jenis_biaya.kode_jenis_biaya', '=', 'konfigurasi_biaya_detail.kode_jenis_biaya')
+            ->join('konfigurasi_tahun_ajaran', 'konfigurasi_tahun_ajaran.kode_ta', '=', 'konfigurasi_biaya.kode_ta')
+            ->leftJoin('pendaftaran_potongan', function ($join) {
+                $join->on('pendaftaran_potongan.kode_biaya', '=', 'konfigurasi_biaya.kode_biaya')
+                    ->on('pendaftaran_potongan.kode_jenis_biaya', '=', 'konfigurasi_biaya_detail.kode_jenis_biaya')
+                    ->on('pendaftaran_potongan.no_pendaftaran', '=', 'siswa_biaya.no_pendaftaran');
+            })
+            ->leftJoin('pembayaran_pendidikan_mutasi', function ($join) {
+                $join->on('pembayaran_pendidikan_mutasi.kode_biaya', '=', 'konfigurasi_biaya.kode_biaya')
+                    ->on('pembayaran_pendidikan_mutasi.kode_jenis_biaya', '=', 'konfigurasi_biaya_detail.kode_jenis_biaya')
+                    ->on('pembayaran_pendidikan_mutasi.no_pendaftaran', '=', 'siswa_biaya.no_pendaftaran');
+            })
+            ->leftJoinSub($historibayar, 'historibayar', function ($join) {
+                $join->on('historibayar.no_pendaftaran', '=', 'siswa_biaya.no_pendaftaran')
+                    ->on('historibayar.kode_biaya', '=', 'konfigurasi_biaya.kode_biaya')
+                    ->on('historibayar.kode_jenis_biaya', '=', 'konfigurasi_biaya_detail.kode_jenis_biaya');
+            })
+
+            ->where('konfigurasi_biaya_detail.kode_biaya', $kode_biaya)
+            ->where('konfigurasi_biaya_detail.kode_jenis_biaya', $kode_jenis_biaya)
+            ->orderBy('konfigurasi_biaya.kode_biaya', 'asc')
+            ->orderBy('konfigurasi_biaya_detail.kode_jenis_biaya', 'asc')
+            ->first();
+
+        $sisatagihan = $biaya->jumlah - $biaya->jumlah_potongan - $biaya->jumlah_mutasi - $biaya->jmlbayar;
+
+        return response()->json(['success' => true, 'sisatagihan' => $sisatagihan], 200);
+    }
+
+    public function showdetailbayar($no_bukti)
+    {
+        $no_bukti = Crypt::decrypt($no_bukti);
+        $data['historibayar'] = Historibayarpendidikan::where('no_bukti', $no_bukti)
+            ->join('users', 'pendidikan_historibayar.id_user', '=', 'users.id')
+            ->first();
+        $data['detail'] = Detailhistoribayarpendidikan::where('no_bukti', $no_bukti)
+            ->join('jenis_biaya', 'pendidikan_historibayar_detail.kode_jenis_biaya', '=', 'jenis_biaya.kode_jenis_biaya')
+            ->join('konfigurasi_biaya', 'pendidikan_historibayar_detail.kode_biaya', '=', 'konfigurasi_biaya.kode_biaya')
+            ->join('konfigurasi_tahun_ajaran', 'konfigurasi_biaya.kode_ta', '=', 'konfigurasi_tahun_ajaran.kode_ta')
+            ->orderBy('pendidikan_historibayar_detail.kode_jenis_biaya', 'asc')
+            ->get();
+        return view('pembayaranpendidikan.showdetailbayar', $data);
     }
 }

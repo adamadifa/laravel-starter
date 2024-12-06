@@ -60,6 +60,13 @@
                             </a>
                         </li>
                     @endcan
+                    @can('departemen.index')
+                        <li class="menu-item {{ request()->is(['departemen', 'departemen/*']) ? 'active' : '' }}">
+                            <a href="{{ route('departemen.index') }}" class="menu-link">
+                                <div>Departemen</div>
+                            </a>
+                        </li>
+                    @endcan
                 </ul>
             @endif
         </li>

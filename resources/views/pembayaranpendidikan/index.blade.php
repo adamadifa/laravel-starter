@@ -106,6 +106,7 @@
 <x-modal-form id="modalrencanaspp" size="" show="loadmodalrencanaspp" title="" />
 <x-modal-form id="modaleditrencanaspp" size="" show="loadeditrencanaspp" title="" />
 <x-modal-form id="modalpembayaran" size="modal-lg" show="loadmodalpembayaran" title="" />
+<x-modal-form id="modalDetailbayar" size="modal-lg" show="loaddetailbayar" title="" />
 @endsection
 @push('myscript')
 <script>
@@ -506,8 +507,9 @@
             let kode_biaya = databiaya[1];
             let kode_jenis_biaya = databiaya[0];
             let jenis_biaya = $(document).find("#formDetailbayar").find("#kode_biaya option:selected").text();
-            let jumlah = $(document).find("#formDetailbayar").find("#jumlah").val();
+            let jumlah = $(document).find("#formDetailbayar").find("#jumlah").val().replace(/[^0-9]/g, '');
             let keterangan = $(document).find("#formDetailbayar").find("#keterangan").val();
+            let sisa_tagihan = $(document).find("#formDetailbayar").find("#sisa_tagihan").val().replace(/[^0-9]/g, '');
 
             if (biaya == "") {
                 Swal.fire({
@@ -529,6 +531,16 @@
                     }
                 });
                 return false;
+            } else if (parseInt(jumlah) > parseInt(sisa_tagihan)) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Jumlah melebihi sisa tagihan!',
+                    didClose: (e) => {
+                        $(document).find("#formDetailbayar").find("#jumlah").focus();
+                    }
+                });
+                return false;
             } else if ($(document).find(`#index_${kode_biaya+kode_jenis_biaya}`).length > 0) {
                 Swal.fire({
                     icon: 'warning',
@@ -542,7 +554,7 @@
             } else {
                 let data = `<tr id="index_${kode_biaya+kode_jenis_biaya}">
                 <td>${jenis_biaya}</td>
-                <td class='text-end jmlbayar'>${jumlah}</td>
+                <td class='text-end jmlbayar'>${convertToRupiah(jumlah)}</td>
                 <td>${keterangan}</td>
                 <td>
                     <input type="hidden" name="kode_biaya[]" value="${kode_biaya}" />
@@ -559,6 +571,8 @@
                 $(document).find("#formDetailbayar").find("#kode_biaya").val("").trigger("change");
                 $(document).find("#formDetailbayar").find("#jumlah").val("");
                 $(document).find("#formDetailbayar").find("#keterangan").val("");
+                $(document).find("#formDetailbayar").find("#sisa_tagihan").val("");
+
                 hitungTotalBayar();
             }
         });
@@ -638,6 +652,14 @@
                     });
                 }
             });
+        });
+        $(document).on('click', '.btnDetailbayar', function(e) {
+            let no_bukti = $(this).attr('no_bukti');
+            $("#modalDetailbayar").modal('show');
+            $("#loaddetailbayar").html(loading);
+            $("#modalDetailbayar").find(".modal-title").text("Detail Pembayaran");
+            $("#loaddetailbayar").load(`/pembayaranpendidikan/${no_bukti}/showdetailbayar`);
+
         });
 
         function convertToRupiah(number) {

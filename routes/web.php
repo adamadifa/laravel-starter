@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AsalsekolahController;
 use App\Http\Controllers\BiayaController;
+use App\Http\Controllers\DepartemenConroller;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\JamkerjaController;
@@ -134,6 +135,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/unit/gettingkatbyunit', 'gettingkatbyunit')->name('unit.gettingkatbyunit');
     });
 
+    Route::controller(DepartemenConroller::class)->group(function () {
+        Route::get('/departemen', 'index')->name('departemen.index')->can('departemen.index');
+        Route::get('/departemen/create', 'create')->name('departemen.create')->can('departemen.create');
+        Route::post('/departemen', 'store')->name('departemen.store')->can('departemen.store');
+        Route::get('/departemen/{kode_dept}/edit', 'edit')->name('departemen.edit')->can('departemen.edit');
+        Route::put('/departemen/{kode_dept}/update', 'update')->name('departemen.update')->can('departemen.update');
+        Route::delete('/departemen/{kode_dept}/delete', 'destroy')->name('departemen.delete')->can('departemen.delete');
+    });
+
 
     Route::controller(JenisbiayaController::class)->group(function () {
         Route::get('/jenisbiaya', 'index')->name('jenisbiaya.index')->can('jenisbiaya.index');
@@ -207,6 +217,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/pembayaranpendidikan/store', 'store')->name('pembayaranpendidikan.store')->can('pembayaranpdd.create');
         Route::get('/pembayaranpendidikan/{no_pendaftaran}/gethistoribayar', 'gethistoribayar')->name('pembayaranpendidikan.gethistoribayar')->can('pembayaranpdd.create');
         Route::post('/pembayaranpendidikan/delete', 'destroy')->name('pembayaranpendidikan.delete')->can('pembayaranpdd.delete');
+        Route::post('/pembayaranpendidikan/getsisatagihan', 'getsisatagihan')->name('pembayaranpendidikan.getsisatagihan')->can('pembayaranpdd.create');
+        Route::get('/pembayaranpendidikan/{no_bukti}/showdetailbayar', 'showdetailbayar')->name('pembayaranpendidikan.showdetailbayar')->can('pembayaranpdd.show');
     });
 
     Route::controller(RencanasppController::class)->group(function () {
