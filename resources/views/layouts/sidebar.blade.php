@@ -18,8 +18,8 @@
     <div class="menu-inner-shadow"></div>
     <ul class="menu-inner py-1">
         <li
-            class="menu-item {{ request()->is(['karyawan', 'karyawan/*', 'jabatan', 'jabatan/*', 'unit', 'unit/*', 'siswa', 'siswa/*', 'jenisbiaya']) ? 'open' : '' }}">
-            @if (auth()->user()->hasAnyPermission(['karyawan.index', 'jabatan.index', 'unit.index', 'jenisbiaya.index']))
+            class="menu-item {{ request()->is(['karyawan', 'karyawan/*', 'jabatan', 'jabatan/*', 'unit', 'unit/*', 'siswa', 'siswa/*', 'jenisbiaya', 'departemen', 'ledger']) ? 'open' : '' }}">
+            @if (auth()->user()->hasAnyPermission(['karyawan.index', 'jabatan.index', 'unit.index', 'jenisbiaya.index', 'departemen.index', 'ledger.index']))
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-database"></i>
                     <div>Data Master</div>
@@ -67,6 +67,13 @@
                             </a>
                         </li>
                     @endcan
+                    @can('ledger.index')
+                        <li class="menu-item {{ request()->is(['ledger', 'ledger/*']) ? 'active' : '' }}">
+                            <a href="{{ route('ledger.index') }}" class="menu-link">
+                                <div>Ledger</div>
+                            </a>
+                        </li>
+                    @endcan
                 </ul>
             @endif
         </li>
@@ -79,13 +86,34 @@
             </li>
         @endif
         @if (auth()->user()->hasAnyPermission(['pembayaranpdd.index']))
-            <li class="menu-item {{ request()->is(['pembayaranpendidikan']) ? 'active' : '' }}">
-                <a href="{{ route('pembayaranpendidikan.index') }}" class="menu-link">
+            <li class="menu-item {{ request()->is(['pembayaranpendidikan']) ? 'open' : '' }}">
+
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-moneybag"></i>
-                    <div>Pembayaran</div>
+                    <div>Keuangan</div>
                 </a>
+                <ul class="menu-sub">
+                    @if (auth()->user()->hasAnyPermission(['pembayaranpdd.index']))
+                        <li class="menu-item {{ request()->is(['pembayaranpendidikan']) ? 'active' : '' }}">
+                            <a href="{{ route('pembayaranpendidikan.index') }}" class="menu-link">
+                                <i class="menu-icon tf-icons ti ti-file-description"></i>
+                                <div>Pembayaran </div>
+                            </a>
+                        </li>
+                    @endif
+                    @if (auth()->user()->hasAnyPermission(['ledgertransaksi.index']))
+                        <li class="menu-item {{ request()->is(['ledgertransaksi']) ? 'active' : '' }}">
+                            <a href="{{ route('ledgertransaksi.index') }}" class="menu-link">
+                                <i class="menu-icon tf-icons ti ti-file-description"></i>
+                                <div>Mutasi Ledger </div>
+                            </a>
+                        </li>
+                    @endif
+                </ul>
+
             </li>
         @endif
+
         <!-- KONFIGURASI-->
         <li class="menu-item {{ request()->is(['jamkerja', 'jamkerja/*', 'tahunajaran', 'biaya']) ? 'open' : '' }}">
             @if (auth()->user()->hasAnyPermission(['jamkerja.index']))

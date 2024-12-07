@@ -16,37 +16,37 @@ class Departemenpermissionseeder extends Seeder
      */
     public function run(): void
     {
-        $permissiongroup = Permission_group::create([
+        $permissiongroup = Permission_group::firstOrCreate([
             'name' => 'Departemen'
         ]);
 
-        Permission::create([
+        Permission::firstOrCreate([
             'name' => 'departemen.index',
             'id_permission_group' => $permissiongroup->id
         ]);
 
-        Permission::create([
+        Permission::firstOrCreate([
             'name' => 'departemen.create',
             'id_permission_group' => $permissiongroup->id
         ]);
 
-        Permission::create([
+        Permission::firstOrCreate([
             'name' => 'departemen.edit',
             'id_permission_group' => $permissiongroup->id
         ]);
 
-        Permission::create([
+        Permission::firstOrCreate([
             'name' => 'departemen.store',
             'id_permission_group' => $permissiongroup->id
         ]);
 
-        Permission::create([
+        Permission::firstOrCreate([
             'name' => 'departemen.update',
             'id_permission_group' => $permissiongroup->id
         ]);
 
 
-        Permission::create([
+        Permission::firstOrCreate([
             'name' => 'departemen.delete',
             'id_permission_group' => $permissiongroup->id
         ]);
@@ -56,42 +56,42 @@ class Departemenpermissionseeder extends Seeder
         $role = Role::findById($roleID);
         $role->givePermissionTo($permissions);
 
-        Departemen::create([
+        Departemen::firstOrCreate([
             'kode_dept' => 'PDD',
             'nama_dept' => 'Pendidikan'
         ]);
 
-        Departemen::create([
+        Departemen::firstOrCreate([
             'kode_dept' => 'SDM',
             'nama_dept' => 'MSDM'
         ]);
 
-        Departemen::create([
+        Departemen::firstOrCreate([
             'kode_dept' => 'SPR',
             'nama_dept' => 'SARANA PRASARANA'
         ]);
 
-        Departemen::create([
+        Departemen::firstOrCreate([
             'kode_dept' => 'DKW',
             'nama_dept' => 'DAKWAH'
         ]);
 
-        Departemen::create([
+        Departemen::firstOrCreate([
             'kode_dept' => 'KEU',
             'nama_dept' => 'KEUANGAN'
         ]);
 
-        Departemen::create([
+        Departemen::firstOrCreate([
             'kode_dept' => 'EKM',
             'nama_dept' => 'EKONOMI'
         ]);
 
-        Departemen::create([
+        Departemen::firstOrCreate([
             'kode_dept' => 'HLO',
             'nama_dept' => 'HALO'
         ]);
 
-        Departemen::create([
+        Departemen::firstOrCreate([
             'kode_dept' => 'SKR',
             'nama_dept' => 'SEKRETARIAT'
         ]);

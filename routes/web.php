@@ -8,6 +8,10 @@ use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\JamkerjaController;
 use App\Http\Controllers\JenisbiayaController;
 use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\KategoripemasukanController;
+use App\Http\Controllers\KategoripengeluaranController;
+use App\Http\Controllers\LedgerController;
+use App\Http\Controllers\LedgertransaksiController;
 use App\Http\Controllers\PembayaranpendidikanController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\Permission_groupController;
@@ -17,6 +21,7 @@ use App\Http\Controllers\RegencyController;
 use App\Http\Controllers\RencanasppController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\SumberdanaController;
 use App\Http\Controllers\TahunajaranController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
@@ -144,6 +149,46 @@ Route::middleware('auth')->group(function () {
         Route::delete('/departemen/{kode_dept}/delete', 'destroy')->name('departemen.delete')->can('departemen.delete');
     });
 
+    Route::controller(LedgerController::class)->group(function () {
+        Route::get('/ledger', 'index')->name('ledger.index')->can('ledger.index');
+        Route::get('/ledger/create', 'create')->name('ledger.create')->can('ledger.create');
+        Route::post('/ledger', 'store')->name('ledger.store')->can('ledger.store');
+        Route::get('/ledger/{kode_ledger}/edit', 'edit')->name('ledger.edit')->can('ledger.edit');
+        Route::get('/ledger/{kode_ledger}/show', 'show')->name('ledger.show')->can('ledger.show');
+        Route::put('/ledger/{kode_ledger}/update', 'update')->name('ledger.update')->can('ledger.update');
+        Route::delete('/ledger/{kode_ledger}/delete', 'destroy')->name('ledger.delete')->can('ledger.delete');
+    });
+
+    Route::controller(LedgertransaksiController::class)->group(function () {
+        Route::get('/ledgertransaksi', 'index')->name('ledgertransaksi.index')->can('ledgertransaksi.index');
+        Route::get('/ledgertransaksi/create', 'create')->name('ledgertransaksi.create')->can('ledgertransaksi.create');
+        Route::post('/ledgertransaksi', 'store')->name('ledgertransaksi.store')->can('ledgertransaksi.store');
+        Route::get('/ledgertransaksi/{kode_ledgertransaksi}/edit', 'edit')->name('ledgertransaksi.edit')->can('ledgertransaksi.edit');
+        Route::get('/ledgertransaksi/{kode_ledgertransaksi}/show', 'show')->name('ledgertransaksi.show')->can('ledgertransaksi.show');
+        Route::put('/ledgertransaksi/{kode_ledgertransaksi}/update', 'update')->name('ledgertransaksi.update')->can('ledgertransaksi.update');
+        Route::delete('/ledgertransaksi/{kode_ledgertransaksi}/delete', 'destroy')->name('ledgertransaksi.delete')->can('ledgertransaksi.delete');
+    });
+
+    Route::controller(KategoripemasukanController::class)->group(function () {
+        Route::get('/kategoripemasukan', 'index')->name('kategoripemasukan.index')->can('kategoripemasukan.index');
+        Route::get('/kategoripemasukan/create', 'create')->name('kategoripemasukan.create')->can('kategoripemasukan.create');
+        Route::post('/kategoripemasukan', 'store')->name('kategoripemasukan.store')->can('kategoripemasukan.store');
+        Route::get('/kategoripemasukan/{kode_kategoripemasukan}/edit', 'edit')->name('kategoripemasukan.edit')->can('kategoripemasukan.edit');
+        Route::get('/kategoripemasukan/{kode_kategoripemasukan}/show', 'show')->name('kategoripemasukan.show')->can('kategoripemasukan.show');
+        Route::put('/kategoripemasukan/{kode_kategoripemasukan}/update', 'update')->name('kategoripemasukan.update')->can('kategoripemasukan.update');
+        Route::delete('/kategoripemasukan/{kode_kategoripemasukan}/delete', 'destroy')->name('kategoripemasukan.delete')->can('kategoripemasukan.delete');
+    });
+
+
+    Route::controller(KategoripengeluaranController::class)->group(function () {
+        Route::get('/kategoripengeluaran', 'index')->name('kategoripengeluaran.index')->can('kategoripengeluaran.index');
+        Route::get('/kategoripengeluaran/create', 'create')->name('kategoripengeluaran.create')->can('kategoripengeluaran.create');
+        Route::post('/kategoripengeluaran', 'store')->name('kategoripengeluaran.store')->can('kategoripengeluaran.store');
+        Route::get('/kategoripengeluaran/{kode_kategoripengeluaran}/edit', 'edit')->name('kategoripengeluaran.edit')->can('kategoripengeluaran.edit');
+        Route::get('/kategoripengeluaran/{kode_kategoripengeluaran}/show', 'show')->name('kategoripengeluaran.show')->can('kategoripengeluaran.show');
+        Route::put('/kategoripengeluaran/{kode_kategoripengeluaran}/update', 'update')->name('kategoripengeluaran.update')->can('kategoripengeluaran.update');
+        Route::delete('/kategoripengeluaran/{kode_kategoripengeluaran}/delete', 'destroy')->name('kategoripengeluaran.delete')->can('kategoripengeluaran.delete');
+    });
 
     Route::controller(JenisbiayaController::class)->group(function () {
         Route::get('/jenisbiaya', 'index')->name('jenisbiaya.index')->can('jenisbiaya.index');
