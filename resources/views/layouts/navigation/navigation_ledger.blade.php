@@ -1,9 +1,9 @@
 @if (auth()->user()->hasAnyPermission(['ledger.index', 'kategoripemasukan.index']))
     <ul class="nav nav-tabs" role="tablist">
 
-        @can('ledger.index')
+        @can('saldoawalledger.index')
             <li class="nav-item" role="presentation">
-                <a href="#" class="nav-link {{ request()->is(['saledger']) ? 'active' : '' }}">
+                <a href="{{ route('saldoawalledger.index') }}" class="nav-link {{ request()->is(['saldoawalledger']) ? 'active' : '' }}">
                     <i class="tf-icons ti ti-file-description ti-md me-1"></i> Saldo Awal
                 </a>
             </li>
@@ -16,20 +16,14 @@
                 </a>
             </li>
         @endcan
-        @can('kategoripemasukan.index')
+        @can('kategoriledger.index')
             <li class="nav-item" role="presentation">
-                <a href="{{ route('kategoripemasukan.index') }}" class="nav-link {{ request()->is(['kategoripemasukan']) ? 'active' : '' }}">
-                    <i class="tf-icons ti ti-file-description ti-md me-1"></i>Kategori Pemasukan
+                <a href="{{ route('kategoriledger.index') }}" class="nav-link {{ request()->is(['kategoriledger']) ? 'active' : '' }}">
+                    <i class="tf-icons ti ti-file-description ti-md me-1"></i>Kategori
                 </a>
             </li>
         @endcan
 
-        @can('kategoripengeluaran.index')
-            <li class="nav-item" role="presentation">
-                <a href="{{ route('kategoripengeluaran.index') }}" class="nav-link {{ request()->is(['kategoripengeluaran']) ? 'active' : '' }}">
-                    <i class="tf-icons ti ti-file-description ti-md me-1"></i>Kategori Pengeluaran
-                </a>
-            </li>
-        @endcan
+
     </ul>
 @endif

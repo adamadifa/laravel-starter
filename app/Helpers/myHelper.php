@@ -100,10 +100,18 @@ function DateToIndo($date2)
 { // fungsi atau method untuk mengubah tanggal ke format indonesia
     // variabel BulanIndo merupakan variabel array yang menyimpan nama-nama bulan
     $BulanIndo2 = array(
-        "Januari", "Februari", "Maret",
-        "April", "Mei", "Juni",
-        "Juli", "Agustus", "September",
-        "Oktober", "November", "Desember"
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
     );
 
     $tahun2 = substr($date2, 0, 4); // memisahkan format tahun menggunakan substring
@@ -112,4 +120,40 @@ function DateToIndo($date2)
 
     $result = $tgl2 . " " . $BulanIndo2[(int)$bulan2 - 1] . " " . $tahun2;
     return ($result);
+}
+
+
+function getbulandantahunlalu($bulan, $tahun, $show)
+{
+    if ($bulan == 1) {
+        $bulanlalu = 12;
+        $tahunlalu = $tahun - 1;
+    } else {
+        $bulanlalu = $bulan - 1;
+        $tahunlalu = $tahun;
+    }
+
+    if ($show == "tahun") {
+        return $tahunlalu;
+    } elseif ($show == "bulan") {
+        return $bulanlalu;
+    }
+}
+
+
+function getbulandantahunberikutnya($bulan, $tahun, $show)
+{
+    if ($bulan == 12) {
+        $bulanberikutnya =  1;
+        $tahunberikutnya = $tahun + 1;
+    } else {
+        $bulanberikutnya = $bulan + 1;
+        $tahunberikutnya = $tahun;
+    }
+
+    if ($show == "tahun") {
+        return $tahunberikutnya;
+    } elseif ($show == "bulan") {
+        return $bulanberikutnya;
+    }
 }

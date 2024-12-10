@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Saldoawalledger extends Model
 {
     use HasFactory;
+    protected $table = 'ledger_saldoawal';
+    protected $guarded = [];
+    protected $primaryKey = 'kode_ledger';
+    public $incrementing = false;
 }

@@ -2,6 +2,7 @@
 return  [
 
     'list_pendidikan ' => ['SD', 'SMP', 'SMA', 'D3', 'S1', 'S2', 'S3'],
+    'start_year' => 2024,
     'tahun_ppdb' => 2024,
     'jenis_kelamin' => [
         'L' => 'Laki - Laki',

@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Transaksiledger extends Model
 {
     use HasFactory;
+    protected $table = 'ledger_transaksi';
+    protected $guarded = [];
+    protected $primaryKey = 'no_bukti';
 }

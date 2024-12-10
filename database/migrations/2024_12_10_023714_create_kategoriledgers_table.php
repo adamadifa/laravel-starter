@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ledger_kategori_pemasukan', function (Blueprint $table) {
-            $table->char('kode_kategori', 5)->primary();
+        Schema::create('ledger_kategori', function (Blueprint $table) {
+            $table->id();
             $table->string('nama_kategori');
+            $table->char('jenis_kategori', 2); //PM = Pemasukan , PK = Pengeluaran
             $table->timestamps();
         });
     }
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ledger_kategori_pemasukan');
+        Schema::dropIfExists('kategoriledgers');
     }
 };
