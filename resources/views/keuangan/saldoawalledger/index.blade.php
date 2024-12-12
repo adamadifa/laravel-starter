@@ -72,6 +72,7 @@
                                         <tr>
                                             <th>No.</th>
                                             <th>Kode</th>
+                                            <th>Ledger</th>
                                             <th>Bulan</th>
                                             <th>Tahun</th>
                                             <th>Ledger</th>
@@ -83,14 +84,26 @@
                                         @foreach ($saldo_awal as $d)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $d->kode_ledger }}</td>
+                                                <td>{{ $d->kode_saldoawal }}</td>
+                                                <td>{{ $d->nama_ledger }}</td>
                                                 <td>{{ $listbulan[$d->bulan] }}</td>
                                                 <td>{{ $d->tahun }}</td>
                                                 <td>{{ $d->nama_ledger }}
                                                     {{ !empty($d->no_rekening) && $d->no_rekening != '-' ? '(' . $d->no_rekening . ')' : '' }}
                                                 </td>
                                                 <td class="text-end">{{ formatAngka($d->jumlah) }}</td>
-
+                                                <td>
+                                                    @can('saldoawalledger.delete')
+                                                        <form method="POST" name="deleteform" class="deleteform"
+                                                            action="{{ route('saldoawalledger.delete', Crypt::encrypt($d->kode_saldoawal)) }}">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <a href="#" class="delete-confirm ml-1">
+                                                                <i class="ti ti-trash text-danger"></i>
+                                                            </a>
+                                                        </form>
+                                                    @endcan
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>

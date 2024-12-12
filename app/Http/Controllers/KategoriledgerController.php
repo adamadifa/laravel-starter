@@ -76,4 +76,21 @@ class KategoriledgerController extends Controller
             return Redirect::back()->with(messageError($e->getMessage()));
         }
     }
+
+    public function getkategoriledger(Request $request)
+    {
+        $debet_kredit = $request->debet_kredit;
+        $query = Kategoriledger::query();
+        if ($debet_kredit == 'D') {
+            $query->where('jenis_kategori', 'PK');
+        } else {
+            $query->where('jenis_kategori', 'PM');
+        }
+        $query->orderBy('nama_kategori');
+        $kategori = $query->get();
+        echo '<option value="">Pilih Kategori</option>';
+        foreach ($kategori as $d) {
+            echo '<option value="' . $d->id . '">' . $d->nama_kategori . '</option>';
+        }
+    }
 }

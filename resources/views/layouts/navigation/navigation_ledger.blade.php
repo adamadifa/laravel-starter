@@ -9,9 +9,9 @@
             </li>
         @endcan
 
-        @can('ledger.index')
+        @can('ledgertransaksi.index')
             <li class="nav-item" role="presentation">
-                <a href="{{ route('ledger.index') }}" class="nav-link {{ request()->is(['ledger']) ? 'active' : '' }}">
+                <a href="{{ route('ledgertransaksi.index') }}" class="nav-link {{ request()->is(['ledgertransaksi']) ? 'active' : '' }}">
                     <i class="tf-icons ti ti-file-description ti-md me-1"></i> Ledger
                 </a>
             </li>

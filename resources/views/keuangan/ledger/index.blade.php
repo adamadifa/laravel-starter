@@ -86,7 +86,53 @@
         </div>
     </div>
 </div>
-<x-modal-form id="modal" size="modal-xl" show="loadmodal" title="" />
+<x-modal-form id="modal" size="modal-lg" show="loadmodal" title="" />
 <x-modal-form id="modalEdit" show="loadmodalEdit" title="" />
 
 @endsection
+@push('myscript')
+<script>
+    $(function() {
+
+        function loading() {
+            $("#loadmodal,#loadmodalEdit").html(`<div class="sk-wave sk-primary" style="margin:auto">
+            <div class="sk-wave-rect"></div>
+            <div class="sk-wave-rect"></div>
+            <div class="sk-wave-rect"></div>
+            <div class="sk-wave-rect"></div>
+            <div class="sk-wave-rect"></div>
+            </div>`);
+        };
+
+        const select2Kodebanksearch = $('.select2Kodebanksearch');
+        if (select2Kodebanksearch.length) {
+            select2Kodebanksearch.each(function() {
+                var $this = $(this);
+                $this.wrap('<div class="position-relative"></div>').select2({
+                    placeholder: 'Pilih  Bank',
+                    allowClear: true,
+                    dropdownParent: $this.parent()
+                });
+            });
+        }
+
+        $("#btnCreate").click(function(e) {
+            e.preventDefault();
+            loading();
+            $("#modal").modal("show");
+            $("#modal").find(".modal-title").text('Input Ledger');
+            $("#loadmodal").load('/ledgertransaksi/create');
+        });
+
+        $(".btnEdit").click(function(e) {
+            e.preventDefault();
+            loading();
+            const no_bukti = $(this).attr('no_bukti');
+            $("#modalEdit").modal("show");
+            $("#modalEdit").find(".modal-title").text('Edit Ledger');
+            $("#modalEdit").find("#loadmodalEdit").load(`/ledger/${no_bukti}/edit`);
+        });
+
+    });
+</script>
+@endpush

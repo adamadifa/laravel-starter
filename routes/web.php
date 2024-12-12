@@ -179,6 +179,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/kategoriledger/{id}/show', 'show')->name('kategoriledger.show')->can('kategoriledger.show');
         Route::put('/kategoriledger/{id}/update', 'update')->name('kategoriledger.update')->can('kategoriledger.update');
         Route::delete('/kategoriledger/{id}/delete', 'destroy')->name('kategoriledger.delete')->can('kategoriledger.delete');
+
+        Route::post('/kategoriledger/getkategoriledger', 'getkategoriledger')->name('kategoriledger.getkategoriledger');
     });
 
     Route::controller(SaldoawalledgerController::class)->group(function () {

@@ -6,6 +6,7 @@ use App\Models\Ledger;
 use App\Models\Saldoawalledger;
 use App\Models\Transaksiledger;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
@@ -18,6 +19,7 @@ class SaldoawalledgerController extends Controller
         $data['ledger'] = Ledger::orderBy('kode_ledger')->get();
 
         $query = Saldoawalledger::query();
+
         if (!empty($request->bulan)) {
             $query->where('bulan', $request->bulan);
         }
@@ -158,5 +160,16 @@ class SaldoawalledgerController extends Controller
             'message' => 'Saldo Awal Ledger',
             'data'    => $data
         ]);
+    }
+
+    public function destroy($kode_saldoawal)
+    {
+        $kode_saldoawal = Crypt::decrypt($kode_saldoawal);
+        try {
+            Saldoawalledger::where('kode_saldoawal', $kode_saldoawal)->delete();
+            return Redirect::back()->with(messageSuccess('Data Berhasil Dihapus'));
+        } catch (\Exception $e) {
+            return Redirect::back()->with(messageError($e->getMessage()));
+        }
     }
 }
