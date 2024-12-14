@@ -11,4 +11,5 @@ class Transaksiledger extends Model
     protected $table = 'ledger_transaksi';
     protected $guarded = [];
     protected $primaryKey = 'no_bukti';
+    public $incrementing = false;
 }

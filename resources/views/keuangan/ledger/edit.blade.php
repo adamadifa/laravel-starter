@@ -1,24 +1,25 @@
-<form action="{{ route('ledgertransaksi.store') }}" method="POST" id="formLedger">
+<form action="{{ route('ledgertransaksi.update', Crypt::encrypt($ledgerTransaksi->no_bukti)) }}" method="POST" id="formLedger">
     @csrf
-    <x-input-with-icon label="Tanggal" name="tanggal" icon="ti ti-calendar" datepicker="flatpickr-date" />
+    @method('PUT')
+    <x-input-with-icon label="Tanggal" name="tanggal" icon="ti ti-calendar" datepicker="flatpickr-date" :value="$ledgerTransaksi->tanggal" />
     <div class="form-group mb-3">
         <select name="kode_ledger" id="kode_ledger" class="form-select select2Kodeledger">
             <option value="">Pilih Ledger</option>
             @foreach ($ledger as $d)
-                <option value="{{ $d->kode_ledger }}">{{ $d->nama_ledger }}
+                <option value="{{ $d->kode_ledger }}" {{ $d->kode_ledger == $ledgerTransaksi->kode_ledger ? 'selected' : '' }}>{{ $d->nama_ledger }}
                     {{ !empty($d->no_rekening) && $d->no_rekening != '-' ? '(' . $d->no_rekening . ')' : '' }}</option>
             @endforeach
         </select>
     </div>
 
-    <x-textarea label="Keterangan" name="keterangan" />
-    <x-input-with-icon label="Jumlah" name="jumlah" icon="ti ti-moneybag" textalign="right" money="true" />
+    <x-textarea label="Keterangan" name="keterangan" :value="$ledgerTransaksi->keterangan" />
+    <x-input-with-icon label="Jumlah" name="jumlah" icon="ti ti-moneybag" textalign="right" money="true" :value="formatAngka($ledgerTransaksi->jumlah)" />
 
     <div class="form-group">
         <select name="debet_kredit" id="debet_kredit" class="form-select">
             <option value="">Debet / Kredit</option>
-            <option value="D">Debet</option>
-            <option value="K">Kredit</option>
+            <option value="D" {{ $ledgerTransaksi->debet_kredit == 'D' ? 'selected' : '' }}>Debet</option>
+            <option value="K" {{ $ledgerTransaksi->debet_kredit == 'K' ? 'selected' : '' }}>Kredit</option>
         </select>
     </div>
     <div class="form-group">
@@ -35,7 +36,7 @@
             <div class="form-group" id="saveButton">
                 <button class="btn btn-primary w-100" type="submit" id="btnSimpan">
                     <ion-icon name="send-outline" class="me-1"></ion-icon>
-                    Submit
+                    Simpan
                 </button>
             </div>
         </div>
@@ -58,12 +59,14 @@
 
         function loadkategori() {
             const debet_kredit = form.find("#debet_kredit").val();
+            const id_kategori = "{{ $ledgerTransaksi->id_kategori }}";
             $.ajax({
                 type: 'POST',
                 url: '/kategoriledger/getkategoriledger',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    debet_kredit: debet_kredit
+                    debet_kredit: debet_kredit,
+                    id_kategori: id_kategori
                 },
                 cache: false,
                 success: function(respond) {
@@ -77,7 +80,7 @@
         });
 
 
-
+        loadkategori();
 
         const select2Kodeledger = $('.select2Kodeledger');
         if (select2Kodeledger.length) {

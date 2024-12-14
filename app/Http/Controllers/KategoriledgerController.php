@@ -90,7 +90,7 @@ class KategoriledgerController extends Controller
         $kategori = $query->get();
         echo '<option value="">Pilih Kategori</option>';
         foreach ($kategori as $d) {
-            echo '<option value="' . $d->id . '">' . $d->nama_kategori . '</option>';
+            echo '<option value="' . $d->id . '"' . ($d->id == $request->id_kategori ? 'selected' : '') . '>' . $d->nama_kategori . '</option>';
         }
     }
 }
