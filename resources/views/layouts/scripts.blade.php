@@ -27,97 +27,101 @@
  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
-   integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
-   crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+     integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"
+     referrerpolicy="no-referrer"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.1/feather.min.js"
-   integrity="sha512-4lykFR6C2W55I60sYddEGjieC2fU79R7GUtaqr3DzmNbo0vSaO1MfUjMoTFYYuedjfEix6uV9jVTtRCSBU/Xiw=="
-   crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+     integrity="sha512-4lykFR6C2W55I60sYddEGjieC2fU79R7GUtaqr3DzmNbo0vSaO1MfUjMoTFYYuedjfEix6uV9jVTtRCSBU/Xiw==" crossorigin="anonymous"
+     referrerpolicy="no-referrer"></script>
  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
  <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.js"></script>
  <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
  <script src="{{ asset('assets/js/jquery.mask.min.js') }}"></script>
  <script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+ {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.25.0/ckeditor.js"></script>
+ <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script> --}}
+ <link href="https://cdn.jsdelivr.net/npm/summernote/dist/summernote.min.css" rel="stylesheet">
+ <script src="https://cdn.jsdelivr.net/npm/summernote/dist/summernote.min.js"></script>
 
  <script>
-   $(function() {
-     $(".flatpickr-date").flatpickr();
+     $(function() {
+         $(".flatpickr-date").flatpickr();
 
-   });
+     });
  </script>
  <!-- Main JS -->
  @if ($message = Session::get('success'))
-   <script>
-     toastr.options.showEasing = 'swing';
-     toastr.options.hideEasing = 'linear';
-     toastr.options.progressBar = true;
-     toastr.success("Berhasil", "{{ $message }}", {
-       timeOut: 3000
-     });
-   </script>
+     <script>
+         toastr.options.showEasing = 'swing';
+         toastr.options.hideEasing = 'linear';
+         toastr.options.progressBar = true;
+         toastr.success("Berhasil", "{{ $message }}", {
+             timeOut: 3000
+         });
+     </script>
  @endif
 
  @if ($message = Session::get('error'))
-   <script>
-     toastr.options.showEasing = 'swing';
-     toastr.options.hideEasing = 'linear';
-     toastr.options.progressBar = true;
-     toastr.error("Gagal", "{{ $message }}", {
-       timeOut: 3000
-     });
-   </script>
+     <script>
+         toastr.options.showEasing = 'swing';
+         toastr.options.hideEasing = 'linear';
+         toastr.options.progressBar = true;
+         toastr.error("Gagal", "{{ $message }}", {
+             timeOut: 3000
+         });
+     </script>
  @endif
 
  @if ($message = Session::get('warning'))
-   <script>
-     toastr.options.showEasing = 'swing';
-     toastr.options.hideEasing = 'linear';
-     toastr.options.progressBar = true;
-     toastr.warning("Warning", "{{ $message }}", {
-       timeOut: 3000
-     });
-   </script>
+     <script>
+         toastr.options.showEasing = 'swing';
+         toastr.options.hideEasing = 'linear';
+         toastr.options.progressBar = true;
+         toastr.warning("Warning", "{{ $message }}", {
+             timeOut: 3000
+         });
+     </script>
  @endif
 
  @if ($errors->any())
-   @php
-     $err = '';
-   @endphp
-   @foreach ($errors->all() as $error)
      @php
-       $err .= $error;
+         $err = '';
      @endphp
-   @endforeach
-   <script>
-     toastr.options.showEasing = 'swing';
-     toastr.options.hideEasing = 'linear';
-     toastr.options.progressBar = true;
-     toastr.error("Gagal", "{{ $err }}", {
-       timeOut: 3000
-     });
-   </script>
+     @foreach ($errors->all() as $error)
+         @php
+             $err .= $error;
+         @endphp
+     @endforeach
+     <script>
+         toastr.options.showEasing = 'swing';
+         toastr.options.hideEasing = 'linear';
+         toastr.options.progressBar = true;
+         toastr.error("Gagal", "{{ $err }}", {
+             timeOut: 3000
+         });
+     </script>
  @endif
  <script>
-   $('.delete-confirm').click(function(event) {
-     var form = $(this).closest("form");
-     var name = $(this).data("name");
-     event.preventDefault();
-     Swal.fire({
-       title: `Apakah Anda Yakin Ingin Menghapus Data Ini ?`,
-       text: "Jika dihapus maka data akan hilang permanent.",
-       icon: "warning",
-       buttons: true,
-       dangerMode: true,
-       showCancelButton: true,
-       confirmButtonColor: "#554bbb",
-       cancelButtonColor: "#d33",
-       confirmButtonText: "Yes, Hapus Saja!"
-     }).then((result) => {
-       /* Read more about isConfirmed, isDenied below */
-       if (result.isConfirmed) {
-         form.submit();
-       }
+     $('.delete-confirm').click(function(event) {
+         var form = $(this).closest("form");
+         var name = $(this).data("name");
+         event.preventDefault();
+         Swal.fire({
+             title: `Apakah Anda Yakin Ingin Menghapus Data Ini ?`,
+             text: "Jika dihapus maka data akan hilang permanent.",
+             icon: "warning",
+             buttons: true,
+             dangerMode: true,
+             showCancelButton: true,
+             confirmButtonColor: "#554bbb",
+             cancelButtonColor: "#d33",
+             confirmButtonText: "Yes, Hapus Saja!"
+         }).then((result) => {
+             /* Read more about isConfirmed, isDenied below */
+             if (result.isConfirmed) {
+                 form.submit();
+             }
+         });
      });
-   });
  </script>
 
 

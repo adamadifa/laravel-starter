@@ -7,6 +7,7 @@ use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\JamkerjaController;
 use App\Http\Controllers\JenisbiayaController;
+use App\Http\Controllers\JobdeskController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KategoriledgerController;
 use App\Http\Controllers\KategoripemasukanController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\Permission_groupController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RealisasikegiatanController;
 use App\Http\Controllers\RegencyController;
 use App\Http\Controllers\RencanasppController;
 use App\Http\Controllers\RoleController;
@@ -195,8 +197,28 @@ Route::middleware('auth')->group(function () {
         Route::post('/saldoawalledger/getsaldo', 'getsaldo')->name('saldoawalledger.getsaldo')->can('saldoawalledger.create');
     });
 
+    Route::controller(JobdeskController::class)->group(function () {
+        Route::get('/jobdesk', 'index')->name('jobdesk.index')->can('jobdesk.index');
+        Route::get('/jobdesk/create', 'create')->name('jobdesk.create')->can('jobdesk.create');
+        Route::post('/jobdesk', 'store')->name('jobdesk.store')->can('jobdesk.store');
+        Route::get('/jobdesk/{kode_jobdesk}/edit', 'edit')->name('jobdesk.edit')->can('jobdesk.edit');
+        Route::get('/jobdesk/{kode_jobdesk}/show', 'show')->name('jobdesk.show')->can('jobdesk.show');
+        Route::put('/jobdesk/{kode_jobdesk}/update', 'update')->name('jobdesk.update')->can('jobdesk.update');
+        Route::delete('/jobdesk/{kode_jobdesk}/delete', 'destroy')->name('jobdesk.delete')->can('jobdesk.delete');
 
-    //
+        Route::get('/jobdesk/getjobdesk', 'getjobdesk')->name('jobdesk.getjobdesk');
+    });
+
+    Route::controller(RealisasikegiatanController::class)->group(function () {
+        Route::get('/realisasikegiatan', 'index')->name('realisasikegiatan.index')->can('realkegiatan.index');
+        Route::get('/realisasikegiatan/create', 'create')->name('realisasikegiatan.create')->can('realkegiatan.create');
+        Route::post('/realisasikegiatan', 'store')->name('realisasikegiatan.store')->can('realkegiatan.store');
+        Route::get('/realisasikegiatan/{id}/edit', 'edit')->name('realisasikegiatan.edit')->can('realkegiatan.edit');
+        Route::get('/realisasikegiatan/{id}/show', 'show')->name('realisasikegiatan.show')->can('realkegiatan.show');
+        Route::put('/realisasikegiatan/{id}/update', 'update')->name('realisasikegiatan.update')->can('realkegiatan.update');
+        Route::delete('/realisasikegiatan/{id}/delete', 'destroy')->name('realisasikegiatan.delete')->can('realkegiatan.delete');
+    });
+
 
     Route::controller(JenisbiayaController::class)->group(function () {
         Route::get('/jenisbiaya', 'index')->name('jenisbiaya.index')->can('jenisbiaya.index');
@@ -206,6 +228,9 @@ Route::middleware('auth')->group(function () {
         Route::put('/jenisbiaya/{kode_jenis_biaya}/update', 'update')->name('jenisbiaya.update')->can('jenisbiaya.update');
         Route::delete('/jenisbiaya/{kode_jenis_biaya}/delete', 'destroy')->name('jenisbiaya.delete')->can('jenisbiaya.delete');
     });
+
+
+
 
 
     Route::controller(BiayaController::class)->group(function () {

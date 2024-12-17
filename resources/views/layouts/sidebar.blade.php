@@ -18,8 +18,17 @@
     <div class="menu-inner-shadow"></div>
     <ul class="menu-inner py-1">
         <li
-            class="menu-item {{ request()->is(['karyawan', 'karyawan/*', 'jabatan', 'jabatan/*', 'unit', 'unit/*', 'siswa', 'siswa/*', 'jenisbiaya', 'departemen', 'ledger']) ? 'open' : '' }}">
-            @if (auth()->user()->hasAnyPermission(['karyawan.index', 'jabatan.index', 'unit.index', 'jenisbiaya.index', 'departemen.index', 'ledger.index']))
+            class="menu-item {{ request()->is(['karyawan', 'karyawan/*', 'jabatan', 'jabatan/*', 'unit', 'unit/*', 'siswa', 'siswa/*', 'jenisbiaya', 'departemen', 'ledger', 'jobdesk']) ? 'open' : '' }}">
+            @if (auth()->user()->hasAnyPermission([
+                        'karyawan.index',
+                        'jabatan.index',
+                        'unit.index',
+                        'jenisbiaya.index',
+                        'departemen.index',
+                        'ledger.index',
+                        'jobdesk.index',
+                        'siswa.index',
+                    ]))
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-database"></i>
                     <div>Data Master</div>
@@ -64,6 +73,13 @@
                         <li class="menu-item {{ request()->is(['departemen', 'departemen/*']) ? 'active' : '' }}">
                             <a href="{{ route('departemen.index') }}" class="menu-link">
                                 <div>Departemen</div>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('jobdesk.index')
+                        <li class="menu-item {{ request()->is(['jobdesk', 'jobdesk/*']) ? 'active' : '' }}">
+                            <a href="{{ route('jobdesk.index') }}" class="menu-link">
+                                <div>Jobdesk</div>
                             </a>
                         </li>
                     @endcan
@@ -113,7 +129,26 @@
 
             </li>
         @endif
+        @if (auth()->user()->hasAnyPermission(['realkegiatan.index']))
+            <li class="menu-item {{ request()->is(['realisasikegiatan']) ? 'open' : '' }}">
 
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons ti ti-activity"></i>
+                    <div>Kegiatan</div>
+                </a>
+                <ul class="menu-sub">
+                    @if (auth()->user()->hasAnyPermission(['realkegiatan.index']))
+                        <li class="menu-item {{ request()->is(['realisasikegiatan']) ? 'active' : '' }}">
+                            <a href="{{ route('realisasikegiatan.index') }}" class="menu-link">
+                                <i class="menu-icon tf-icons ti ti-file-description"></i>
+                                <div>Realisasi Kegiatan </div>
+                            </a>
+                        </li>
+                    @endif
+                </ul>
+
+            </li>
+        @endif
         <!-- KONFIGURASI-->
         <li class="menu-item {{ request()->is(['jamkerja', 'jamkerja/*', 'tahunajaran', 'biaya']) ? 'open' : '' }}">
             @if (auth()->user()->hasAnyPermission(['jamkerja.index']))
