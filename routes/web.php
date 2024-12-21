@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgendakegiatanController;
 use App\Http\Controllers\AsalsekolahController;
 use App\Http\Controllers\BiayaController;
 use App\Http\Controllers\DepartemenConroller;
@@ -217,6 +218,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/realisasikegiatan/{id}/show', 'show')->name('realisasikegiatan.show')->can('realkegiatan.show');
         Route::put('/realisasikegiatan/{id}/update', 'update')->name('realisasikegiatan.update')->can('realkegiatan.update');
         Route::delete('/realisasikegiatan/{id}/delete', 'destroy')->name('realisasikegiatan.delete')->can('realkegiatan.delete');
+    });
+
+    Route::controller(AgendakegiatanController::class)->group(function () {
+        Route::get('/agendakegiatan', 'index')->name('agendakegiatan.index')->can('agendakegiatan.index');
+        Route::get('/agendakegiatan/create', 'create')->name('agendakegiatan.create')->can('agendakegiatan.create');
+        Route::post('/agendakegiatan', 'store')->name('agendakegiatan.store')->can('agendakegiatan.store');
+        Route::get('/agendakegiatan/{id}/edit', 'edit')->name('agendakegiatan.edit')->can('agendakegiatan.edit');
+        Route::get('/agendakegiatan/{id}/show', 'show')->name('agendakegiatan.show')->can('agendakegiatan.show');
+        Route::put('/agendakegiatan/{id}/update', 'update')->name('agendakegiatan.update')->can('agendakegiatan.update');
+        Route::delete('/agendakegiatan/{id}/delete', 'destroy')->name('agendakegiatan.delete')->can('agendakegiatan.delete');
     });
 
 

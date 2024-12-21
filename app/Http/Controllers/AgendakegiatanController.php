@@ -2,32 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Departemen;
-use App\Models\Jabatan;
-use App\Models\Realisasikegiatan;
 use Illuminate\Http\Request;
+use App\Models\AgendaKegiatan;
+use App\Models\Jabatan;
+use App\Models\Departemen;
+use App\Models\Jobdesk;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redirect;
 
-class RealisasikegiatanController extends Controller
+class AgendakegiatanController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Realisasikegiatan::query();
-        $query->select('realisasi_kegiatan.*', 'name', 'jobdesk');
-        $query->join('departemen', 'realisasi_kegiatan.kode_dept', '=', 'departemen.kode_dept');
-        $query->join('jabatan', 'realisasi_kegiatan.kode_jabatan', '=', 'jabatan.kode_jabatan');
-        $query->join('jobdesk', 'realisasi_kegiatan.kode_jobdesk', '=', 'jobdesk.kode_jobdesk');
-        $query->join('users', 'realisasi_kegiatan.id_user', '=', 'users.id');
-        // $query->where('realisasi_kegiatan.kode_jabatan', $request->kode_jabatan);
-        // $query->where('realisasi_kegiatan.kode_dept', $request->kode_dept);
+        $query = AgendaKegiatan::query();
+        $query->select('agenda_kegiatan.*', 'name');
+        $query->join('departemen', 'agenda_kegiatan.kode_dept', '=', 'departemen.kode_dept');
+        $query->join('jabatan', 'agenda_kegiatan.kode_jabatan', '=', 'jabatan.kode_jabatan');
+        $query->join('users', 'agenda_kegiatan.id_user', '=', 'users.id');
+        // $query->where('agenda_kegiatan.kode_jabatan', $request->kode_jabatan);
+        // $query->where('agenda_kegiatan.kode_dept', $request->kode_dept);
         $query->orderBy('tanggal');
-        $data['realisasikegiatan'] = $query->get();
+        $data['agenda_kegiatan'] = $query->get();
 
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
 
-        return view('realisasi_kegiatan.index', $data);
+        return view('agenda_kegiatan.index', $data);
     }
 
 
@@ -35,7 +35,7 @@ class RealisasikegiatanController extends Controller
     {
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
-        return view('realisasi_kegiatan.create', $data);
+        return view('agenda_kegiatan.create', $data);
     }
 
     public function store(Request $request)
@@ -44,23 +44,20 @@ class RealisasikegiatanController extends Controller
             'tanggal' => 'required',
             'kode_jabatan' => 'required',
             'kode_dept' => 'required',
-            'kode_jobdesk' => 'required',
             'uraian_kegiatan' => 'required',
-            'file' => 'mimes:jpg,jpeg,png|max:1024',
         ]);
 
         try {
-            Realisasikegiatan::create([
+            AgendaKegiatan::create([
                 'tanggal' => $request->tanggal,
                 'kode_jabatan' => $request->kode_jabatan,
                 'kode_dept' => $request->kode_dept,
-                'kode_jobdesk' => $request->kode_jobdesk,
                 'uraian_kegiatan' => $request->uraian_kegiatan,
                 'id_user' => auth()->user()->id
             ]);
-            return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
+            return Redirect::back()->with('success', 'Data Berhasil Disimpan');
         } catch (\Exception $e) {
-            return Redirect::back()->with(messageError($e->getMessage()));
+            return Redirect::back()->with('error', $e->getMessage());
         }
     }
 
@@ -69,11 +66,10 @@ class RealisasikegiatanController extends Controller
         $id = Crypt::decrypt($id);
 
         try {
-            Realisasikegiatan::where('id', $id)->delete();
-            return Redirect::back()->with(messageSuccess('Data Berhasil Dihapus'));
+            AgendaKegiatan::where('id', $id)->delete();
+            return Redirect::back()->with('success', 'Data Berhasil Dihapus');
         } catch (\Exception $e) {
-            dd($e);
-            return Redirect::back()->with(messageError($e->getMessage()));
+            return Redirect::back()->with('error', $e->getMessage());
         }
     }
 
@@ -82,8 +78,8 @@ class RealisasikegiatanController extends Controller
         $id = Crypt::decrypt($id);
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
-        $data['realisasikegiatan'] = Realisasikegiatan::where('id', $id)->first();
-        return view('realisasi_kegiatan.edit', $data);
+        $data['agenda_kegiatan'] = AgendaKegiatan::where('id', $id)->first();
+        return view('agendakegiatan.edit', $data);
     }
 
     public function update(Request $request, $id)
@@ -99,8 +95,8 @@ class RealisasikegiatanController extends Controller
         ]);
 
         try {
-            $realisasikegiatan = Realisasikegiatan::find($id);
-            $realisasikegiatan->update([
+            $agenda_kegiatan = AgendaKegiatan::find($id);
+            $agenda_kegiatan->update([
                 'tanggal' => $request->tanggal,
                 'kode_jabatan' => $request->kode_jabatan,
                 'kode_dept' => $request->kode_dept,
@@ -108,9 +104,9 @@ class RealisasikegiatanController extends Controller
                 'uraian_kegiatan' => $request->uraian_kegiatan,
                 'id_user' => auth()->user()->id
             ]);
-            return Redirect::back()->with(messageSuccess('Data Berhasil Diupdate'));
+            return Redirect::back()->with('success', 'Data Berhasil Diupdate');
         } catch (\Exception $e) {
-            return Redirect::back()->with(messageError($e->getMessage()));
+            return Redirect::back()->with('error', $e->getMessage());
         }
     }
 }

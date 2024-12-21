@@ -157,3 +157,14 @@ function getbulandantahunberikutnya($bulan, $tahun, $show)
         return $bulanberikutnya;
     }
 }
+
+
+function formatNama($sentence)
+{
+    $words = explode(' ', $sentence);
+    if (count($words) >= 2) {
+        return $words[0] . ' ' . $words[1];
+    } else {
+        return $sentence;
+    }
+}

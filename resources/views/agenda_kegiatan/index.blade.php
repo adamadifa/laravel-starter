@@ -1,23 +1,23 @@
 @extends('layouts.app')
-@section('titlepage', 'Realisasi Kegiatan')
+@section('titlepage', 'Agenda Kegiatan')
 
 @section('content')
 @section('navigasi')
-    <span>Realisasi Kegiatan</span>
+    <span>Agenda Kegiatan</span>
 @endsection
 <div class="row">
     <div class="col-lg-12 col-sm-12 col-xs-12">
         <div class="card">
             <div class="card-header">
-                @can('realkegiatan.create')
-                    <a href="#" class="btn btn-primary" id="btncreateRealisasiKegiatan"><i class="fa fa-plus me-2"></i> Tambah
-                        Realisasi Kegiatan</a>
+                @can('agendakegiatan.create')
+                    <a href="#" class="btn btn-primary" id="btncreateAgendaKegiatan"><i class="fa fa-plus me-2"></i> Tambah
+                        Agenda Kegiatan</a>
                 @endcan
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <form action="{{ route('realisasikegiatan.index') }}">
+                        <form action="{{ route('agendakegiatan.index') }}">
                             <div class="row">
                                 <div class="col-lg-5 col-sm-12 col-md-12">
                                     <div class="form-group">
@@ -59,24 +59,24 @@
                                         <th style="width: 1%">No.</th>
                                         <th style="width: 10%">Tanggal</th>
                                         <th>Uraian Kegiatan</th>
-                                        <th>Jobdesk</th>
+
                                         <th style="width: 5%">Dept</th>
                                         <th style="width: 10%">User</th>
                                         <th style="width: 5%">#</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($realisasikegiatan as $d)
+                                    @foreach ($agenda_kegiatan as $d)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ date('d-m-Y', strtotime($d->tanggal)) }}</td>
                                             <td>{{ strip_tags($d->uraian_kegiatan) }}</td>
-                                            <td>{{ $d->jobdesk }}</td>
+
                                             <td>{{ $d->kode_dept }}</td>
                                             <td>{{ formatNama($d->name) }}</td>
                                             <td>
                                                 <div class="d-flex">
-                                                    @can('realkegiatan.edit')
+                                                    @can('agendakegiatan.edit')
                                                         <div>
                                                             <a href="#" class="me-2 btnEdit" id="{{ Crypt::encrypt($d->id) }}">
                                                                 <i class="ti ti-edit text-success"></i>
@@ -84,10 +84,10 @@
                                                         </div>
                                                     @endcan
 
-                                                    @can('realkegiatan.delete')
+                                                    @can('agendakegiatan.delete')
                                                         <div>
                                                             <form method="POST" name="deleteform" class="deleteform"
-                                                                action="{{ route('realisasikegiatan.delete', Crypt::encrypt($d->id)) }}">
+                                                                action="{{ route('agendakegiatan.delete', Crypt::encrypt($d->id)) }}">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <a href="#" class="delete-confirm ml-1">
@@ -109,24 +109,24 @@
         </div>
     </div>
 </div>
-<x-modal-form id="mdlcreateRealisasiKegiatan" size="" show="loadcreateRealisasiKegiatan" title="Tambah Realisasi Kegiatan" />
-<x-modal-form id="mdleditRealisasiKegiatan" size="" show="loadeditRealisasiKegiatan" title="Edit Realisasi Kegiatan" />
+<x-modal-form id="mdlcreateAgendaKegiatan" size="" show="loadcreateAgendaKegiatan" title="Tambah Agenda Kegiatan" />
+<x-modal-form id="mdleditAgendaKegiatan" size="" show="loadeditAgendaKegiatan" title="Edit Agenda Kegiatan" />
 @endsection
 @push('myscript')
 {{-- <script src="{{ asset('assets/js/pages/roles/create.js') }}"></script> --}}
 <script>
     $(function() {
-        $("#btncreateRealisasiKegiatan").click(function(e) {
+        $("#btncreateAgendaKegiatan").click(function(e) {
             e.preventDefault();
-            $('#mdlcreateRealisasiKegiatan').modal("show");
-            $("#loadcreateRealisasiKegiatan").load('/realisasikegiatan/create');
+            $('#mdlcreateAgendaKegiatan').modal("show");
+            $("#loadcreateAgendaKegiatan").load('/agendakegiatan/create');
         });
 
         $(".btnEdit").click(function(e) {
             var id = $(this).attr("id");
             e.preventDefault();
-            $('#mdleditRealisasiKegiatan').modal("show");
-            $("#loadeditRealisasiKegiatan").load('/realisasikegiatan/' + id + '/edit');
+            $('#mdleditAgendaKegiatan').modal("show");
+            $("#loadeditAgendaKegiatan").load('/agendakegiatan/' + id + '/edit');
         });
     });
 </script>

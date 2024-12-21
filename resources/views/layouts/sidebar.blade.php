@@ -129,8 +129,8 @@
 
             </li>
         @endif
-        @if (auth()->user()->hasAnyPermission(['realkegiatan.index']))
-            <li class="menu-item {{ request()->is(['realisasikegiatan']) ? 'open' : '' }}">
+        @if (auth()->user()->hasAnyPermission(['realkegiatan.index', 'agendakegiatan.index']))
+            <li class="menu-item {{ request()->is(['realisasikegiatan', 'agendakegiatan']) ? 'open' : '' }}">
 
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-activity"></i>
@@ -142,6 +142,14 @@
                             <a href="{{ route('realisasikegiatan.index') }}" class="menu-link">
                                 <i class="menu-icon tf-icons ti ti-file-description"></i>
                                 <div>Realisasi Kegiatan </div>
+                            </a>
+                        </li>
+                    @endif
+                    @if (auth()->user()->hasAnyPermission(['agendakegiatan.index']))
+                        <li class="menu-item {{ request()->is(['agendakegiatan']) ? 'active' : '' }}">
+                            <a href="{{ route('agendakegiatan.index') }}" class="menu-link">
+                                <i class="menu-icon tf-icons ti ti-file-description"></i>
+                                <div>Agenda Kegiatan </div>
                             </a>
                         </li>
                     @endif
