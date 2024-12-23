@@ -190,37 +190,38 @@
             @endif
         </li>
         <!-- Setting -->
-        <li
-            class="menu-item {{ request()->is(['roles', 'roles/*', 'permissiongroups', 'permissiongroups/*', 'permissions', 'permissions/*', 'users', 'users/*']) ? 'open' : '' }} ">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons ti ti-settings"></i>
-                <div>Settings</div>
+        @hasrole('super admin')
+            <li
+                class="menu-item {{ request()->is(['roles', 'roles/*', 'permissiongroups', 'permissiongroups/*', 'permissions', 'permissions/*', 'users', 'users/*']) ? 'open' : '' }} ">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons ti ti-settings"></i>
+                    <div>Settings</div>
 
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item {{ request()->is(['users', 'users/*']) ? 'active' : '' }}">
-                    <a href="{{ route('users.index') }}" class="menu-link">
-                        <div>User</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ request()->is(['roles', 'roles/*']) ? 'active' : '' }}">
-                    <a href="{{ route('roles.index') }}" class="menu-link">
-                        <div>Role</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ request()->is(['permissions', 'permissions/*']) ? 'active' : '' }}"">
-                    <a href=" {{ route('permissions.index') }}" class="menu-link">
-                        <div>Permission</div>
-                    </a>
-                </li>
-                <li class="menu-item  {{ request()->is(['permissiongroups', 'permissiongroups/*']) ? 'active' : '' }}">
-                    <a href="{{ route('permissiongroups.index') }}" class="menu-link">
-                        <div>Group Permission</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ request()->is(['users', 'users/*']) ? 'active' : '' }}">
+                        <a href="{{ route('users.index') }}" class="menu-link">
+                            <div>User</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ request()->is(['roles', 'roles/*']) ? 'active' : '' }}">
+                        <a href="{{ route('roles.index') }}" class="menu-link">
+                            <div>Role</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ request()->is(['permissions', 'permissions/*']) ? 'active' : '' }}"">
+                        <a href=" {{ route('permissions.index') }}" class="menu-link">
+                            <div>Permission</div>
+                        </a>
+                    </li>
+                    <li class="menu-item  {{ request()->is(['permissiongroups', 'permissiongroups/*']) ? 'active' : '' }}">
+                        <a href="{{ route('permissiongroups.index') }}" class="menu-link">
+                            <div>Group Permission</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        @endhasrole
 
     </ul>
 </aside>

@@ -1,5 +1,5 @@
  <!-- build:js assets/vendor/js/core.js -->
-
+ <script src="{{ asset('assets/vendor/libs/swiper/swiper-bundle.min.js') }}"></script>
  <script src="{{ asset('/assets/vendor/libs/jquery/jquery.js') }}"></script>
  <script src="{{ asset('/assets/vendor/libs/popper/popper.js') }}"></script>
  <script src="{{ asset('/assets/vendor/js/bootstrap.js') }}"></script>
@@ -41,6 +41,21 @@
  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script> --}}
  <link href="https://cdn.jsdelivr.net/npm/summernote/dist/summernote.min.css" rel="stylesheet">
  <script src="https://cdn.jsdelivr.net/npm/summernote/dist/summernote.min.js"></script>
+
+ <script>
+     var swiper1 = new Swiper(".cardswiper", {
+         slidesPerView: "auto",
+         spaceBetween: 0,
+         pagination: false
+     });
+
+     /* swiper carousel connectionwiper */
+     var swiper2 = new Swiper(".connectionwiper", {
+         slidesPerView: "auto",
+         spaceBetween: 0,
+         pagination: false
+     });
+ </script>
 
  <script>
      $(function() {

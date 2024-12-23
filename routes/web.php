@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgendakegiatanController;
 use App\Http\Controllers\AsalsekolahController;
 use App\Http\Controllers\BiayaController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartemenConroller;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\JabatanController;
@@ -49,10 +50,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware(['auth', 'verified']);
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

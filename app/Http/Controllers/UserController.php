@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Departemen;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -24,7 +25,8 @@ class UserController extends Controller
     {
         $roles = Role::orderBy('name')->get();
         $unit = Unit::orderBy('kode_unit')->get();
-        return view('settings.users.create', compact('roles', 'unit'));
+        $dept = Departemen::orderBy('kode_dept')->get();
+        return view('settings.users.create', compact('roles', 'unit', 'dept'));
     }
 
     public function edit($id)
@@ -45,6 +47,7 @@ class UserController extends Controller
             'password' => 'required',
             'role' => 'required',
             'kode_unit' => 'required',
+            'kode_dept' => 'required'
         ]);
 
         try {
@@ -53,13 +56,14 @@ class UserController extends Controller
                 'username' => $request->username,
                 'email' => $request->email,
                 'password' => $request->password,
-                'kode_unit' => $request->kode_unit
+                'kode_unit' => $request->kode_unit,
+                'kode_dept' => $request->kode_dept
             ]);
 
             $user->assignRole($request->role);
-            return Redirect::back()->with(['success' => 'Data Berhasil Disimpan']);
+            return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
         } catch (\Exception $e) {
-            return Redirect::back()->with(['eror' => 'Data Gagal Disimpan']);
+            return Redirect::back()->with(messageError($e->getMessage()));
         }
     }
 
