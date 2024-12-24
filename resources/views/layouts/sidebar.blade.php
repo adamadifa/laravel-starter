@@ -2,7 +2,7 @@
 
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
-        <a href="index.html" class="app-brand-link">
+        <a href="{{ route('dashboard') }}" class="app-brand-link">
             <span class="app-brand-logo demo">
                 <img src="{{ asset('assets/img/logo/persisalamin.png') }}" alt="" width="52">
             </span>
@@ -17,6 +17,12 @@
 
     <div class="menu-inner-shadow"></div>
     <ul class="menu-inner py-1">
+        <li class="menu-item {{ request()->is(['dashboard', 'dashboard/*']) ? 'active' : '' }}">
+            <a href="{{ route('dashboard') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-home"></i>
+                <div>Dashboard</div>
+            </a>
+        </li>
         <li
             class="menu-item {{ request()->is(['karyawan', 'karyawan/*', 'jabatan', 'jabatan/*', 'unit', 'unit/*', 'siswa', 'siswa/*', 'jenisbiaya', 'departemen', 'ledger', 'jobdesk']) ? 'open' : '' }}">
             @if (auth()->user()->hasAnyPermission([

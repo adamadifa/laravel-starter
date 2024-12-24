@@ -24,7 +24,8 @@ class User extends Authenticatable
         'email',
         'password',
         'kode_unit',
-        'kode_dept'
+        'kode_dept',
+        'kode_jabatan'
     ];
 
     /**

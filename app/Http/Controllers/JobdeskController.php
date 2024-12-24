@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Departemen;
 use App\Models\Jabatan;
 use App\Models\Jobdesk;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redirect;
@@ -105,7 +106,11 @@ class JobdeskController extends Controller
 
     public function getjobdesk(Request $request)
     {
-        $jobdesk = Jobdesk::where('kode_jabatan', $request->kode_jabatan)->where('kode_dept', $request->kode_dept)->get();
+        $user = User::where('id', auth()->user()->id)->first();
+        $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : auth()->user()->kode_jabatan;
+        $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : auth()->user()->kode_dept;
+
+        $jobdesk = Jobdesk::where('kode_jabatan', $kode_jabatan)->where('kode_dept', $kode_dept)->get();
         return response()->json($jobdesk);
     }
 }

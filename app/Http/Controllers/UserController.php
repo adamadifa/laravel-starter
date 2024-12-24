@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Departemen;
+use App\Models\Jabatan;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,8 +26,9 @@ class UserController extends Controller
     {
         $roles = Role::orderBy('name')->get();
         $unit = Unit::orderBy('kode_unit')->get();
+        $jabatan = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $dept = Departemen::orderBy('kode_dept')->get();
-        return view('settings.users.create', compact('roles', 'unit', 'dept'));
+        return view('settings.users.create', compact('roles', 'unit', 'dept', 'jabatan'));
     }
 
     public function edit($id)
@@ -34,8 +36,10 @@ class UserController extends Controller
         $id = Crypt::decrypt($id);
         $user = User::with('roles')->where('id', $id)->first();
         $roles = Role::orderBy('name')->get();
+        $jabatan = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
+        $dept = Departemen::orderBy('kode_dept')->get();
         $unit = Unit::orderBy('kode_unit')->get();
-        return view('settings.users.edit', compact('user', 'roles', 'unit'));
+        return view('settings.users.edit', compact('user', 'roles', 'unit', 'jabatan', 'dept'));
     }
 
     public function store(Request $request)
@@ -47,7 +51,8 @@ class UserController extends Controller
             'password' => 'required',
             'role' => 'required',
             'kode_unit' => 'required',
-            'kode_dept' => 'required'
+            'kode_dept' => 'required',
+            'kode_jabatan' => 'required'
         ]);
 
         try {
@@ -57,7 +62,8 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => $request->password,
                 'kode_unit' => $request->kode_unit,
-                'kode_dept' => $request->kode_dept
+                'kode_dept' => $request->kode_dept,
+                'kode_jabatan' => $request->kode_jabatan
             ]);
 
             $user->assignRole($request->role);
@@ -78,7 +84,10 @@ class UserController extends Controller
             'name' => 'required',
             'username' => 'required',
             'email' => 'required|email',
-            'kode_unit' => 'required'
+            'kode_unit' => 'required',
+            'kode_dept' => 'required',
+            'role' => 'required',
+            'kode_jabatan' => 'required'
         ]);
 
         try {
@@ -90,13 +99,17 @@ class UserController extends Controller
                     'email' => $request->email,
                     'password' => bcrypt($request->password),
                     'kode_unit' => $request->kode_unit,
+                    'kode_dept' => $request->kode_dept,
+                    'kode_jabatan' => $request->kode_jabatan
                 ]);
             } else {
                 User::where('id', $id)->update([
                     'name' => $request->name,
                     'username' => $request->username,
                     'email' => $request->email,
-                    'kode_unit' => $request->kode_unit
+                    'kode_unit' => $request->kode_unit,
+                    'kode_dept' => $request->kode_dept,
+                    'kode_jabatan' => $request->kode_jabatan
                 ]);
             }
 

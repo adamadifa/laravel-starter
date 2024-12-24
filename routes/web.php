@@ -61,6 +61,10 @@ Route::middleware('auth')->group(function () {
 
     //Setings
     //Role
+    Route::controller(DashboardController::class)->group(function () {
+        Route::post('/dashboard/getrealisasikegiatan', 'getrealisasikegiatan')->name('dashboard.getrealisasikegiatan');
+        Route::post('/dashboard/getagendakegiatan', 'getagendakegiatan')->name('dashboard.getagendakegiatan');
+    });
     Route::controller(RoleController::class)->group(function () {
         Route::get('/roles', 'index')->name('roles.index');
         Route::get('/roles/create', 'create')->name('roles.create');
@@ -216,9 +220,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/realisasikegiatan/create', 'create')->name('realisasikegiatan.create')->can('realkegiatan.create');
         Route::post('/realisasikegiatan', 'store')->name('realisasikegiatan.store')->can('realkegiatan.store');
         Route::get('/realisasikegiatan/{id}/edit', 'edit')->name('realisasikegiatan.edit')->can('realkegiatan.edit');
-        Route::get('/realisasikegiatan/{id}/show', 'show')->name('realisasikegiatan.show')->can('realkegiatan.show');
+        Route::get('/realisasikegiatan/show/{id}', 'show')->name('realisasikegiatan.show')->can('realkegiatan.create');
         Route::put('/realisasikegiatan/{id}/update', 'update')->name('realisasikegiatan.update')->can('realkegiatan.update');
         Route::delete('/realisasikegiatan/{id}/delete', 'destroy')->name('realisasikegiatan.delete')->can('realkegiatan.delete');
+
+        Route::post('/realisasikegiatan/getrealisasikegiatan', 'getrealisasikegiatan')->name('realisasikegiatan.getrealisasikegiatan');
     });
 
     Route::controller(AgendakegiatanController::class)->group(function () {
@@ -226,9 +232,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/agendakegiatan/create', 'create')->name('agendakegiatan.create')->can('agendakegiatan.create');
         Route::post('/agendakegiatan', 'store')->name('agendakegiatan.store')->can('agendakegiatan.store');
         Route::get('/agendakegiatan/{id}/edit', 'edit')->name('agendakegiatan.edit')->can('agendakegiatan.edit');
-        Route::get('/agendakegiatan/{id}/show', 'show')->name('agendakegiatan.show')->can('agendakegiatan.show');
+        Route::get('/agendakegiatan/show/{id}', 'show')->name('agendakegiatan.show')->can('agendakegiatan.create');
         Route::put('/agendakegiatan/{id}/update', 'update')->name('agendakegiatan.update')->can('agendakegiatan.update');
         Route::delete('/agendakegiatan/{id}/delete', 'destroy')->name('agendakegiatan.delete')->can('agendakegiatan.delete');
+
+        Route::post('/agendakegiatan/getagendakegiatan', 'getagendakegiatan')->name('agendakegiatan.getagendakegiatan');
     });
 
 

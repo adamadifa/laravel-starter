@@ -168,3 +168,14 @@ function formatNama($sentence)
         return $sentence;
     }
 }
+
+function truncateString($string, $length = 50, $suffix = '...')
+{
+    // Periksa apakah panjang string lebih besar dari panjang yang diinginkan
+    if (strlen($string) > $length) {
+        // Potong string hingga panjang yang diinginkan dan tambahkan suffix
+        return substr($string, 0, $length) . $suffix;
+    }
+    // Jika tidak, kembalikan string apa adanya
+    return $string;
+}

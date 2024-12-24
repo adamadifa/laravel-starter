@@ -116,7 +116,7 @@
      </script>
  @endif
  <script>
-     $('.delete-confirm').click(function(event) {
+     $(document).on('click', '.delete-confirm', function(event) {
          var form = $(this).closest("form");
          var name = $(this).data("name");
          event.preventDefault();
@@ -137,6 +137,27 @@
              }
          });
      });
+     //  $('.delete-confirm').click(function(event) {
+     //      var form = $(this).closest("form");
+     //      var name = $(this).data("name");
+     //      event.preventDefault();
+     //      Swal.fire({
+     //          title: `Apakah Anda Yakin Ingin Menghapus Data Ini ?`,
+     //          text: "Jika dihapus maka data akan hilang permanent.",
+     //          icon: "warning",
+     //          buttons: true,
+     //          dangerMode: true,
+     //          showCancelButton: true,
+     //          confirmButtonColor: "#554bbb",
+     //          cancelButtonColor: "#d33",
+     //          confirmButtonText: "Yes, Hapus Saja!"
+     //      }).then((result) => {
+     //          /* Read more about isConfirmed, isDenied below */
+     //          if (result.isConfirmed) {
+     //              form.submit();
+     //          }
+     //      });
+     //  });
  </script>
 
 

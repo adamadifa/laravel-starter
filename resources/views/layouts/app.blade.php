@@ -101,7 +101,7 @@
         <div class="drag-target"></div>
     </div>
     <!-- / Layout wrapper -->
-    @if ($agent->isMobile())
+    {{-- @if ($agent->isMobile())
         <nav class="navbar fixed-bottom navbar-light bg-white shadow d-md-none">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#"><i class="ti ti-user" style="font-size: 20px"></i></a>
@@ -113,7 +113,7 @@
                 <a class="navbar-brand" href="#"><i class="ti ti-help" style="font-size: 20px"></i></a>
             </div>
         </nav>
-    @endif
+    @endif --}}
     <!-- Core JS -->
     @include('layouts.scripts')
     <!-- Page JS -->
