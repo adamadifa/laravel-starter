@@ -17,19 +17,33 @@ class RealisasikegiatanController extends Controller
 {
     public function index(Request $request)
     {
+        $user = User::where('id', auth()->user()->id)->first();
         $query = Realisasikegiatan::query();
         $query->select('realisasi_kegiatan.*', 'name', 'jobdesk');
         $query->join('departemen', 'realisasi_kegiatan.kode_dept', '=', 'departemen.kode_dept');
         $query->join('jabatan', 'realisasi_kegiatan.kode_jabatan', '=', 'jabatan.kode_jabatan');
         $query->join('jobdesk', 'realisasi_kegiatan.kode_jobdesk', '=', 'jobdesk.kode_jobdesk');
         $query->join('users', 'realisasi_kegiatan.id_user', '=', 'users.id');
-        // $query->where('realisasi_kegiatan.kode_jabatan', $request->kode_jabatan);
-        // $query->where('realisasi_kegiatan.kode_dept', $request->kode_dept);
-        $query->orderBy('tanggal');
-        $data['realisasikegiatan'] = $query->get();
+        if (!$user->hasRole('super admin')) {
+            $query->where('realisasi_kegiatan.kode_jabatan', $user->kode_jabatan);
+            $query->where('realisasi_kegiatan.kode_dept', $user->kode_dept);
+        } else {
+            $query->where('realisasi_kegiatan.kode_jabatan', $request->kode_jabatan);
+            $query->where('realisasi_kegiatan.kode_dept', $request->kode_dept);
+        }
 
+        if (!empty($request->dari) && !empty($request->sampai)) {
+            $query->whereBetween('tanggal', [$request->dari, $request->sampai]);
+        }
+
+        $query->orderBy('tanggal', 'DESC');
+        $realisasikegiatan = $query->paginate(30);
+        $realisasikegiatan->appends($request->all());
+
+        $data['realisasikegiatan'] = $realisasikegiatan;
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
+        $data['user'] = $user;
         $agent = new Agent();
         if ($agent->isMobile()) {
             return view('realisasi_kegiatan.index_mobile', $data);
@@ -40,8 +54,10 @@ class RealisasikegiatanController extends Controller
 
     public function create()
     {
+        $user = User::where('id', auth()->user()->id)->first();
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
+        $data['user'] = $user;
         $agent = new Agent();
         if ($agent->isMobile()) {
             return view('realisasi_kegiatan.create_mobile', $data);
@@ -136,11 +152,12 @@ class RealisasikegiatanController extends Controller
 
     public function edit($id)
     {
+        $user = User::where('id', auth()->user()->id)->first();
         $id = Crypt::decrypt($id);
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
         $data['realisasikegiatan'] = Realisasikegiatan::where('id', $id)->first();
-
+        $data['user'] = $user;
         $agent = new Agent();
         if ($agent->isMobile()) {
             return view('realisasi_kegiatan.edit_mobile', $data);

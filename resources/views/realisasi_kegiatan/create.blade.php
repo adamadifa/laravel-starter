@@ -1,23 +1,27 @@
 <form action="{{ route('realisasikegiatan.store') }}" id="formCreaterealisasikegiatan" method="POST" enctype="multipart/form-data">
     @csrf
     <x-input-with-icon icon="ti ti-calendar" label="Tanggal" name="tanggal" datepicker="flatpickr-date" />
-    <div class="form-group mb-3">
-        <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatan">
-            <option value="">Jabatan</option>
-            @foreach ($jabatan as $d)
-                <option value="{{ $d->kode_jabatan }}">{{ strtoUpper($d->nama_jabatan) }}</option>
-            @endforeach
-        </select>
-    </div>
+    <x-input-with-icon icon="ti ti-file-description" label="Nama Kegiatan" name="nama_kegiatan" datepicker="flatpickr-date" />
+    @if ($user->hasRole('super admin'))
+        <div class="form-group mb-3">
+            <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatan">
+                <option value="">Jabatan</option>
+                @foreach ($jabatan as $d)
+                    <option value="{{ $d->kode_jabatan }}">{{ strtoUpper($d->nama_jabatan) }}</option>
+                @endforeach
+            </select>
+        </div>
 
-    <div class="form-group mb-3">
-        <select name="kode_dept" id="kode_dept" class="form-select select2Kodedept">
-            <option value="">Departemen</option>
-            @foreach ($departemen as $d)
-                <option value="{{ $d->kode_dept }}">{{ strtoupper($d->nama_dept) }}</option>
-            @endforeach
-        </select>
-    </div>
+        <div class="form-group mb-3">
+            <select name="kode_dept" id="kode_dept" class="form-select select2Kodedept">
+                <option value="">Departemen</option>
+                @foreach ($departemen as $d)
+                    <option value="{{ $d->kode_dept }}">{{ strtoupper($d->nama_dept) }}</option>
+                @endforeach
+            </select>
+        </div>
+    @endif
+
     <div class="form-group mb-3">
         <select name="kode_jobdesk" id="kode_jobdesk" class="form-select select2Kodejobdesk">
             <option value="">Job Desk</option>
@@ -53,6 +57,7 @@
             let kode_jabatan = $(this).find('#kode_jabatan').val();
             let uraian_kegiatan = $(this).find('#uraian_kegiatan').val();
             let kode_jobdesk = $(this).find('#kode_jobdesk').val();
+            let nama_kegiatan = $(this).find('#nama_kegiatan').val();
 
             if (tanggal == "") {
                 Swal.fire({
@@ -61,6 +66,16 @@
                     text: 'Tanggal tidak boleh kosong!',
                     didClose: (e) => {
                         $(this).find("#tanggal").focus();
+                    }
+                });
+                return false;
+            } else if (nama_kegiatan == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Nama Kegiatan tidak boleh kosong!',
+                    didClose: (e) => {
+                        $(this).find("#nama_kegiatan").focus();
                     }
                 });
                 return false;
@@ -191,7 +206,7 @@
                 success: function(response) {
                     for (let i = 0; i < response.length; i++) {
                         $("#formCreaterealisasikegiatan").find("#kode_jobdesk").append('<option value="' + response[i]
-                            .kode_jobdesk + '">' + response[i].jobdesk + '</option>');
+                            .kode_jobdesk + '">' + response[i].kode_jobdesk + ' - ' + response[i].jobdesk + '</option>');
                     }
                 }
             })
@@ -200,5 +215,7 @@
         $("#formCreaterealisasikegiatan").find('#kode_jabatan, #kode_dept').on('change', function() {
             getJobdesk();
         });
+
+        getJobdesk();
     });
 </script>

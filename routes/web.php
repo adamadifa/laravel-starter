@@ -21,6 +21,7 @@ use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\Permission_groupController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProgramkerjaController;
 use App\Http\Controllers\RealisasikegiatanController;
 use App\Http\Controllers\RegencyController;
 use App\Http\Controllers\RencanasppController;
@@ -250,6 +251,15 @@ Route::middleware('auth')->group(function () {
     });
 
 
+    Route::controller(ProgramkerjaController::class)->group(function () {
+        Route::get('/programkerja', 'index')->name('programkerja.index')->can('programkerja.index');
+        Route::get('/programkerja/create', 'create')->name('programkerja.create')->can('programkerja.create');
+        Route::post('/programkerja', 'store')->name('programkerja.store')->can('programkerja.create');
+        Route::get('/programkerja/{kode_program_kerja}/edit', 'edit')->name('programkerja.edit')->can('programkerja.edit');
+        Route::get('/programkerja/{kode_program_kerja}/show', 'show')->name('programkerja.show')->can('programkerja.index');
+        Route::put('/programkerja/{kode_program_kerja}/update', 'update')->name('programkerja.update')->can('programkerja.edit');
+        Route::delete('/programkerja/{kode_program_kerja}/delete', 'destroy')->name('programkerja.delete')->can('programkerja.delete');
+    });
 
 
 

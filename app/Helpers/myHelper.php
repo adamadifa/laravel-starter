@@ -169,6 +169,16 @@ function formatNama($sentence)
     }
 }
 
+function formatNama1($sentence)
+{
+    $words = explode(' ', $sentence);
+    if (count($words) >= 2) {
+        return $words[0];
+    } else {
+        return $sentence;
+    }
+}
+
 function truncateString($string, $length = 50, $suffix = '...')
 {
     // Periksa apakah panjang string lebih besar dari panjang yang diinginkan
@@ -177,5 +187,15 @@ function truncateString($string, $length = 50, $suffix = '...')
         return substr($string, 0, $length) . $suffix;
     }
     // Jika tidak, kembalikan string apa adanya
+    return $string;
+}
+
+
+function removeHtmltag($string)
+{
+    // Menghapus tag HTML
+    $string = strip_tags($string);
+    // Menghapus &nbsp;
+    $string = str_replace('&nbsp;', ' ', $string);
     return $string;
 }

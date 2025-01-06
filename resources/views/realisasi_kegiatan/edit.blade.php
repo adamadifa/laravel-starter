@@ -3,25 +3,30 @@
     @csrf
     @method('PUT')
     <x-input-with-icon icon="ti ti-calendar" label="Tanggal" name="tanggal" datepicker="flatpickr-date" :value="$realisasikegiatan->tanggal" />
-    <div class="form-group mb-3">
-        <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatan">
-            <option value="">Jabatan</option>
-            @foreach ($jabatan as $d)
-                <option value="{{ $d->kode_jabatan }}" {{ $realisasikegiatan->kode_jabatan == $d->kode_jabatan ? 'selected' : '' }}>
-                    {{ strtoUpper($d->nama_jabatan) }}</option>
-            @endforeach
-        </select>
-    </div>
+    <x-input-with-icon icon="ti ti-file-description" label="Nama Kegiatan" name="nama_kegiatan" :value="$realisasikegiatan->nama_kegiatan" />
 
-    <div class="form-group mb-3">
-        <select name="kode_dept" id="kode_dept" class="form-select select2Kodedept">
-            <option value="">Departemen</option>
-            @foreach ($departemen as $d)
-                <option value="{{ $d->kode_dept }}" {{ $realisasikegiatan->kode_dept == $d->kode_dept ? 'selected' : '' }}>
-                    {{ strtoupper($d->nama_dept) }}</option>
-            @endforeach
-        </select>
-    </div>
+    @if ($user->hasRole('super admin'))
+        <div class="form-group mb-3">
+            <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatan">
+                <option value="">Jabatan</option>
+                @foreach ($jabatan as $d)
+                    <option value="{{ $d->kode_jabatan }}" {{ $realisasikegiatan->kode_jabatan == $d->kode_jabatan ? 'selected' : '' }}>
+                        {{ strtoUpper($d->nama_jabatan) }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <select name="kode_dept" id="kode_dept" class="form-select select2Kodedept">
+                <option value="">Departemen</option>
+                @foreach ($departemen as $d)
+                    <option value="{{ $d->kode_dept }}" {{ $realisasikegiatan->kode_dept == $d->kode_dept ? 'selected' : '' }}>
+                        {{ strtoupper($d->nama_dept) }}</option>
+                @endforeach
+            </select>
+        </div>
+    @endif
+
     <div class="form-group mb-3">
         <select name="kode_jobdesk" id="kode_jobdesk" class="form-select select2Kodejobdesk">
             <option value="">Job Desk</option>
@@ -55,6 +60,7 @@
             let kode_jabatan = $(this).find('#kode_jabatan').val();
             let uraian_kegiatan = $(this).find('#uraian_kegiatan').val();
             let kode_jobdesk = $(this).find('#kode_jobdesk').val();
+            let nama_kegiatan = $(this).find('#nama_kegiatan').val();
 
             if (tanggal == "") {
                 Swal.fire({
@@ -63,6 +69,16 @@
                     text: 'Tanggal tidak boleh kosong!',
                     didClose: (e) => {
                         $(this).find("#tanggal").focus();
+                    }
+                });
+                return false;
+            } else if (nama_kegiatan == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Nama Kegiatan tidak boleh kosong!',
+                    didClose: (e) => {
+                        $(this).find("#nama_kegiatan").focus();
                     }
                 });
                 return false;

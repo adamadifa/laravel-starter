@@ -16,16 +16,23 @@ class AgendakegiatanController extends Controller
 {
     public function index(Request $request)
     {
+        $user = User::where('id', auth()->user()->id)->first();
         $query = AgendaKegiatan::query();
         $query->select('agenda_kegiatan.*', 'name');
         $query->join('departemen', 'agenda_kegiatan.kode_dept', '=', 'departemen.kode_dept');
         $query->join('jabatan', 'agenda_kegiatan.kode_jabatan', '=', 'jabatan.kode_jabatan');
         $query->join('users', 'agenda_kegiatan.id_user', '=', 'users.id');
-        // $query->where('agenda_kegiatan.kode_jabatan', $request->kode_jabatan);
-        // $query->where('agenda_kegiatan.kode_dept', $request->kode_dept);
+        if ($user->hasRole('super admin')) {
+            $query->where('agenda_kegiatan.kode_jabatan', $request->kode_jabatan);
+            $query->where('agenda_kegiatan.kode_dept', $request->kode_dept);
+        } else {
+            $query->where('agenda_kegiatan.kode_jabatan', $user->kode_jabatan);
+            $query->where('agenda_kegiatan.kode_dept', $user->kode_dept);
+        }
+
         $query->orderBy('tanggal');
         $data['agenda_kegiatan'] = $query->get();
-
+        $data['user'] = $user;
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
 
@@ -39,6 +46,8 @@ class AgendakegiatanController extends Controller
 
     public function create()
     {
+        $user = User::where('id', auth()->user()->id)->first();
+        $data['user'] = $user;
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
         $agent = new Agent();
@@ -108,6 +117,7 @@ class AgendakegiatanController extends Controller
     public function edit($id)
     {
         $id = Crypt::decrypt($id);
+        $data['user'] = User::where('id', auth()->user()->id)->first();
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
         $data['agenda_kegiatan'] = AgendaKegiatan::where('id', $id)->first();
@@ -115,7 +125,7 @@ class AgendakegiatanController extends Controller
         if ($agent->isMobile()) {
             return view('agenda_kegiatan.edit_mobile', $data);
         }
-        return view('agendakegiatan.edit', $data);
+        return view('agenda_kegiatan.edit', $data);
     }
 
     public function update(Request $request, $id)

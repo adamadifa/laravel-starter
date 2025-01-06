@@ -1,23 +1,27 @@
 <form action="{{ route('agendakegiatan.store') }}" id="formCreateAgendakegiatan" method="POST" enctype="multipart/form-data">
     @csrf
     <x-input-with-icon icon="ti ti-calendar" label="Tanggal" name="tanggal" datepicker="flatpickr-date" />
-    <div class="form-group mb-3">
-        <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatan">
-            <option value="">Jabatan</option>
-            @foreach ($jabatan as $d)
-                <option value="{{ $d->kode_jabatan }}">{{ strtoUpper($d->nama_jabatan) }}</option>
-            @endforeach
-        </select>
-    </div>
+    <x-input-with-icon icon="ti ti-file-description" label="Nama Kegiatan" name="nama_kegiatan" />
+    @if ($user->hasRole('super admin'))
+        <div class="form-group mb-3">
+            <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatan">
+                <option value="">Jabatan</option>
+                @foreach ($jabatan as $d)
+                    <option value="{{ $d->kode_jabatan }}">{{ strtoUpper($d->nama_jabatan) }}</option>
+                @endforeach
+            </select>
+        </div>
 
-    <div class="form-group mb-3">
-        <select name="kode_dept" id="kode_dept" class="form-select select2Kodedept">
-            <option value="">Departemen</option>
-            @foreach ($departemen as $d)
-                <option value="{{ $d->kode_dept }}">{{ strtoupper($d->nama_dept) }}</option>
-            @endforeach
-        </select>
-    </div>
+        <div class="form-group mb-3">
+            <select name="kode_dept" id="kode_dept" class="form-select select2Kodedept">
+                <option value="">Departemen</option>
+                @foreach ($departemen as $d)
+                    <option value="{{ $d->kode_dept }}">{{ strtoupper($d->nama_dept) }}</option>
+                @endforeach
+            </select>
+        </div>
+    @endif
+
 
     <div class="form-group mb-3">
         <textarea name="uraian_kegiatan" id="uraian_kegiatan" class="form-control" rows="30"></textarea>
@@ -45,6 +49,7 @@
             let tanggal = $(this).find('#tanggal').val();
             let kode_dept = $(this).find('#kode_dept').val();
             let kode_jabatan = $(this).find('#kode_jabatan').val();
+            let nama_kegiatan = $(this).find('#nama_kegiatan').val();
             let uraian_kegiatan = $(this).find('#uraian_kegiatan').val();
             let kode_jobdesk = $(this).find('#kode_jobdesk').val();
 
@@ -78,6 +83,16 @@
                     }
                 });
                 return false;
+            } else if (nama_kegiatan == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Nama kegiatan tidak boleh kosong!',
+                    didClose: (e) => {
+                        $(this).find("#uraian_kegiatan").focus();
+                    }
+                });
+                return false;
             } else if (uraian_kegiatan == "") {
                 Swal.fire({
                     icon: 'warning',
@@ -85,16 +100,6 @@
                     text: 'Uraian kegiatan tidak boleh kosong!',
                     didClose: (e) => {
                         $(this).find("#uraian_kegiatan").focus();
-                    }
-                });
-                return false;
-            } else if (kode_jobdesk == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Oops...',
-                    text: 'Jobdesk tidak boleh kosong!',
-                    didClose: (e) => {
-                        $(this).find("#kode_jobdesk").focus();
                     }
                 });
                 return false;
@@ -143,29 +148,6 @@
         }
 
 
-        function getJobdesk() {
-            let kode_jabatan = $("#formCreateAgendakegiatan").find('#kode_jabatan').val();
-            let kode_dept = $("#formCreateAgendakegiatan").find('#kode_dept').val();
 
-            $.ajax({
-                url: "{{ route('jobdesk.getjobdesk') }}",
-                type: "GET",
-                data: {
-                    kode_jabatan: kode_jabatan,
-                    kode_dept: kode_dept
-                },
-                cache: false,
-                success: function(response) {
-                    for (let i = 0; i < response.length; i++) {
-                        $("#formCreateAgendakegiatan").find("#kode_jobdesk").append('<option value="' + response[i]
-                            .kode_jobdesk + '">' + response[i].jobdesk + '</option>');
-                    }
-                }
-            })
-        }
-
-        $("#formCreateAgendakegiatan").find('#kode_jabatan, #kode_dept').on('change', function() {
-            getJobdesk();
-        });
     });
 </script>

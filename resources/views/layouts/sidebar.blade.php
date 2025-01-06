@@ -135,14 +135,22 @@
 
             </li>
         @endif
-        @if (auth()->user()->hasAnyPermission(['realkegiatan.index', 'agendakegiatan.index']))
-            <li class="menu-item {{ request()->is(['realisasikegiatan', 'agendakegiatan']) ? 'open' : '' }}">
+        @if (auth()->user()->hasAnyPermission(['realkegiatan.index', 'agendakegiatan.index', 'programkerja.index']))
+            <li class="menu-item {{ request()->is(['realisasikegiatan', 'agendakegiatan', 'programkerja']) ? 'open' : '' }}">
 
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-activity"></i>
                     <div>Kegiatan</div>
                 </a>
                 <ul class="menu-sub">
+                    @if (auth()->user()->hasAnyPermission(['programkerja.index']))
+                        <li class="menu-item {{ request()->is(['programkerja']) ? 'active' : '' }}">
+                            <a href="{{ route('programkerja.index') }}" class="menu-link">
+                                <i class="menu-icon tf-icons ti ti-file-description"></i>
+                                <div>Program Kerja </div>
+                            </a>
+                        </li>
+                    @endif
                     @if (auth()->user()->hasAnyPermission(['realkegiatan.index']))
                         <li class="menu-item {{ request()->is(['realisasikegiatan']) ? 'active' : '' }}">
                             <a href="{{ route('realisasikegiatan.index') }}" class="menu-link">

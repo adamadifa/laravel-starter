@@ -19,38 +19,52 @@
                     <div class="col-12">
                         <form action="{{ route('agendakegiatan.index') }}">
                             <div class="row">
-                                <div class="col-lg-5 col-sm-12 col-md-12">
-                                    <div class="form-group">
-                                        <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatansearch">
-                                            <option value="">Jabatan</option>
-                                            @foreach ($jabatan as $d)
-                                                <option value="{{ $d->kode_jabatan }}"
-                                                    {{ Request('kode_jabatan') == $d->kode_jabatan ? 'selected' : '' }}>
-                                                    {{ strtoUpper($d->nama_jabatan) }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                <div class="col-lg-6 col-sm-12 col-md-12">
+                                    <x-input-with-icon label="Dari" value="{{ Request('dari') }}" name="dari" icon="ti ti-calendar"
+                                        datepicker="flatpickr-date" />
                                 </div>
-                                <div class="col-lg-5 col-sm-12 col-md-12">
-                                    <div class="form-group">
-                                        <select name="kode_dept" id="kode_dept" class="form-select select2Kodedeptsearc">
-                                            <option value="">Departemen</option>
-                                            @foreach ($departemen as $d)
-                                                <option value="{{ $d->kode_dept }}" {{ Request('kode_dept') == $d->kode_dept ? 'selected' : '' }}>
-                                                    {{ strtoUpper($d->nama_dept) }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-sm-12 col-md-12">
-                                    <button class="btn btn-primary">Cari</button>
+                                <div class="col-lg-6 col-sm-12 col-md-12">
+                                    <x-input-with-icon label="Sampai" value="{{ Request('sampai') }}" name="sampai" icon="ti ti-calendar"
+                                        datepicker="flatpickr-date" />
                                 </div>
                             </div>
+                            @if ($user->hasRole('super admin'))
+                                <div class="row">
+                                    <div class="col-lg-5 col-sm-12 col-md-12">
+                                        <div class="form-group">
+                                            <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatansearch">
+                                                <option value="">Jabatan</option>
+                                                @foreach ($jabatan as $d)
+                                                    <option value="{{ $d->kode_jabatan }}"
+                                                        {{ Request('kode_jabatan') == $d->kode_jabatan ? 'selected' : '' }}>
+                                                        {{ strtoUpper($d->nama_jabatan) }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5 col-sm-12 col-md-12">
+                                        <div class="form-group">
+                                            <select name="kode_dept" id="kode_dept" class="form-select select2Kodedeptsearc">
+                                                <option value="">Departemen</option>
+                                                @foreach ($departemen as $d)
+                                                    <option value="{{ $d->kode_dept }}" {{ Request('kode_dept') == $d->kode_dept ? 'selected' : '' }}>
+                                                        {{ strtoUpper($d->nama_dept) }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
 
+                                </div>
+                            @endif
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12 col-md-12">
+                                    <button class="btn btn-primary w-100"><i class="ti ti-search me-2"></i>Cari</button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mt-2">
                     <div class="col-12">
                         <div class="table-responsive mb-2">
                             <table class="table table-striped table-hover table-bordered">
@@ -58,7 +72,8 @@
                                     <tr>
                                         <th style="width: 1%">No.</th>
                                         <th style="width: 10%">Tanggal</th>
-                                        <th>Uraian Kegiatan</th>
+                                        <th style="width: 29%">Nama Kegiatan</th>
+                                        <th style="width: 40%">Uraian Kegiatan</th>
 
                                         <th style="width: 5%">Dept</th>
                                         <th style="width: 10%">User</th>
@@ -70,10 +85,11 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ date('d-m-Y', strtotime($d->tanggal)) }}</td>
+                                            <td>{{ strip_tags($d->nama_kegiatan) }}</td>
                                             <td>{{ strip_tags($d->uraian_kegiatan) }}</td>
 
                                             <td>{{ $d->kode_dept }}</td>
-                                            <td>{{ formatNama($d->name) }}</td>
+                                            <td>{{ formatNama1($d->name) }}</td>
                                             <td>
                                                 <div class="d-flex">
                                                     @can('agendakegiatan.edit')
@@ -109,8 +125,8 @@
         </div>
     </div>
 </div>
-<x-modal-form id="mdlcreateAgendaKegiatan" size="" show="loadcreateAgendaKegiatan" title="Tambah Agenda Kegiatan" />
-<x-modal-form id="mdleditAgendaKegiatan" size="" show="loadeditAgendaKegiatan" title="Edit Agenda Kegiatan" />
+<x-modal-form id="mdlAgendaKegiatan" size="" show="loadAgendaKegiatan" title="" />
+
 @endsection
 @push('myscript')
 {{-- <script src="{{ asset('assets/js/pages/roles/create.js') }}"></script> --}}
@@ -118,15 +134,17 @@
     $(function() {
         $("#btncreateAgendaKegiatan").click(function(e) {
             e.preventDefault();
-            $('#mdlcreateAgendaKegiatan').modal("show");
-            $("#loadcreateAgendaKegiatan").load('/agendakegiatan/create');
+            $('#mdlAgendaKegiatan').modal("show");
+            $("#mdlAgendaKegiatan").find(".modal-title").text("Tambah Agenda Kegiatan");
+            $("#loadAgendaKegiatan").load('/agendakegiatan/create');
         });
 
         $(".btnEdit").click(function(e) {
             var id = $(this).attr("id");
             e.preventDefault();
-            $('#mdleditAgendaKegiatan').modal("show");
-            $("#loadeditAgendaKegiatan").load('/agendakegiatan/' + id + '/edit');
+            $('#mdlAgendaKegiatan').modal("show");
+            $("#mdlAgendaKegiatan").find(".modal-title").text("Edit Agenda Kegiatan");
+            $("#loadAgendaKegiatan").load('/agendakegiatan/' + id + '/edit');
         });
     });
 </script>
