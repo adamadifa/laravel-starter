@@ -19,30 +19,44 @@
                     <div class="col-12">
                         <form action="{{ route('programkerja.index') }}">
                             <div class="row">
-                                <div class="col-lg-3 col-sm-12 col-md-12">
-                                    <div class="form-group">
-                                        <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatansearch">
-                                            <option value="">Jabatan</option>
-                                            @foreach ($jabatan as $d)
-                                                <option value="{{ $d->kode_jabatan }}"
-                                                    {{ Request('kode_jabatan') == $d->kode_jabatan ? 'selected' : '' }}>
-                                                    {{ strtoUpper($d->nama_jabatan) }}</option>
-                                            @endforeach
-                                        </select>
+                                <div class="col-lg-6 col-sm-12 col-md-12">
+                                    <x-input-with-icon label="Dari" value="{{ Request('dari') }}" name="dari" icon="ti ti-calendar"
+                                        datepicker="flatpickr-date" />
+                                </div>
+                                <div class="col-lg-6 col-sm-12 col-md-12">
+                                    <x-input-with-icon label="Sampai" value="{{ Request('sampai') }}" name="sampai" icon="ti ti-calendar"
+                                        datepicker="flatpickr-date" />
+                                </div>
+                            </div>
+                            @if ($user->hasRole('super admin'))
+                                <div class="row">
+                                    <div class="col-lg-3 col-sm-12 col-md-12">
+                                        <div class="form-group">
+                                            <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatansearch">
+                                                <option value="">Jabatan</option>
+                                                @foreach ($jabatan as $d)
+                                                    <option value="{{ $d->kode_jabatan }}"
+                                                        {{ Request('kode_jabatan') == $d->kode_jabatan ? 'selected' : '' }}>
+                                                        {{ strtoUpper($d->nama_jabatan) }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12 col-md-12">
+                                        <div class="form-group">
+                                            <select name="kode_dept" id="kode_dept" class="form-select select2Kodedeptsearc">
+                                                <option value="">Departemen</option>
+                                                @foreach ($departemen as $d)
+                                                    <option value="{{ $d->kode_dept }}" {{ Request('kode_dept') == $d->kode_dept ? 'selected' : '' }}>
+                                                        {{ strtoUpper($d->nama_dept) }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-12 col-md-12">
-                                    <div class="form-group">
-                                        <select name="kode_dept" id="kode_dept" class="form-select select2Kodedeptsearc">
-                                            <option value="">Departemen</option>
-                                            @foreach ($departemen as $d)
-                                                <option value="{{ $d->kode_dept }}" {{ Request('kode_dept') == $d->kode_dept ? 'selected' : '' }}>
-                                                    {{ strtoUpper($d->nama_dept) }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-sm-12 col-md-12">
+                            @endif
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12 col-md-12">
                                     <div class="form-group">
                                         <select name="kode_ta" id="kode_ta" class="form-select select2Kodeta">
                                             <option value="">Tahun Ajaran</option>
@@ -53,15 +67,16 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-2 col-sm-12 col-md-12">
-                                    <button class="btn btn-primary">Cari</button>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12 col-md-12 ">
+                                    <button class="btn btn-primary w-100"><i class="ti ti-search"></i> Cari</button>
                                 </div>
                             </div>
-
                         </form>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mt-2">
                     <div class="col-12">
                         <div class="table-responsive mb-2">
                             <table class="table table-striped table-hover table-bordered">
@@ -81,10 +96,10 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $d->program_kerja }}</td>
-                                            <td>{{ strip_tags($d->target_pencapaian) }}</td>
+                                            <td>{{ removeHtmltag($d->target_pencapaian) }}</td>
                                             <td>{{ $d->tanggal_pelaksanaan }}</td>
                                             <td>{{ $d->kode_dept }}</td>
-                                            <td>{{ formatNama($d->name) }}</td>
+                                            <td>{{ formatNama1($d->name) }}</td>
                                             <td>
                                                 <div class="d-flex">
                                                     @can('programkerja.edit')
@@ -130,7 +145,7 @@
         $("#btncreateProgramKerja").click(function(e) {
             e.preventDefault();
             $('#mdlProgramkerja').modal("show");
-            $("#mdlProgramkerja").find(".modal-title").text("Tambah Program Kerja");
+            $("#mdlProgramkerja").find(".modal-title").text("Tambah Program Kerja {{ $ta_aktif->tahun_ajaran }}");
             $("#loadProgramkerja").load('/programkerja/create');
         });
 

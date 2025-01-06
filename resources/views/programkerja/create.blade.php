@@ -7,23 +7,26 @@
     <div class="form-group mb-3">
         <textarea name="keterangan" id="keterangan" class="form-control" rows="30"></textarea>
     </div>
-    <div class="form-group mb-3">
-        <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatan">
-            <option value="">Jabatan</option>
-            @foreach ($jabatan as $d)
-                <option value="{{ $d->kode_jabatan }}">{{ strtoUpper($d->nama_jabatan) }}</option>
-            @endforeach
-        </select>
-    </div>
+    @if ($user->hasRole('super admin'))
+        <div class="form-group mb-3">
+            <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatan">
+                <option value="">Jabatan</option>
+                @foreach ($jabatan as $d)
+                    <option value="{{ $d->kode_jabatan }}">{{ strtoUpper($d->nama_jabatan) }}</option>
+                @endforeach
+            </select>
+        </div>
 
-    <div class="form-group mb-3">
-        <select name="kode_dept" id="kode_dept" class="form-select select2Kodedept">
-            <option value="">Departemen</option>
-            @foreach ($departemen as $d)
-                <option value="{{ $d->kode_dept }}">{{ strtoupper($d->nama_dept) }}</option>
-            @endforeach
-        </select>
-    </div>
+        <div class="form-group mb-3">
+            <select name="kode_dept" id="kode_dept" class="form-select select2Kodedept">
+                <option value="">Departemen</option>
+                @foreach ($departemen as $d)
+                    <option value="{{ $d->kode_dept }}">{{ strtoupper($d->nama_dept) }}</option>
+                @endforeach
+            </select>
+        </div>
+    @endif
+
     <x-input-with-icon icon="ti ti-calendar" label="Tanggal Pelaksanaan" name="tanggal_pelaksanaan" datepicker="flatpickr-date" />
 
 

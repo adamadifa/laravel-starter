@@ -15,14 +15,21 @@ class ProgramkerjaController extends Controller
 {
     public function index(Request $request)
     {
+        $user = User::where('id', auth()->user()->id)->first();
         $ta_aktif = Tahunajaran::where('status', 1)->first();
         $query = Programkerja::query();
         $query->select('program_kerja.*', 'name');
         $query->join('departemen', 'program_kerja.kode_dept', '=', 'departemen.kode_dept');
         $query->join('jabatan', 'program_kerja.kode_jabatan', '=', 'jabatan.kode_jabatan');
         $query->join('users', 'program_kerja.id_user', '=', 'users.id');
-        // $query->where('program_kerja.kode_jabatan', $request->kode_jabatan);
-        // $query->where('program_kerja.kode_dept', $request->kode_dept);
+        if ($user->hasRole('super admin')) {
+            $query->where('program_kerja.kode_jabatan', $request->kode_jabatan);
+            $query->where('program_kerja.kode_dept', $request->kode_dept);
+        } else {
+            $query->where('program_kerja.kode_jabatan', $user->kode_jabatan);
+            $query->where('program_kerja.kode_dept', $user->kode_dept);
+        }
+
         if (!empty($request->kode_ta)) {
             $query->where('program_kerja.kode_ta', $request->kode_ta);
         } else {
@@ -30,9 +37,11 @@ class ProgramkerjaController extends Controller
         }
         $query->orderBy('tanggal_pelaksanaan');
         $data['programkerja'] = $query->get();
+        $data['user'] = $user;
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
         $data['tahunajaran'] = Tahunajaran::all();
+        $data['ta_aktif'] = $ta_aktif;
         return view('programkerja.index', $data);
     }
 
@@ -40,6 +49,7 @@ class ProgramkerjaController extends Controller
     {
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
+        $data['user'] = User::where('id', auth()->user()->id)->first();
         return view('programkerja.create', $data);
     }
 
@@ -108,6 +118,7 @@ class ProgramkerjaController extends Controller
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
         $data['programkerja'] = Programkerja::where('kode_program_kerja', $kode_program_kerja)->first();
+        $data['user'] = User::where('id', auth()->user()->id)->first();
         return view('programkerja.edit', $data);
     }
 
