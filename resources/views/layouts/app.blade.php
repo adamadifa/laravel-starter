@@ -10,6 +10,8 @@
     <title>@yield('titlepage')</title>
 
     <meta name="description" content="" />
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#4CAF50">
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('/assets/img/favicon/favicon.ico') }}" />
@@ -25,6 +27,8 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ asset('/assets/js/config.js') }}"></script>
+
+    @laravelPWA
 </head>
 
 <body>
