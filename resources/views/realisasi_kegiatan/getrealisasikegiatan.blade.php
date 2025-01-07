@@ -5,7 +5,7 @@
                 <div class="img-thumbnail">
                     <i class="ti ti-calendar-event text-primary" style="font-size: 3rem"></i>
                 </div>
-                <div class="detail ms-2">
+                <div class="detail ms-2 btnShow" id="{{ Crypt::encrypt($d->id) }}">
                     <h5 class="title m-0">{{ $d->nama_kegiatan }}</h5>
                     <span class="m-0 text-muted">
                         <i class="ti ti-calendar me-1 mb-1"></i>
