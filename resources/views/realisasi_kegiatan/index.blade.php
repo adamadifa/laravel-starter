@@ -17,7 +17,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <form action="{{ route('realisasikegiatan.index') }}">
+                        <form action="{{ route('realisasikegiatan.index') }}" id="myForm">
                             <div class="row">
                                 <div class="col-lg-6 col-sm-12 col-md-12">
                                     <x-input-with-icon label="Dari" value="{{ Request('dari') }}" name="dari" icon="ti ti-calendar"
@@ -56,8 +56,14 @@
                                 </div>
                             @endif
                             <div class="row">
-                                <div class="col-lg-12 col-sm-12 col-md-12">
+                                <div class="col-lg-11 col-sm-12 col-md-12">
                                     <button class="btn btn-primary w-100"><i class="ti ti-search me-2"></i>Cari</button>
+                                </div>
+                                <div class="col-lg-1 col-sm-12 col-md-12">
+                                    <button class="btn btn-warning" type="submit" value="1" name="cetak" id="cetakButton"><i
+                                            class="ti ti-printer me-1"></i>
+                                        Cetak
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -73,7 +79,8 @@
                                         <th style="width: 10%">Tanggal</th>
                                         <th style="width: 20%">Uraian Kegiatan</th>
                                         <th style="width: 30%">Uraian Kegiatan</th>
-                                        <th style="width: 29%">Jobdesk</th>
+                                        <th style="width: 15%">Jobdesk</th>
+                                        <th style="width: 24%">Program Kerja</th>
                                         <th style="width: 5%">Dept</th>
                                         <th style="width: 10%">User</th>
                                         <th style="width: 5%">#</th>
@@ -87,6 +94,7 @@
                                             <td>{{ removeHtmltag($d->nama_kegiatan) }}</td>
                                             <td>{{ removeHtmltag($d->uraian_kegiatan) }}</td>
                                             <td>{{ $d->jobdesk }}</td>
+                                            <td>{{ $d->program_kerja }}</td>
                                             <td>{{ $d->kode_dept }}</td>
                                             <td>{{ formatNama1($d->name) }}</td>
                                             <td>
@@ -133,6 +141,45 @@
 <x-modal-form id="mdlRealisasiKegiatan" size="" show="loadRealisasiKegiatan" title="" />
 @endsection
 @push('myscript')
+<script>
+    $('#cetakButton').click(function(e) {
+        e.preventDefault();
+        // Ambil data form menggunakan jQuery
+        const formData = $('#myForm').serialize();
+        const url = "{{ URL::current() }}";
+        // URL tujuan untuk cetak menggunakan jQuery
+        const printUrl = url + '?' + formData + '&cetak=1';
+
+        const kode_dept = $('#kode_dept').val();
+        const dari = $('#dari').val();
+        const sampai = $('#sampai').val();
+
+        if (kode_dept == '') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Departemen tidak boleh kosong!',
+                didClose: (e) => {
+                    $('#kode_dept').focus();
+                }
+            });
+            return false;
+        } else if (dari == '' || sampai == '') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Tanggal tidak boleh kosong!',
+                didClose: (e) => {
+                    $('#dari').focus();
+                }
+            });
+            return false;
+        } else {
+            window.open(printUrl, '_blank');
+        }
+        // Buka tab baru untuk cetak menggunakan jQuery
+    });
+</script>
 {{-- <script src="{{ asset('assets/js/pages/roles/create.js') }}"></script> --}}
 <script>
     $(function() {

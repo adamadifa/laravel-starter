@@ -6,18 +6,22 @@
     <span>Program Kerja</span>
 @endsection
 <div class="row">
-    <div class="col-lg-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-sm-12 col-md-12">
         <div class="card">
             <div class="card-header">
-                @can('agendakegiatan.create')
-                    <a href="#" class="btn btn-primary" id="btncreateProgramKerja"><i class="fa fa-plus me-2"></i> Tambah
-                        Program Kerja</a>
-                @endcan
+                <div class="d-flex justify-content-between">
+                    @can('agendakegiatan.create')
+                        <a href="#" class="btn btn-primary" id="btncreateProgramKerja"><i class="fa fa-plus me-2"></i> Tambah
+                            Program Kerja</a>
+                    @endcan
+
+                </div>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <form action="{{ route('programkerja.index') }}">
+                        <form action="{{ route('programkerja.index') }}" id="myForm">
+
                             <div class="row">
                                 <div class="col-lg-6 col-sm-12 col-md-12">
                                     <x-input-with-icon label="Dari" value="{{ Request('dari') }}" name="dari" icon="ti ti-calendar"
@@ -30,7 +34,7 @@
                             </div>
                             @if ($user->hasRole('super admin'))
                                 <div class="row">
-                                    <div class="col-lg-3 col-sm-12 col-md-12">
+                                    <div class="col-lg-6 col-sm-12 col-md-12">
                                         <div class="form-group">
                                             <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatansearch">
                                                 <option value="">Jabatan</option>
@@ -42,7 +46,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-sm-12 col-md-12">
+                                    <div class="col-lg-6 col-sm-12 col-md-12">
                                         <div class="form-group">
                                             <select name="kode_dept" id="kode_dept" class="form-select select2Kodedeptsearc">
                                                 <option value="">Departemen</option>
@@ -69,8 +73,15 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-12 col-sm-12 col-md-12 ">
-                                    <button class="btn btn-primary w-100"><i class="ti ti-search"></i> Cari</button>
+                                <div class="col-lg-11 col-sm-12 col-md-12 ">
+                                    <button class="btn btn-primary w-100" type="submit" value="1" name="cari"><i class="ti ti-search"></i>
+                                        Cari</button>
+                                </div>
+                                <div class="col-lg-1 col-sm-12 col-md-12">
+                                    <button class="btn btn-warning" type="submit" value="1" name="cetak" id="cetakButton"><i
+                                            class="ti ti-printer me-1"></i>
+                                        Cetak
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -141,6 +152,20 @@
 @push('myscript')
 {{-- <script src="{{ asset('assets/js/pages/roles/create.js') }}"></script> --}}
 <script>
+    document.getElementById('cetakButton').addEventListener('click', function(e) {
+        e.preventDefault();
+        // Ambil data form
+        const form = document.getElementById('myForm');
+        const formData = new FormData(form);
+        const url = "{{ URL::current() }}";
+        // URL tujuan untuk cetak
+        const printUrl = url + '?' + new URLSearchParams(formData).toString() + '&cetak=1';
+
+        // Buka tab baru untuk cetak
+        window.open(printUrl, '_blank');
+    });
+</script>
+<script>
     $(function() {
         $("#btncreateProgramKerja").click(function(e) {
             e.preventDefault();
@@ -156,6 +181,8 @@
             $("#mdlProgramkerja").find(".modal-title").text("Edit Program Kerja");
             $("#loadProgramkerja").load('/programkerja/' + id + '/edit');
         });
+
+
     });
 </script>
 @endpush

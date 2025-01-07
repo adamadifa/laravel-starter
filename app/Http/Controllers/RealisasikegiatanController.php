@@ -19,24 +19,29 @@ class RealisasikegiatanController extends Controller
     {
         $user = User::where('id', auth()->user()->id)->first();
         $query = Realisasikegiatan::query();
-        $query->select('realisasi_kegiatan.*', 'name', 'jobdesk');
+        $query->select('realisasi_kegiatan.*', 'name', 'jobdesk', 'program_kerja');
         $query->join('departemen', 'realisasi_kegiatan.kode_dept', '=', 'departemen.kode_dept');
         $query->join('jabatan', 'realisasi_kegiatan.kode_jabatan', '=', 'jabatan.kode_jabatan');
         $query->join('jobdesk', 'realisasi_kegiatan.kode_jobdesk', '=', 'jobdesk.kode_jobdesk');
+        $query->join('program_kerja', 'realisasi_kegiatan.kode_program_kerja', '=', 'program_kerja.kode_program_kerja');
         $query->join('users', 'realisasi_kegiatan.id_user', '=', 'users.id');
-        if (!$user->hasRole('super admin')) {
+        if ($user->hasRole('super admin')) {
+            if (!empty($request->kode_jabatan)) {
+                $query->where('realisasi_kegiatan.kode_jabatan', $request->kode_jabatan);
+            }
+            if (!empty($request->kode_dept)) {
+                $query->where('realisasi_kegiatan.kode_dept', $request->kode_dept);
+            }
+        } else {
             $query->where('realisasi_kegiatan.kode_jabatan', $user->kode_jabatan);
             $query->where('realisasi_kegiatan.kode_dept', $user->kode_dept);
-        } else {
-            $query->where('realisasi_kegiatan.kode_jabatan', $request->kode_jabatan);
-            $query->where('realisasi_kegiatan.kode_dept', $request->kode_dept);
         }
 
         if (!empty($request->dari) && !empty($request->sampai)) {
             $query->whereBetween('tanggal', [$request->dari, $request->sampai]);
         }
 
-        $query->orderBy('tanggal', 'DESC');
+        // $query->orderBy('tanggal', 'DESC');
         $realisasikegiatan = $query->paginate(30);
         $realisasikegiatan->appends($request->all());
 
@@ -48,6 +53,19 @@ class RealisasikegiatanController extends Controller
         if ($agent->isMobile()) {
             return view('realisasi_kegiatan.index_mobile', $data);
         }
+
+        if ($request->cetak) {
+            $query->orderBy('tanggal');
+            $data['realisasikegiatan'] = $query->get();
+            $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : $user->kode_jabatan;
+            $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : $user->kode_dept;
+            $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', $kode_jabatan)->first();
+            $data['departemen'] = Departemen::orderBy('kode_dept')->where('kode_dept', $kode_dept)->first();
+            $data['dari'] = $request->dari;
+            $data['sampai'] = $request->sampai;
+            return view('realisasi_kegiatan.cetak', $data);
+        }
+        $query->orderBy('tanggal', 'desc');
         return view('realisasi_kegiatan.index', $data);
     }
 
@@ -77,6 +95,7 @@ class RealisasikegiatanController extends Controller
                 'kode_dept' => 'required',
                 'kode_jobdesk' => 'required',
                 'uraian_kegiatan' => 'required',
+                'kode_program_kerja' => 'required',
                 'file' => 'mimes:jpg,jpeg,png|max:1024',
             ]);
         } else {
@@ -84,6 +103,7 @@ class RealisasikegiatanController extends Controller
                 'tanggal' => 'required',
                 'nama_kegiatan' => 'required',
                 'kode_jobdesk' => 'required',
+                'kode_program_kerja' => 'required',
                 'uraian_kegiatan' => 'required',
                 'file' => 'mimes:jpg,jpeg,png|max:1024',
             ]);
@@ -115,6 +135,7 @@ class RealisasikegiatanController extends Controller
                 'kode_jabatan' => $kode_jabatan,
                 'kode_dept' => $kode_dept,
                 'kode_jobdesk' => $request->kode_jobdesk,
+                'kode_program_kerja' => $request->kode_program_kerja,
                 'uraian_kegiatan' => $request->uraian_kegiatan,
                 'id_user' => auth()->user()->id,
                 'foto' => $file
@@ -177,6 +198,7 @@ class RealisasikegiatanController extends Controller
                 'kode_jabatan' => 'required',
                 'kode_dept' => 'required',
                 'kode_jobdesk' => 'required',
+                'kode_program_kerja' => 'required',
                 'uraian_kegiatan' => 'required',
                 'file' => 'mimes:jpg,jpeg,png|max:1024',
             ]);
@@ -185,6 +207,7 @@ class RealisasikegiatanController extends Controller
                 'tanggal' => 'required',
                 'nama_kegiatan' => 'required',
                 'kode_jobdesk' => 'required',
+                'kode_program_kerja' => 'required',
                 'uraian_kegiatan' => 'required',
                 'file' => 'mimes:jpg,jpeg,png|max:1024',
             ]);
@@ -204,6 +227,7 @@ class RealisasikegiatanController extends Controller
                 'kode_jabatan' => $kode_jabatan,
                 'kode_dept' => $kode_dept,
                 'kode_jobdesk' => $request->kode_jobdesk,
+                'kode_program_kerja' => $request->kode_program_kerja,
                 'uraian_kegiatan' => $request->uraian_kegiatan,
                 'id_user' => auth()->user()->id
             ]);

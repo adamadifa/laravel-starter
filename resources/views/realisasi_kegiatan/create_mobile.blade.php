@@ -28,6 +28,11 @@
             </select>
         </div>
         <div class="form-group mb-3">
+            <select name="kode_program_kerja" id="kode_program_kerja" class="form-select select2Kodeprogramkerja">
+                <option value="">Program Kerja</option>
+            </select>
+        </div>
+        <div class="form-group mb-3">
             <textarea name="uraian_kegiatan" id="uraian_kegiatan" class="form-control" rows="10" placeholder="Uraian Kegiatan"></textarea>
         </div>
         <div class="form-group">
@@ -168,6 +173,17 @@
                 });
             }
 
+            const select2Kodeprogramkerja = $('.select2Kodeprogramkerja');
+            if (select2Kodeprogramkerja.length) {
+                select2Kodeprogramkerja.each(function() {
+                    var $this = $(this);
+                    $this.wrap('<div class="position-relative"></div>').select2({
+                        placeholder: 'Pilih  Program Kerja',
+                        allowClear: true,
+                        dropdownParent: $this.parent()
+                    });
+                });
+            }
 
             function getJobdesk() {
                 let kode_jabatan = $("#formCreaterealisasikegiatan").find('#kode_jabatan').val();
@@ -190,11 +206,35 @@
                 })
             }
 
+            function getProgramkerja() {
+                let kode_jabatan = $("#formCreaterealisasikegiatan").find('#kode_jabatan').val();
+                let kode_dept = $("#formCreaterealisasikegiatan").find('#kode_dept').val();
+
+                $.ajax({
+                    url: "{{ route('programkerja.getprogramkerja') }}",
+                    type: "GET",
+                    data: {
+                        kode_jabatan: kode_jabatan,
+                        kode_dept: kode_dept
+                    },
+                    cache: false,
+                    success: function(response) {
+                        for (let i = 0; i < response.length; i++) {
+                            $("#formCreaterealisasikegiatan").find("#kode_program_kerja").append('<option value="' + response[i]
+                                .kode_program_kerja + '">' + response[i].kode_program_kerja + ' - ' + response[i].program_kerja +
+                                '</option>');
+                        }
+                    }
+                })
+            }
+
             $("#formCreaterealisasikegiatan").find('#kode_jabatan, #kode_dept').on('change', function() {
                 getJobdesk();
+                getProgramkerja();
             });
 
             getJobdesk();
+            getProgramkerja();
         });
     </script>
 @endpush

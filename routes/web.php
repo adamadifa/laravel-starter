@@ -259,6 +259,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/programkerja/{kode_program_kerja}/show', 'show')->name('programkerja.show')->can('programkerja.index');
         Route::put('/programkerja/{kode_program_kerja}/update', 'update')->name('programkerja.update')->can('programkerja.edit');
         Route::delete('/programkerja/{kode_program_kerja}/delete', 'destroy')->name('programkerja.delete')->can('programkerja.delete');
+
+        Route::get('/programkerja/getprogramkerja', 'getprogramkerja')->name('programkerja.getprogramkerja');
     });
 
 

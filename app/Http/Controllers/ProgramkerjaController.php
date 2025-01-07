@@ -23,8 +23,13 @@ class ProgramkerjaController extends Controller
         $query->join('jabatan', 'program_kerja.kode_jabatan', '=', 'jabatan.kode_jabatan');
         $query->join('users', 'program_kerja.id_user', '=', 'users.id');
         if ($user->hasRole('super admin')) {
-            $query->where('program_kerja.kode_jabatan', $request->kode_jabatan);
-            $query->where('program_kerja.kode_dept', $request->kode_dept);
+            if (!empty($request->kode_jabatan)) {
+                $query->where('program_kerja.kode_jabatan', $request->kode_jabatan);
+            }
+
+            if (!empty($request->kode_dept)) {
+                $query->where('program_kerja.kode_dept', $request->kode_dept);
+            }
         } else {
             $query->where('program_kerja.kode_jabatan', $user->kode_jabatan);
             $query->where('program_kerja.kode_dept', $user->kode_dept);
@@ -36,13 +41,25 @@ class ProgramkerjaController extends Controller
             $query->where('program_kerja.kode_ta', $ta_aktif->kode_ta);
         }
         $query->orderBy('tanggal_pelaksanaan');
+        $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : $user->kode_jabatan;
+        $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : $user->kode_dept;
         $data['programkerja'] = $query->get();
         $data['user'] = $user;
-        $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
-        $data['departemen'] = Departemen::orderBy('kode_dept')->get();
         $data['tahunajaran'] = Tahunajaran::all();
         $data['ta_aktif'] = $ta_aktif;
-        return view('programkerja.index', $data);
+
+        if ($request->cetak == 1) {
+            if (empty($kode_dept)) {
+                return Redirect::back()->with(messageError('Pilih Departemen terlebih dahulu'));
+            }
+            $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', $kode_jabatan)->first();
+            $data['departemen'] = Departemen::orderBy('kode_dept')->where('kode_dept', $kode_dept)->first();
+            return view('programkerja.cetak', $data);
+        } else {
+            $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
+            $data['departemen'] = Departemen::orderBy('kode_dept')->get();
+            return view('programkerja.index', $data);
+        }
     }
 
     public function create()
@@ -180,5 +197,16 @@ class ProgramkerjaController extends Controller
         } catch (\Exception $e) {
             return Redirect::back()->with('error', $e->getMessage());
         }
+    }
+
+
+    public function getprogramkerja(Request $request)
+    {
+        $user = User::where('id', auth()->user()->id)->first();
+        $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : auth()->user()->kode_jabatan;
+        $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : auth()->user()->kode_dept;
+
+        $program_kerja = Programkerja::where('kode_jabatan', $kode_jabatan)->where('kode_dept', $kode_dept)->get();
+        return response()->json($program_kerja);
     }
 }

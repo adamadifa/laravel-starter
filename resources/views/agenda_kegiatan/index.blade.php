@@ -17,7 +17,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <form action="{{ route('agendakegiatan.index') }}">
+                        <form action="{{ route('agendakegiatan.index') }}" id="myForm">
                             <div class="row">
                                 <div class="col-lg-6 col-sm-12 col-md-12">
                                     <x-input-with-icon label="Dari" value="{{ Request('dari') }}" name="dari" icon="ti ti-calendar"
@@ -30,7 +30,7 @@
                             </div>
                             @if ($user->hasRole('super admin'))
                                 <div class="row">
-                                    <div class="col-lg-5 col-sm-12 col-md-12">
+                                    <div class="col-lg-6 col-sm-12 col-md-12">
                                         <div class="form-group">
                                             <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatansearch">
                                                 <option value="">Jabatan</option>
@@ -42,7 +42,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-5 col-sm-12 col-md-12">
+                                    <div class="col-lg-6 col-sm-12 col-md-12">
                                         <div class="form-group">
                                             <select name="kode_dept" id="kode_dept" class="form-select select2Kodedeptsearc">
                                                 <option value="">Departemen</option>
@@ -57,8 +57,14 @@
                                 </div>
                             @endif
                             <div class="row">
-                                <div class="col-lg-12 col-sm-12 col-md-12">
+                                <div class="col-lg-11 col-sm-12 col-md-12">
                                     <button class="btn btn-primary w-100"><i class="ti ti-search me-2"></i>Cari</button>
+                                </div>
+                                <div class="col-lg-1 col-sm-12 col-md-12">
+                                    <button class="btn btn-warning" type="submit" value="1" name="cetak" id="cetakButton"><i
+                                            class="ti ti-printer me-1"></i>
+                                        Cetak
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -121,6 +127,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12">
+                        {{ $agenda_kegiatan->links() }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -130,6 +141,45 @@
 @endsection
 @push('myscript')
 {{-- <script src="{{ asset('assets/js/pages/roles/create.js') }}"></script> --}}
+<script>
+    $('#cetakButton').click(function(e) {
+        e.preventDefault();
+        // Ambil data form menggunakan jQuery
+        const formData = $('#myForm').serialize();
+        const url = "{{ URL::current() }}";
+        // URL tujuan untuk cetak menggunakan jQuery
+        const printUrl = url + '?' + formData + '&cetak=1';
+
+        const kode_dept = $('#kode_dept').val();
+        const dari = $('#dari').val();
+        const sampai = $('#sampai').val();
+
+        if (kode_dept == '') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Departemen tidak boleh kosong!',
+                didClose: (e) => {
+                    $('#kode_dept').focus();
+                }
+            });
+            return false;
+        } else if (dari == '' || sampai == '') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'Tanggal tidak boleh kosong!',
+                didClose: (e) => {
+                    $('#dari').focus();
+                }
+            });
+            return false;
+        } else {
+            window.open(printUrl, '_blank');
+        }
+        // Buka tab baru untuk cetak menggunakan jQuery
+    });
+</script>
 <script>
     $(function() {
         $("#btncreateAgendaKegiatan").click(function(e) {

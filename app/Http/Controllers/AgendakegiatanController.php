@@ -23,23 +23,43 @@ class AgendakegiatanController extends Controller
         $query->join('jabatan', 'agenda_kegiatan.kode_jabatan', '=', 'jabatan.kode_jabatan');
         $query->join('users', 'agenda_kegiatan.id_user', '=', 'users.id');
         if ($user->hasRole('super admin')) {
-            $query->where('agenda_kegiatan.kode_jabatan', $request->kode_jabatan);
-            $query->where('agenda_kegiatan.kode_dept', $request->kode_dept);
+            if (!empty($request->kode_jabatan)) {
+                $query->where('agenda_kegiatan.kode_jabatan', $request->kode_jabatan);
+            }
+            if (!empty($request->kode_dept)) {
+                $query->where('agenda_kegiatan.kode_dept', $request->kode_dept);
+            }
         } else {
             $query->where('agenda_kegiatan.kode_jabatan', $user->kode_jabatan);
             $query->where('agenda_kegiatan.kode_dept', $user->kode_dept);
         }
 
-        $query->orderBy('tanggal');
-        $data['agenda_kegiatan'] = $query->get();
+
+
         $data['user'] = $user;
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
 
         $agent = new Agent();
         if ($agent->isMobile()) {
+            $query->orderBy('tanggal', 'desc');
+            $data['agenda_kegiatan'] = $query->get();
             return view('agenda_kegiatan.index_mobile', $data);
         }
+
+        if ($request->cetak) {
+            $query->orderBy('tanggal');
+            $data['agenda_kegiatan'] = $query->get();
+            $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : $user->kode_jabatan;
+            $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : $user->kode_dept;
+            $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', $kode_jabatan)->first();
+            $data['departemen'] = Departemen::orderBy('kode_dept')->where('kode_dept', $kode_dept)->first();
+            $data['dari'] = $request->dari;
+            $data['sampai'] = $request->sampai;
+            return view('agenda_kegiatan.cetak', $data);
+        }
+        $query->orderBy('tanggal', 'desc');
+        $data['agenda_kegiatan'] = $query->paginate(30);
         return view('agenda_kegiatan.index', $data);
     }
 
