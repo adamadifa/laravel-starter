@@ -76,53 +76,53 @@
                 </div>
             </div>
         </div>
-    @endhasanyrole
 
-    <div class="row mt-2">
-        <div class="col-12 px-0">
-            <div
-                class="swiper-container cardswiper swiper-container-initialized swiper-container-horizontal swiper-container-ios swiper-container-pointer-events">
-                <div class="swiper-wrapper" id="swiper-wrapper-e7c52537e6cf4732" aria-live="polite"
-                    style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">
 
-                    @foreach ($ledger as $l)
-                        <div class="swiper-slide {{ $loop->first ? 'swiper-slide-active' : '' }}" role="group"
-                            aria-label="{{ $loop->index }} / {{ count($ledger) }} }}">
-                            <div class="card dark-bg">
-                                <div class="card-body p-3 pb-2">
-                                    <div class="row mb-1">
-                                        <div class="col-auto align-self-center">
-                                            <img src="https://sip.persisalamin.com/assets-mobile/img/masterocard.png" alt="">
+        <div class="row mt-2">
+            <div class="col-12 px-0">
+                <div
+                    class="swiper-container cardswiper swiper-container-initialized swiper-container-horizontal swiper-container-ios swiper-container-pointer-events">
+                    <div class="swiper-wrapper" id="swiper-wrapper-e7c52537e6cf4732" aria-live="polite"
+                        style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">
+
+                        @foreach ($ledger as $l)
+                            <div class="swiper-slide {{ $loop->first ? 'swiper-slide-active' : '' }}" role="group"
+                                aria-label="{{ $loop->index }} / {{ count($ledger) }} }}">
+                                <div class="card dark-bg">
+                                    <div class="card-body p-3 pb-2">
+                                        <div class="row mb-1">
+                                            <div class="col-auto align-self-center">
+                                                <img src="https://sip.persisalamin.com/assets-mobile/img/masterocard.png" alt="">
+                                            </div>
+                                            <div class=" col align-self-center text-end">
+                                                <p class="small">
+                                                    <span class="text-uppercase size-10">Validity</span><br>
+                                                    <span class="text-muted">Unlimited</span>
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div class=" col align-self-center text-end">
-                                            <p class="small">
-                                                <span class="text-uppercase size-10">Validity</span><br>
-                                                <span class="text-muted">Unlimited</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <h4 class="fw-normal mb-1">
-                                                200.000
-                                                <span class="small text-muted">Rp</span>
-                                            </h4>
-                                            <p class="mb-0 text-muted size-12">
-                                                {{ $l->no_rekening }}</p>
-                                            <p class="text-muted size-12">{{ $l->nama_ledger }}</p>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4 class="fw-normal mb-1">
+                                                    200.000
+                                                    <span class="small text-muted">Rp</span>
+                                                </h4>
+                                                <p class="mb-0 text-muted size-12">
+                                                    {{ $l->no_rekening }}</p>
+                                                <p class="text-muted size-12">{{ $l->nama_ledger }}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
+                    <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                    <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
                 </div>
-                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
-                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
             </div>
         </div>
-    </div>
-
+    @endhasanyrole
     <div class="row mt-2">
         <div class="col-12">
             <div class="card h-100">
