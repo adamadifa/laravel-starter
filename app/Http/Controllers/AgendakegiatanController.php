@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\AgendaKegiatan;
+use App\Models\Agendakegiatan;
 use App\Models\Jabatan;
 use App\Models\Departemen;
 use App\Models\Jobdesk;
@@ -17,7 +17,7 @@ class AgendakegiatanController extends Controller
     public function index(Request $request)
     {
         $user = User::where('id', auth()->user()->id)->first();
-        $query = AgendaKegiatan::query();
+        $query = Agendakegiatan::query();
         $query->select('agenda_kegiatan.*', 'name');
         $query->join('departemen', 'agenda_kegiatan.kode_dept', '=', 'departemen.kode_dept');
         $query->join('jabatan', 'agenda_kegiatan.kode_jabatan', '=', 'jabatan.kode_jabatan');
