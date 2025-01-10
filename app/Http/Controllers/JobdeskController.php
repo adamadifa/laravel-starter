@@ -53,24 +53,36 @@ class JobdeskController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'kode_jabatan' => 'required',
-            'kode_dept' => 'required',
-            'jobdesk' => 'required',
-        ]);
+        $user = User::where('id', auth()->user()->id)->first();
+        if ($user->hasRole('super admin')) {
+            $request->validate([
+                'kode_jabatan' => 'required',
+                'kode_dept' => 'required',
+                'jobdesk' => 'required',
+            ]);
+            $kode_dept = $request->kode_dept;
+            $kode_jabatan = $request->kode_jabatan;
+        } else {
+            $request->validate([
+                'jobdesk' => 'required',
+            ]);
+            $kode_dept = $user->kode_dept;
+            $kode_jabatan = $user->kode_jabatan;
+        }
+
 
         try {
             $lastjobdesk = Jobdesk::orderBy('kode_jobdesk', 'desc')
-                ->where('kode_jabatan', $request->kode_jabatan)
-                ->where('kode_dept', $request->kode_dept)
+                ->where('kode_jabatan', $kode_jabatan)
+                ->where('kode_dept', $kode_dept)
                 ->first();
             $last_kode_jobdesk = $lastjobdesk != null ? $lastjobdesk->kode_jobdesk : '';
             $kode_jobdesk = buatkode($last_kode_jobdesk, $request->kode_jabatan . $request->kode_dept, 4);
             Jobdesk::create([
                 'kode_jobdesk' => $kode_jobdesk,
                 'jobdesk' => $request->jobdesk,
-                'kode_jabatan' => $request->kode_jabatan,
-                'kode_dept' => $request->kode_dept
+                'kode_jabatan' => $kode_jabatan,
+                'kode_dept' => $kode_dept
             ]);
             return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
         } catch (\Exception $e) {
@@ -100,16 +112,28 @@ class JobdeskController extends Controller
 
     public function update(Request $request, $kode_jobdesk)
     {
-        $request->validate([
-            'kode_jabatan' => 'required',
-            'kode_dept' => 'required',
-            'jobdesk' => 'required',
-        ]);
+        $user = User::where('id', auth()->user()->id)->first();
+        if ($user->hasRole('super admin')) {
+            $request->validate([
+                'kode_jabatan' => 'required',
+                'kode_dept' => 'required',
+                'jobdesk' => 'required',
+            ]);
+            $kode_dept = $request->kode_dept;
+            $kode_jabatan = $request->kode_jabatan;
+        } else {
+            $request->validate([
+                'jobdesk' => 'required',
+            ]);
+            $kode_dept = $user->kode_dept;
+            $kode_jabatan = $user->kode_jabatan;
+        }
+
         $kode_jobdesk = Crypt::decrypt($kode_jobdesk);
         try {
             Jobdesk::where('kode_jobdesk', $kode_jobdesk)->update([
-                'kode_jabatan' => $request->kode_jabatan,
-                'kode_dept' => $request->kode_dept,
+                'kode_jabatan' => $kode_jabatan,
+                'kode_dept' => $kode_dept,
                 'jobdesk' => $request->jobdesk
             ]);
             return Redirect::back()->with(messageSuccess('Data Berhasil Diubah'));

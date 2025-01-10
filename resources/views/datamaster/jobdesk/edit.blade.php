@@ -1,27 +1,30 @@
 <form action="{{ route('jobdesk.update', ['kode_jobdesk' => Crypt::encrypt($jobdesk->kode_jobdesk)]) }}" id="formEditJobdesk" method="POST">
     @csrf
     @method('PUT')
-    <div class="form-group mb-3">
-        <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatan">
-            <option value="">Jabatan</option>
-            @foreach ($jabatan as $d)
-                <option value="{{ $d->kode_jabatan }}" {{ $jobdesk->kode_jabatan == $d->kode_jabatan ? 'selected' : '' }}>
-                    {{ strtoUpper($d->nama_jabatan) }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+    @hasanyrole('super admin')
+        <div class="form-group mb-3">
+            <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatan">
+                <option value="">Jabatan</option>
+                @foreach ($jabatan as $d)
+                    <option value="{{ $d->kode_jabatan }}" {{ $jobdesk->kode_jabatan == $d->kode_jabatan ? 'selected' : '' }}>
+                        {{ strtoUpper($d->nama_jabatan) }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
 
-    <div class="form-group mb-3">
-        <select name="kode_dept" id="kode_dept" class="form-select select2Kodedept">
-            <option value="">Departemen</option>
-            @foreach ($departemen as $d)
-                <option value="{{ $d->kode_dept }}" {{ $jobdesk->kode_dept == $d->kode_dept ? 'selected' : '' }}>
-                    {{ strtoupper($d->nama_dept) }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+        <div class="form-group mb-3">
+            <select name="kode_dept" id="kode_dept" class="form-select select2Kodedept">
+                <option value="">Departemen</option>
+                @foreach ($departemen as $d)
+                    <option value="{{ $d->kode_dept }}" {{ $jobdesk->kode_dept == $d->kode_dept ? 'selected' : '' }}>
+                        {{ strtoupper($d->nama_dept) }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    @endhasanyrole
+
     <x-textarea label="Jobdesk" name="jobdesk" :value="$jobdesk->jobdesk" />
     <div class="form-group mb-3">
         <button class="btn btn-primary w-100" id="btnSimpan" type="submit">
@@ -44,7 +47,10 @@
                 });
             });
         }
-
+        $("#jobdesk").summernote({
+            height: 200,
+            placeholder: 'Jobdesk...'
+        });
         const select2Kodejabatan = $('.select2Kodejabatan');
         if (select2Kodejabatan.length) {
             select2Kodejabatan.each(function() {

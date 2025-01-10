@@ -27,7 +27,7 @@
         </div>
     @endif
 
-    <x-input-with-icon icon="ti ti-calendar" label="Tanggal Pelaksanaan" name="tanggal_pelaksanaan" datepicker="flatpickr-date" />
+
 
 
     <div class="form-group mb-3">
@@ -77,16 +77,6 @@
                     icon: 'warning',
                     title: 'Oops...',
                     text: 'Target Pencapaian tidak boleh kosong!',
-                    didClose: (e) => {
-                        $(this).find("#kode_dept").focus();
-                    }
-                });
-                return false;
-            } else if (tanggal_pelaksanaan == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Oops...',
-                    text: 'Tanggal Pelaksanaan tidak boleh kosong!',
                     didClose: (e) => {
                         $(this).find("#kode_dept").focus();
                     }

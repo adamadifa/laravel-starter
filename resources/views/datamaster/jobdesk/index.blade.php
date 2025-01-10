@@ -78,7 +78,7 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $d->kode_jobdesk }}</td>
-                                            <td>{{ $d->jobdesk }}</td>
+                                            <td>{{ removeHtmltag($d->jobdesk) }}</td>
                                             <td>{{ $d->nama_jabatan }}</td>
                                             <td>{{ $d->nama_dept }}</td>
                                             <td>
@@ -115,8 +115,7 @@
         </div>
     </div>
 </div>
-<x-modal-form id="mdlcreateJobdesk" size="" show="loadcreateJobdesk" title="Tambah Jobdesk" />
-<x-modal-form id="mdleditJobdesk" size="" show="loadeditJobdesk" title="Edit Jobdesk" />
+<x-modal-form id="mdlJobdesk" size="" show="loadJobdesk" title="" />
 @endsection
 @push('myscript')
 {{-- <script src="{{ asset('assets/js/pages/roles/create.js') }}"></script> --}}
@@ -124,15 +123,17 @@
     $(function() {
         $("#btncreateJobdesk").click(function(e) {
             e.preventDefault();
-            $('#mdlcreateJobdesk').modal("show");
-            $("#loadcreateJobdesk").load('/jobdesk/create');
+            $('#mdlJobdesk').modal("show");
+            $("#mdlJobdesk").find(".modal-title").text("Tambah Jobdesk");
+            $("#loadJobdesk").load('/jobdesk/create');
         });
 
         $(".btnEdit").click(function(e) {
             var kode_jobdesk = $(this).attr("kode_jobdesk");
             e.preventDefault();
-            $('#mdleditJobdesk').modal("show");
-            $("#loadeditJobdesk").load('/jobdesk/' + kode_jobdesk + '/edit');
+            $('#mdlJobdesk').modal("show");
+            $("#mdlJobdesk").find(".modal-title").text("Edit Jobdesk");
+            $("#loadJobdesk").load('/jobdesk/' + kode_jobdesk + '/edit');
         });
     });
 </script>

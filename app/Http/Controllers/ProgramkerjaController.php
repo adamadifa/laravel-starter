@@ -40,7 +40,7 @@ class ProgramkerjaController extends Controller
         } else {
             $query->where('program_kerja.kode_ta', $ta_aktif->kode_ta);
         }
-        $query->orderBy('tanggal_pelaksanaan');
+        $query->orderBy('created_at', 'desc');
         $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : $user->kode_jabatan;
         $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : $user->kode_dept;
         $data['programkerja'] = $query->get();
@@ -79,7 +79,6 @@ class ProgramkerjaController extends Controller
 
                 'program_kerja' => 'required',
                 'target_pencapaian' => 'required',
-                'tanggal_pelaksanaan' => 'required',
                 'keterangan' => 'required',
                 'kode_jabatan' => 'required',
                 'kode_dept' => 'required',
@@ -92,7 +91,6 @@ class ProgramkerjaController extends Controller
 
                 'program_kerja' => 'required',
                 'target_pencapaian' => 'required',
-                'tanggal_pelaksanaan' => 'required',
                 'keterangan' => 'required',
             ]);
             $kode_jabatan = $user->kode_jabatan;
@@ -115,7 +113,6 @@ class ProgramkerjaController extends Controller
                 'program_kerja' => $request->program_kerja,
                 'target_pencapaian' => $request->target_pencapaian,
                 'keterangan' => $request->keterangan,
-                'tanggal_pelaksanaan' => $request->tanggal_pelaksanaan,
                 'kode_dept' => $kode_dept,
                 'kode_jabatan' => $kode_jabatan,
                 'kode_ta' => $ta_aktif->kode_ta,
@@ -149,7 +146,7 @@ class ProgramkerjaController extends Controller
 
                 'program_kerja' => 'required',
                 'target_pencapaian' => 'required',
-                'tanggal_pelaksanaan' => 'required',
+
                 'keterangan' => 'required',
                 'kode_jabatan' => 'required',
                 'kode_dept' => 'required',
@@ -162,7 +159,7 @@ class ProgramkerjaController extends Controller
 
                 'program_kerja' => 'required',
                 'target_pencapaian' => 'required',
-                'tanggal_pelaksanaan' => 'required',
+
                 'keterangan' => 'required',
             ]);
             $kode_jabatan = $user->kode_jabatan;
@@ -177,7 +174,6 @@ class ProgramkerjaController extends Controller
                 'program_kerja' => $request->program_kerja,
                 'target_pencapaian' => $request->target_pencapaian,
                 'keterangan' => $request->keterangan,
-                'tanggal_pelaksanaan' => $request->tanggal_pelaksanaan,
                 'kode_dept' => $kode_dept,
                 'kode_jabatan' => $kode_jabatan,
             ]);
