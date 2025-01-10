@@ -14,12 +14,27 @@ class JobdeskController extends Controller
 {
     public function index(Request $request)
     {
+        $user = User::where('id', auth()->user()->id)->first();
         $query = Jobdesk::query();
         $query->join('departemen', 'jobdesk.kode_dept', '=', 'departemen.kode_dept');
         $query->join('jabatan', 'jobdesk.kode_jabatan', '=', 'jabatan.kode_jabatan');
         $query->orderBy('kode_jobdesk');
-        $query->where('jobdesk.kode_jabatan', $request->kode_jabatan);
-        $query->where('jobdesk.kode_dept', $request->kode_dept);
+        if ($user->hasRole('super admin')) {
+            if (!empty($request->kode_jabatan)) {
+                $query->where('jobdesk.kode_jabatan', $request->kode_jabatan);
+            }
+            if (!empty($request->kode_dept)) {
+                $query->where('jobdesk.kode_dept', $request->kode_dept);
+            }
+        } else {
+            $query->where('jobdesk.kode_jabatan', $user->kode_jabatan);
+            $query->where('jobdesk.kode_dept', $user->kode_dept);
+        }
+
+        if (!empty($request->jobdesk_search)) {
+            $query->where('jobdesk.jobdesk', 'like', '%' . $request->jobdesk_search . '%');
+        }
+
         $data['jobdesk'] = $query->get();
 
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();

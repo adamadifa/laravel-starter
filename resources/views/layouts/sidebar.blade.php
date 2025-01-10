@@ -24,17 +24,8 @@
             </a>
         </li>
         <li
-            class="menu-item {{ request()->is(['karyawan', 'karyawan/*', 'jabatan', 'jabatan/*', 'unit', 'unit/*', 'siswa', 'siswa/*', 'jenisbiaya', 'departemen', 'ledger', 'jobdesk']) ? 'open' : '' }}">
-            @if (auth()->user()->hasAnyPermission([
-                        'karyawan.index',
-                        'jabatan.index',
-                        'unit.index',
-                        'jenisbiaya.index',
-                        'departemen.index',
-                        'ledger.index',
-                        'jobdesk.index',
-                        'siswa.index',
-                    ]))
+            class="menu-item {{ request()->is(['karyawan', 'karyawan/*', 'jabatan', 'jabatan/*', 'unit', 'unit/*', 'siswa', 'siswa/*', 'jenisbiaya', 'departemen', 'ledger']) ? 'open' : '' }}">
+            @if (auth()->user()->hasAnyPermission(['karyawan.index', 'jabatan.index', 'unit.index', 'jenisbiaya.index', 'departemen.index', 'ledger.index', 'siswa.index']))
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-database"></i>
                     <div>Data Master</div>
@@ -82,13 +73,7 @@
                             </a>
                         </li>
                     @endcan
-                    @can('jobdesk.index')
-                        <li class="menu-item {{ request()->is(['jobdesk', 'jobdesk/*']) ? 'active' : '' }}">
-                            <a href="{{ route('jobdesk.index') }}" class="menu-link">
-                                <div>Jobdesk</div>
-                            </a>
-                        </li>
-                    @endcan
+
                     @can('ledger.index')
                         <li class="menu-item {{ request()->is(['ledger', 'ledger/*']) ? 'active' : '' }}">
                             <a href="{{ route('ledger.index') }}" class="menu-link">
@@ -135,14 +120,21 @@
 
             </li>
         @endif
-        @if (auth()->user()->hasAnyPermission(['realkegiatan.index', 'agendakegiatan.index', 'programkerja.index']))
-            <li class="menu-item {{ request()->is(['realisasikegiatan', 'agendakegiatan', 'programkerja']) ? 'open' : '' }}">
+        @if (auth()->user()->hasAnyPermission(['realkegiatan.index', 'agendakegiatan.index', 'programkerja.index', 'jobdesk.index']))
+            <li class="menu-item {{ request()->is(['realisasikegiatan', 'agendakegiatan', 'programkerja', 'jobdesk']) ? 'open' : '' }}">
 
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-activity"></i>
                     <div>Kegiatan</div>
                 </a>
                 <ul class="menu-sub">
+                    @can('jobdesk.index')
+                        <li class="menu-item {{ request()->is(['jobdesk', 'jobdesk/*']) ? 'active' : '' }}">
+                            <a href="{{ route('jobdesk.index') }}" class="menu-link">
+                                <div>Jobdesk</div>
+                            </a>
+                        </li>
+                    @endcan
                     @if (auth()->user()->hasAnyPermission(['programkerja.index']))
                         <li class="menu-item {{ request()->is(['programkerja']) ? 'active' : '' }}">
                             <a href="{{ route('programkerja.index') }}" class="menu-link">
