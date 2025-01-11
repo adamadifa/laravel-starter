@@ -214,6 +214,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/jobdesk/{kode_jobdesk}/delete', 'destroy')->name('jobdesk.delete')->can('jobdesk.delete');
 
         Route::get('/jobdesk/getjobdesk', 'getjobdesk')->name('jobdesk.getjobdesk');
+        Route::post('/jobdesk/getjobdesklist', 'getjobdesklist')->name('jobdesk.getjobdesklist');
     });
 
     Route::controller(RealisasikegiatanController::class)->group(function () {
@@ -261,6 +262,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/programkerja/{kode_program_kerja}/delete', 'destroy')->name('programkerja.delete')->can('programkerja.delete');
 
         Route::get('/programkerja/getprogramkerja', 'getprogramkerja')->name('programkerja.getprogramkerja');
+        Route::post('/programkerja/getprogramkerjalist', 'getprogramkerjalist')->name('programkerja.getprogramkerjalist');
     });
 
 
@@ -319,9 +321,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/pembayaranpendidikan', 'index')->name('pembayaranpendidikan.index')->can('pembayaranpdd.index');
         Route::get('/pembayaranpendidikan/{no_pendaftaran}/show', 'show')->name('pembayaranpendidikan.show')->can('pembayaranpdd.show');
         Route::get('/pembayaranpendidikan/{no_pendaftaran}/getbiaya', 'getbiaya')->name('pembayaranpendidikan.getbiaya')->can('pembayaranpdd.show');
-        Route::get('/pembayaranpendidikan/{no_pendaftaran}/{kode_jenis_biaya}/{kode_biaya}/inputpotongan', 'createpotongan')->name('pembayaranpendidikan.create')->can('pembayaranpdd.create');
+        Route::get('/pembayaranpendidikan/{no_pendaftaran}/{kode_jenis_biaya}/{kode_biaya}/inputpotongan', 'createpotongan')->name('pembayaranpendidikan.createpotongan')->can('pembayaranpdd.create');
         Route::post('/pembayaranpendidikan/storepotongan', 'storepotongan')->name('pembayaranpendidikan.storepotongan')->can('pembayaranpdd.create');
-        Route::get('/pembayaranpendidikan/{no_pendaftaran}/{kode_jenis_biaya}/{kode_biaya}/inputmutasi', 'createmutasi')->name('pembayaranpendidikan.create')->can('pembayaranpdd.create');
+        Route::get('/pembayaranpendidikan/{no_pendaftaran}/{kode_jenis_biaya}/{kode_biaya}/inputmutasi', 'createmutasi')->name('pembayaranpendidikan.createmnutasi')->can('pembayaranpdd.create');
         Route::post('/pembayaranpendidikan/storemutasi', 'storemutasi')->name('pembayaranpendidikan.storemutasi')->can('pembayaranpdd.create');
         Route::get('/pembayaranpendidikan/{no_pendaftaran}/create', 'create')->name('pembayaranpendidikan.create')->can('pembayaranpdd.create');
         Route::post('/pembayaranpendidikan/store', 'store')->name('pembayaranpendidikan.store')->can('pembayaranpdd.create');
@@ -334,7 +336,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(RencanasppController::class)->group(function () {
         Route::get('/rencanaspp', 'index')->name('rencanaspp.index')->can('rencanaspp.index');
         Route::get('/rencanaspp/{no_pendaftaran}/create', 'create')->name('rencanaspp.create')->can('rencanaspp.create');
-        Route::get('/rencanaspp/{no_pendaftaran}/getrencanaspp', 'getrencanaspp')->name('rencanaspp.create')->can('rencanaspp.create');
+        Route::get('/rencanaspp/{no_pendaftaran}/getrencanaspp', 'getrencanaspp')->name('rencanaspp.getrencanaspp')->can('rencanaspp.create');
         Route::post('/rencanaspp', 'store')->name('rencanaspp.store')->can('rencanaspp.create');
         Route::get('/rencanaspp/{kode_rencana_spp}/edit', 'edit')->name('rencanaspp.edit')->can('rencanaspp.edit');
         Route::post('/rencanaspp/update', 'update')->name('rencanaspp.update')->can('rencanaspp.edit');

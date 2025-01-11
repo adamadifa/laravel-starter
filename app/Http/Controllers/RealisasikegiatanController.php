@@ -166,7 +166,6 @@ class RealisasikegiatanController extends Controller
             Realisasikegiatan::where('id', $id)->delete();
             return Redirect::back()->with(messageSuccess('Data Berhasil Dihapus'));
         } catch (\Exception $e) {
-            dd($e);
             return Redirect::back()->with(messageError($e->getMessage()));
         }
     }

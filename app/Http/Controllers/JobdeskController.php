@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redirect;
+use Jenssegers\Agent\Agent;
 
 class JobdeskController extends Controller
 {
@@ -40,6 +41,10 @@ class JobdeskController extends Controller
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
 
+        $agent = new Agent();
+        if ($agent->isMobile()) {
+            return view('datamaster.jobdesk.index_mobile', $data);
+        }
         return view('datamaster.jobdesk.index', $data);
     }
 
@@ -48,6 +53,10 @@ class JobdeskController extends Controller
     {
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
+        $agent = new Agent();
+        if ($agent->isMobile()) {
+            return view('datamaster.jobdesk.create_mobile', $data);
+        }
         return view('datamaster.jobdesk.create', $data);
     }
 
@@ -84,6 +93,12 @@ class JobdeskController extends Controller
                 'kode_jabatan' => $kode_jabatan,
                 'kode_dept' => $kode_dept
             ]);
+
+            $agent = new Agent();
+
+            if ($agent->isMobile()) {
+                return redirect(route('realisasikegiatan.index'))->with(messageSuccess('Data Berhasil Disimpan'));
+            }
             return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
         } catch (\Exception $e) {
             return Redirect::back()->with(messageError($e->getMessage()));
@@ -92,7 +107,9 @@ class JobdeskController extends Controller
 
     public function destroy($kode_jobdesk)
     {
+
         $kode_jobdesk = Crypt::decrypt($kode_jobdesk);
+
         try {
             Jobdesk::where('kode_jobdesk', $kode_jobdesk)->delete();
             return Redirect::back()->with(messageSuccess('Data Berhasil Dihapus'));
@@ -107,6 +124,10 @@ class JobdeskController extends Controller
         $data['jobdesk'] = Jobdesk::where('kode_jobdesk', $kode_jobdesk)->first();
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
+        $agent = new Agent();
+        if ($agent->isMobile()) {
+            return view('datamaster.jobdesk.edit_mobile', $data);
+        }
         return view('datamaster.jobdesk.edit', $data);
     }
 
@@ -136,6 +157,11 @@ class JobdeskController extends Controller
                 'kode_dept' => $kode_dept,
                 'jobdesk' => $request->jobdesk
             ]);
+            $agent = new Agent();
+
+            if ($agent->isMobile()) {
+                return redirect(route('jobdesk.index'))->with(messageSuccess('Data Berhasil Diubah'));
+            }
             return Redirect::back()->with(messageSuccess('Data Berhasil Diubah'));
         } catch (\Exception $e) {
             return Redirect::back()->with(messageError($e->getMessage()));
@@ -151,5 +177,16 @@ class JobdeskController extends Controller
 
         $jobdesk = Jobdesk::where('kode_jabatan', $kode_jabatan)->where('kode_dept', $kode_dept)->get();
         return response()->json($jobdesk);
+    }
+
+
+    public function getjobdesklist(Request $request)
+    {
+        $user = User::where('id', auth()->user()->id)->first();
+        $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : auth()->user()->kode_jabatan;
+        $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : auth()->user()->kode_dept;
+
+        $jobdesk = Jobdesk::where('kode_jabatan', $kode_jabatan)->where('kode_dept', $kode_dept)->get();
+        return view('datamaster.jobdesk.getjobdesklist', compact('jobdesk'));
     }
 }

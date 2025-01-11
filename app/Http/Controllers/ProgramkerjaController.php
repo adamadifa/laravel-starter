@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redirect;
+use Jenssegers\Agent\Agent;
 
 class ProgramkerjaController extends Controller
 {
@@ -48,6 +49,10 @@ class ProgramkerjaController extends Controller
         $data['tahunajaran'] = Tahunajaran::all();
         $data['ta_aktif'] = $ta_aktif;
 
+        $agent = new Agent();
+        if ($agent->isMobile()) {
+            return view('programkerja.index_mobile', $data);
+        }
         if ($request->cetak == 1) {
             if (empty($kode_dept)) {
                 return Redirect::back()->with(messageError('Pilih Departemen terlebih dahulu'));
@@ -204,5 +209,19 @@ class ProgramkerjaController extends Controller
 
         $program_kerja = Programkerja::where('kode_jabatan', $kode_jabatan)->where('kode_dept', $kode_dept)->get();
         return response()->json($program_kerja);
+    }
+
+    public function getprogramkerjalist(Request $request)
+    {
+        $user = User::where('id', auth()->user()->id)->first();
+        $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : auth()->user()->kode_jabatan;
+        $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : auth()->user()->kode_dept;
+
+        $program_kerja = Programkerja::where('program_kerja.kode_jabatan', $kode_jabatan)->where('program_kerja.kode_dept', $kode_dept)
+            ->join('jabatan', 'program_kerja.kode_jabatan', '=', 'jabatan.kode_jabatan')
+            ->join('departemen', 'program_kerja.kode_dept', '=', 'departemen.kode_dept')
+            ->join('users', 'program_kerja.id_user', '=', 'users.id')
+            ->get();
+        return view('programkerja.getprogramkerjalist', compact('program_kerja'));
     }
 }

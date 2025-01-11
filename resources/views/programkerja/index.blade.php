@@ -22,16 +22,6 @@
                     <div class="col-12">
                         <form action="{{ route('programkerja.index') }}" id="myForm">
 
-                            <div class="row">
-                                <div class="col-lg-6 col-sm-12 col-md-12">
-                                    <x-input-with-icon label="Dari" value="{{ Request('dari') }}" name="dari" icon="ti ti-calendar"
-                                        datepicker="flatpickr-date" />
-                                </div>
-                                <div class="col-lg-6 col-sm-12 col-md-12">
-                                    <x-input-with-icon label="Sampai" value="{{ Request('sampai') }}" name="sampai" icon="ti ti-calendar"
-                                        datepicker="flatpickr-date" />
-                                </div>
-                            </div>
                             @if ($user->hasRole('super admin'))
                                 <div class="row">
                                     <div class="col-lg-6 col-sm-12 col-md-12">
