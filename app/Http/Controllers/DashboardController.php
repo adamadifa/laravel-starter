@@ -30,15 +30,17 @@ class DashboardController extends Controller
         $query->join('jabatan', 'realisasi_kegiatan.kode_jabatan', '=', 'jabatan.kode_jabatan');
         $query->join('jobdesk', 'realisasi_kegiatan.kode_jobdesk', '=', 'jobdesk.kode_jobdesk');
         $query->join('users', 'realisasi_kegiatan.id_user', '=', 'users.id');
-        if ($user->hasRole('super admin')) {
-            if (!empty($kode_dept)) {
-                $query->where('realisasi_kegiatan.kode_dept', $kode_dept);
-            }
+        if (!empty($kode_dept)) {
+            $query->where('realisasi_kegiatan.kode_dept', $kode_dept);
         } else {
-            $query->where('realisasi_kegiatan.kode_jabatan', $user->kode_jabatan);
             $query->where('realisasi_kegiatan.kode_dept', $user->kode_dept);
-            $query->where('realisasi_kegiatan.id_user', auth()->user()->id);
         }
+        // if ($user->hasRole('super admin')) {
+        // } else {
+        //     $query->where('realisasi_kegiatan.kode_jabatan', $user->kode_jabatan);
+        //     $query->where('realisasi_kegiatan.kode_dept', $user->kode_dept);
+        //     $query->where('realisasi_kegiatan.id_user', auth()->user()->id);
+        // }
         $query->whereBetween('realisasi_kegiatan.tanggal', [$dari, $sampai]);
 
         $query->orderBy('tanggal');
@@ -57,15 +59,20 @@ class DashboardController extends Controller
         $query->join('departemen', 'agenda_kegiatan.kode_dept', '=', 'departemen.kode_dept');
         $query->join('jabatan', 'agenda_kegiatan.kode_jabatan', '=', 'jabatan.kode_jabatan');
         $query->join('users', 'agenda_kegiatan.id_user', '=', 'users.id');
-        if ($user->hasRole('super admin')) {
-            if (!empty($kode_dept)) {
-                $query->where('agenda_kegiatan.kode_dept', $kode_dept);
-            }
+        if (!empty($kode_dept)) {
+            $query->where('agenda_kegiatan.kode_dept', $kode_dept);
         } else {
-            $query->where('agenda_kegiatan.kode_jabatan', $user->kode_jabatan);
+            // $query->where('agenda_kegiatan.kode_jabatan', $user->kode_jabatan);
             $query->where('agenda_kegiatan.kode_dept', $user->kode_dept);
-            $query->where('agenda_kegiatan.id_user', auth()->user()->id);
+            // $query->where('agenda_kegiatan.id_user', auth()->user()->id);
         }
+        // if ($user->hasRole('super admin')) {
+
+        // } else {
+        //     $query->where('agenda_kegiatan.kode_jabatan', $user->kode_jabatan);
+        //     $query->where('agenda_kegiatan.kode_dept', $user->kode_dept);
+        //     $query->where('agenda_kegiatan.id_user', auth()->user()->id);
+        // }
         $query->whereBetween('agenda_kegiatan.tanggal', [$dari, $sampai]);
 
         $query->orderBy('tanggal');

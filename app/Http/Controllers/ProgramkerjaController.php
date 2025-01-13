@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redirect;
+use Jenssegers\Agent\Agent;
 
 class ProgramkerjaController extends Controller
 {
@@ -40,7 +41,11 @@ class ProgramkerjaController extends Controller
         } else {
             $query->where('program_kerja.kode_ta', $ta_aktif->kode_ta);
         }
-        $query->orderBy('tanggal_pelaksanaan');
+
+        if (!empty($request->cari)) {
+            $query->where('program_kerja.program_kerja', 'like', '%' . $request->cari . '%');
+        }
+        $query->orderBy('created_at', 'desc');
         $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : $user->kode_jabatan;
         $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : $user->kode_dept;
         $data['programkerja'] = $query->get();
@@ -48,6 +53,10 @@ class ProgramkerjaController extends Controller
         $data['tahunajaran'] = Tahunajaran::all();
         $data['ta_aktif'] = $ta_aktif;
 
+        $agent = new Agent();
+        if ($agent->isMobile()) {
+            return view('programkerja.index_mobile', $data);
+        }
         if ($request->cetak == 1) {
             if (empty($kode_dept)) {
                 return Redirect::back()->with(messageError('Pilih Departemen terlebih dahulu'));
@@ -67,6 +76,10 @@ class ProgramkerjaController extends Controller
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
         $data['user'] = User::where('id', auth()->user()->id)->first();
+        $agent = new Agent();
+        if ($agent->isMobile()) {
+            return view('programkerja.create_mobile', $data);
+        }
         return view('programkerja.create', $data);
     }
 
@@ -79,7 +92,6 @@ class ProgramkerjaController extends Controller
 
                 'program_kerja' => 'required',
                 'target_pencapaian' => 'required',
-                'tanggal_pelaksanaan' => 'required',
                 'keterangan' => 'required',
                 'kode_jabatan' => 'required',
                 'kode_dept' => 'required',
@@ -92,7 +104,6 @@ class ProgramkerjaController extends Controller
 
                 'program_kerja' => 'required',
                 'target_pencapaian' => 'required',
-                'tanggal_pelaksanaan' => 'required',
                 'keterangan' => 'required',
             ]);
             $kode_jabatan = $user->kode_jabatan;
@@ -115,12 +126,17 @@ class ProgramkerjaController extends Controller
                 'program_kerja' => $request->program_kerja,
                 'target_pencapaian' => $request->target_pencapaian,
                 'keterangan' => $request->keterangan,
-                'tanggal_pelaksanaan' => $request->tanggal_pelaksanaan,
                 'kode_dept' => $kode_dept,
                 'kode_jabatan' => $kode_jabatan,
                 'kode_ta' => $ta_aktif->kode_ta,
                 'id_user' => auth()->user()->id
             ]);
+
+            $agent = new Agent();
+
+            if ($agent->isMobile()) {
+                return redirect(route('programkerja.index'))->with(messageSuccess('Data Berhasil Disimpan'));
+            }
 
             return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
         } catch (\Exception $e) {
@@ -136,6 +152,10 @@ class ProgramkerjaController extends Controller
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
         $data['programkerja'] = Programkerja::where('kode_program_kerja', $kode_program_kerja)->first();
         $data['user'] = User::where('id', auth()->user()->id)->first();
+        $agent = new Agent();
+        if ($agent->isMobile()) {
+            return view('programkerja.edit_mobile', $data);
+        }
         return view('programkerja.edit', $data);
     }
 
@@ -149,7 +169,7 @@ class ProgramkerjaController extends Controller
 
                 'program_kerja' => 'required',
                 'target_pencapaian' => 'required',
-                'tanggal_pelaksanaan' => 'required',
+
                 'keterangan' => 'required',
                 'kode_jabatan' => 'required',
                 'kode_dept' => 'required',
@@ -162,7 +182,7 @@ class ProgramkerjaController extends Controller
 
                 'program_kerja' => 'required',
                 'target_pencapaian' => 'required',
-                'tanggal_pelaksanaan' => 'required',
+
                 'keterangan' => 'required',
             ]);
             $kode_jabatan = $user->kode_jabatan;
@@ -177,11 +197,14 @@ class ProgramkerjaController extends Controller
                 'program_kerja' => $request->program_kerja,
                 'target_pencapaian' => $request->target_pencapaian,
                 'keterangan' => $request->keterangan,
-                'tanggal_pelaksanaan' => $request->tanggal_pelaksanaan,
                 'kode_dept' => $kode_dept,
                 'kode_jabatan' => $kode_jabatan,
             ]);
+            $agent = new Agent();
 
+            if ($agent->isMobile()) {
+                return redirect(route('programkerja.index'))->with(messageSuccess('Data Berhasil Disimpan'));
+            }
             return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
         } catch (\Exception $e) {
             return Redirect::back()->with(messageError($e->getMessage()));
@@ -205,8 +228,34 @@ class ProgramkerjaController extends Controller
         $user = User::where('id', auth()->user()->id)->first();
         $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : auth()->user()->kode_jabatan;
         $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : auth()->user()->kode_dept;
-
-        $program_kerja = Programkerja::where('kode_jabatan', $kode_jabatan)->where('kode_dept', $kode_dept)->get();
+        $ta_aktif = Tahunajaran::where('status', 1)->first();
+        $qprogramkerja = Programkerja::query();
+        $qprogramkerja->where('program_kerja.kode_jabatan', $kode_jabatan);
+        $qprogramkerja->where('program_kerja.kode_dept', $kode_dept);
+        if (!empty($request->cari)) {
+            $qprogramkerja->where('program_kerja.program_kerja', 'like', '%' . $request->cari . '%');
+        }
+        $qprogramkerja->where('program_kerja.kode_ta', $ta_aktif->kode_ta);
+        $program_kerja = $qprogramkerja->get();
         return response()->json($program_kerja);
+    }
+
+    public function getprogramkerjalist(Request $request)
+    {
+        $user = User::where('id', auth()->user()->id)->first();
+        $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : auth()->user()->kode_jabatan;
+        $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : auth()->user()->kode_dept;
+
+        $qprogramkerja = Programkerja::query();
+        $qprogramkerja->where('program_kerja.kode_jabatan', $kode_jabatan);
+        $qprogramkerja->where('program_kerja.kode_dept', $kode_dept);
+        if (!empty($request->cari)) {
+            $qprogramkerja->where('program_kerja.program_kerja', 'like', '%' . $request->cari . '%');
+        }
+        $qprogramkerja->where('program_kerja.kode_ta', $request->kode_ta);
+        $program_kerja = $qprogramkerja->get();
+
+
+        return view('programkerja.getprogramkerjalist', compact('program_kerja'));
     }
 }

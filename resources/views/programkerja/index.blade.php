@@ -22,16 +22,6 @@
                     <div class="col-12">
                         <form action="{{ route('programkerja.index') }}" id="myForm">
 
-                            <div class="row">
-                                <div class="col-lg-6 col-sm-12 col-md-12">
-                                    <x-input-with-icon label="Dari" value="{{ Request('dari') }}" name="dari" icon="ti ti-calendar"
-                                        datepicker="flatpickr-date" />
-                                </div>
-                                <div class="col-lg-6 col-sm-12 col-md-12">
-                                    <x-input-with-icon label="Sampai" value="{{ Request('sampai') }}" name="sampai" icon="ti ti-calendar"
-                                        datepicker="flatpickr-date" />
-                                </div>
-                            </div>
                             @if ($user->hasRole('super admin'))
                                 <div class="row">
                                     <div class="col-lg-6 col-sm-12 col-md-12">
@@ -65,7 +55,8 @@
                                         <select name="kode_ta" id="kode_ta" class="form-select select2Kodeta">
                                             <option value="">Tahun Ajaran</option>
                                             @foreach ($tahunajaran as $d)
-                                                <option value="{{ $d->kode_ta }}" {{ Request('kode_ta') == $d->kode_ta ? 'selected' : '' }}>
+                                                <option value="{{ $d->kode_ta }}"
+                                                    {{ Request('kode_ta') == $d->kode_ta || $ta_aktif->kode_ta == $d->kode_ta ? 'selected' : '' }}>
                                                     {{ $d->tahun_ajaran }}</option>
                                             @endforeach
                                         </select>
@@ -96,7 +87,6 @@
                                         <th style="width: 1%">No.</th>
                                         <th>Program Kerja</th>
                                         <th>Target Pencapaian</th>
-                                        <th style="width: 10%">Tanggal</th>
                                         <th style="width: 5%">Dept</th>
                                         <th style="width: 10%">User</th>
                                         <th style="width: 5%">#</th>
@@ -108,7 +98,6 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $d->program_kerja }}</td>
                                             <td>{{ removeHtmltag($d->target_pencapaian) }}</td>
-                                            <td>{{ $d->tanggal_pelaksanaan }}</td>
                                             <td>{{ $d->kode_dept }}</td>
                                             <td>{{ formatNama1($d->name) }}</td>
                                             <td>
