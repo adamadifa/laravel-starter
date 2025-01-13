@@ -41,6 +41,10 @@ class ProgramkerjaController extends Controller
         } else {
             $query->where('program_kerja.kode_ta', $ta_aktif->kode_ta);
         }
+
+        if (!empty($request->cari)) {
+            $query->where('program_kerja.program_kerja', 'like', '%' . $request->cari . '%');
+        }
         $query->orderBy('created_at', 'desc');
         $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : $user->kode_jabatan;
         $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : $user->kode_dept;
@@ -72,6 +76,10 @@ class ProgramkerjaController extends Controller
         $data['jabatan'] = Jabatan::orderBy('kode_jabatan')->where('kode_jabatan', '!=', 'J00')->get();
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
         $data['user'] = User::where('id', auth()->user()->id)->first();
+        $agent = new Agent();
+        if ($agent->isMobile()) {
+            return view('programkerja.create_mobile', $data);
+        }
         return view('programkerja.create', $data);
     }
 
@@ -124,6 +132,12 @@ class ProgramkerjaController extends Controller
                 'id_user' => auth()->user()->id
             ]);
 
+            $agent = new Agent();
+
+            if ($agent->isMobile()) {
+                return redirect(route('programkerja.index'))->with(messageSuccess('Data Berhasil Disimpan'));
+            }
+
             return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
         } catch (\Exception $e) {
             return Redirect::back()->with(messageError($e->getMessage()));
@@ -138,6 +152,10 @@ class ProgramkerjaController extends Controller
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
         $data['programkerja'] = Programkerja::where('kode_program_kerja', $kode_program_kerja)->first();
         $data['user'] = User::where('id', auth()->user()->id)->first();
+        $agent = new Agent();
+        if ($agent->isMobile()) {
+            return view('programkerja.edit_mobile', $data);
+        }
         return view('programkerja.edit', $data);
     }
 
@@ -182,7 +200,11 @@ class ProgramkerjaController extends Controller
                 'kode_dept' => $kode_dept,
                 'kode_jabatan' => $kode_jabatan,
             ]);
+            $agent = new Agent();
 
+            if ($agent->isMobile()) {
+                return redirect(route('programkerja.index'))->with(messageSuccess('Data Berhasil Disimpan'));
+            }
             return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
         } catch (\Exception $e) {
             return Redirect::back()->with(messageError($e->getMessage()));
@@ -206,8 +228,15 @@ class ProgramkerjaController extends Controller
         $user = User::where('id', auth()->user()->id)->first();
         $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : auth()->user()->kode_jabatan;
         $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : auth()->user()->kode_dept;
-
-        $program_kerja = Programkerja::where('kode_jabatan', $kode_jabatan)->where('kode_dept', $kode_dept)->get();
+        $ta_aktif = Tahunajaran::where('status', 1)->first();
+        $qprogramkerja = Programkerja::query();
+        $qprogramkerja->where('program_kerja.kode_jabatan', $kode_jabatan);
+        $qprogramkerja->where('program_kerja.kode_dept', $kode_dept);
+        if (!empty($request->cari)) {
+            $qprogramkerja->where('program_kerja.program_kerja', 'like', '%' . $request->cari . '%');
+        }
+        $qprogramkerja->where('program_kerja.kode_ta', $ta_aktif->kode_ta);
+        $program_kerja = $qprogramkerja->get();
         return response()->json($program_kerja);
     }
 
@@ -217,11 +246,16 @@ class ProgramkerjaController extends Controller
         $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : auth()->user()->kode_jabatan;
         $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : auth()->user()->kode_dept;
 
-        $program_kerja = Programkerja::where('program_kerja.kode_jabatan', $kode_jabatan)->where('program_kerja.kode_dept', $kode_dept)
-            ->join('jabatan', 'program_kerja.kode_jabatan', '=', 'jabatan.kode_jabatan')
-            ->join('departemen', 'program_kerja.kode_dept', '=', 'departemen.kode_dept')
-            ->join('users', 'program_kerja.id_user', '=', 'users.id')
-            ->get();
+        $qprogramkerja = Programkerja::query();
+        $qprogramkerja->where('program_kerja.kode_jabatan', $kode_jabatan);
+        $qprogramkerja->where('program_kerja.kode_dept', $kode_dept);
+        if (!empty($request->cari)) {
+            $qprogramkerja->where('program_kerja.program_kerja', 'like', '%' . $request->cari . '%');
+        }
+        $qprogramkerja->where('program_kerja.kode_ta', $request->kode_ta);
+        $program_kerja = $qprogramkerja->get();
+
+
         return view('programkerja.getprogramkerjalist', compact('program_kerja'));
     }
 }

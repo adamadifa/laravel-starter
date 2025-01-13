@@ -186,7 +186,13 @@ class JobdeskController extends Controller
         $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : auth()->user()->kode_jabatan;
         $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : auth()->user()->kode_dept;
 
-        $jobdesk = Jobdesk::where('kode_jabatan', $kode_jabatan)->where('kode_dept', $kode_dept)->get();
+        $qjobdesk = Jobdesk::query();
+        $qjobdesk->where('kode_jabatan', $kode_jabatan);
+        $qjobdesk->where('kode_dept', $kode_dept);
+        if (!empty($request->jobdesk_search)) {
+            $qjobdesk->where('jobdesk', 'like', '%' . $request->jobdesk_search . '%');
+        }
+        $jobdesk  = $qjobdesk->get();
         return view('datamaster.jobdesk.getjobdesklist', compact('jobdesk'));
     }
 }

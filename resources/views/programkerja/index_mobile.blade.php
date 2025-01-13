@@ -61,6 +61,7 @@
 
             function getProgramkerja() {
                 // alert('test');
+                let cari = $('#cari').val();
                 let kode_ta = $('#kode_ta').val();
                 $("#getprogramkerja").html(`<div class="sk-wave sk-primary" style="margin:auto">
                 <div class="sk-wave-rect"></div>
@@ -74,7 +75,8 @@
                     url: "{{ route('programkerja.getprogramkerjalist') }}",
                     data: {
                         _token: "{{ csrf_token() }}",
-                        kode_ta: kode_ta
+                        kode_ta: kode_ta,
+                        cari: cari
                     },
                     cache: false,
                     success: function(data) {
@@ -83,6 +85,9 @@
                 })
             }
 
+            $("#cari").on('input', function() {
+                getProgramkerja();
+            });
             getProgramkerja();
 
             $(document).on('click', '.btnShow', function(e) {

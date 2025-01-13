@@ -67,6 +67,10 @@
 
             getJobdesk();
 
+            $("#jobdesk_search").on('input', function() {
+                getJobdesk();
+            });
+
             $(document).on('click', '.btnShow', function(e) {
                 e.preventDefault();
                 const id = $(this).attr("id");
