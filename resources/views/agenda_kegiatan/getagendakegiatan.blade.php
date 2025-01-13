@@ -16,7 +16,7 @@
                 </div>
                 <div class="ms-auto">
                     <div class="d-flex">
-                        <a href="{{ route('agendakegiatan.edit', Crypt::encrypt($d->id)) }}" class="btn btn-primary btn-sm me-1">
+                        <a href="{{ route('agendakegiatan.edit', Crypt::encrypt($d->id)) }}" class="btn btn-primary btn-xs me-1">
                             <i class="ti ti-edit"></i>
                         </a>
                         {{-- <a href="#" class="btn btn-info btn-sm btnShow me-1" id="{{ Crypt::encrypt($d->id) }}">
@@ -26,7 +26,7 @@
                             action="{{ route('agendakegiatan.delete', Crypt::encrypt($d->id)) }}">
                             @csrf
                             @method('DELETE')
-                            <a href="#" class="delete-confirm ml-1 btn btn-danger btn-sm">
+                            <a href="#" class="delete-confirm ml-1 btn btn-danger btn-xs">
                                 <i class="ti ti-trash"></i>
                             </a>
                         </form>
