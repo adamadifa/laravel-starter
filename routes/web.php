@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgendakegiatanController;
+use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\AsalsekolahController;
 use App\Http\Controllers\BiayaController;
 use App\Http\Controllers\DashboardController;
@@ -365,6 +366,18 @@ Route::middleware('auth')->group(function () {
         Route::delete('/asalsekolah/{kode_asalsekolah}/delete', 'destroy')->name('asalsekolah.delete')->can('asalsekolah.delete');
 
         Route::get('/asalsekolah/{kode_unit}/{kode_asal_sekolah}/getasalsekolahbyunit', 'getasalsekolahbyunit')->name('asalsekolah.getasalsekolahbyunit');
+    });
+
+
+    //Koperasi
+
+    Route::controller(AnggotaController::class)->group(function () {
+        Route::get('/anggota', 'index')->name('anggota.index')->can('anggota.index');
+        Route::get('/anggota/create', 'create')->name('anggota.create')->can('anggota.create');
+        Route::post('/anggota', 'store')->name('anggota.store')->can('anggota.create');
+        Route::get('/anggota/{id}/edit', 'edit')->name('anggota.edit')->can('anggota.edit');
+        Route::put('/anggota/{id}/update', 'update')->name('anggota.update')->can('anggota.edit');
+        Route::delete('/anggota/{id}/delete', 'destroy')->name('anggota.delete')->can('anggota.delete');
     });
 });
 

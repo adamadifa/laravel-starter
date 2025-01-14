@@ -24,8 +24,17 @@
             </a>
         </li>
         <li
-            class="menu-item {{ request()->is(['karyawan', 'karyawan/*', 'jabatan', 'jabatan/*', 'unit', 'unit/*', 'siswa', 'siswa/*', 'jenisbiaya', 'departemen', 'ledger']) ? 'open' : '' }}">
-            @if (auth()->user()->hasAnyPermission(['karyawan.index', 'jabatan.index', 'unit.index', 'jenisbiaya.index', 'departemen.index', 'ledger.index', 'siswa.index']))
+            class="menu-item {{ request()->is(['karyawan', 'karyawan/*', 'jabatan', 'jabatan/*', 'unit', 'unit/*', 'siswa', 'siswa/*', 'jenisbiaya', 'departemen', 'ledger', 'anggota']) ? 'open' : '' }}">
+            @if (auth()->user()->hasAnyPermission([
+                        'karyawan.index',
+                        'jabatan.index',
+                        'unit.index',
+                        'jenisbiaya.index',
+                        'departemen.index',
+                        'ledger.index',
+                        'siswa.index',
+                        'anggota.index',
+                    ]))
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-database"></i>
                     <div>Data Master</div>
@@ -78,6 +87,13 @@
                         <li class="menu-item {{ request()->is(['ledger', 'ledger/*']) ? 'active' : '' }}">
                             <a href="{{ route('ledger.index') }}" class="menu-link">
                                 <div>Ledger</div>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('anggota.index')
+                        <li class="menu-item {{ request()->is(['anggota', 'anggota/*']) ? 'active' : '' }}">
+                            <a href="{{ route('anggota.index') }}" class="menu-link">
+                                <div>Anggota</div>
                             </a>
                         </li>
                     @endcan
