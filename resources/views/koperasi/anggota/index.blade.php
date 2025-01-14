@@ -63,7 +63,7 @@
         </div>
     </div>
 </div>
-<x-modal-form id="mdlAnggota" size="" show="loadmodalAnggota" title="" />
+<x-modal-form id="mdlAnggota" size="modal-lg" show="loadmodalAnggota" title="" />
 @endsection
 @push('myscript')
 {{-- <script src="{{ asset('assets/js/pages/roles/create.js') }}"></script> --}}

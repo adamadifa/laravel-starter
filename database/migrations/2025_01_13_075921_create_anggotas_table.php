@@ -27,10 +27,10 @@ return new class extends Migration
             $table->string('nama_saudara', 100);
             $table->string('no_hp', 20);
             $table->string('alamat', 255);
-            $table->char('id_propinsi', 2);
-            $table->char('id_kota', 4);
-            $table->char('id_kecamatan', 7);
-            $table->char('id_kelurahan', 10);
+            $table->char('id_province', 2);
+            $table->char('id_regency', 4);
+            $table->char('id_district', 7);
+            $table->char('id_village', 10);
             $table->char('kode_pos', 6);
             $table->char('status_tinggal', 2);
             $table->timestamps();
