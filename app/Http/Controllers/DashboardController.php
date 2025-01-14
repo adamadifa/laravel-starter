@@ -20,6 +20,7 @@ class DashboardController extends Controller
 
     public function getrealisasikegiatan(Request $request)
     {
+        //Dashboard
         $user = User::where('id', auth()->user()->id)->first();
         $dari = $request->dari;
         $sampai = $request->sampai;
