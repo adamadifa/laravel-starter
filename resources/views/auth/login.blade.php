@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <link rel="manifest" href="{{ asset('manifest.json') }}">
     <meta name="theme-color" content="#4CAF50">
-    <title>Login Basic - Pages | Vuexy - Bootstrap Admin Template</title>
+    <title>Login Basic </title>
 
     <meta name="description" content="" />
 
