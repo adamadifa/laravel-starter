@@ -1,5 +1,6 @@
-<form action="{{ route('anggota.store') }}" aria-autocomplete="false" id="formAnggota" method="POST">
+<form action="{{ route('anggota.update', Crypt::encrypt($anggota->no_anggota)) }}" aria-autocomplete="false" id="formAnggota" method="POST">
     @csrf
+    @method('PUT')
     <div class="row">
         <div class="col-lg-6 col-md-12 col-sm-12">
             <div class="divider text-start">
@@ -7,17 +8,17 @@
                     <i class="ti ti-user"></i> Data Anggota
                 </div>
             </div>
-            <x-input-with-icon icon="ti ti-barcode" label="Auto" name="no_anggota" disabled />
-            <x-input-with-icon-label icon="ti ti-credit-card" label="Nomor Identitas" name="nik" />
-            <x-input-with-icon-label icon="ti ti-user" label="Nama Anggota" name="nama_lengkap" />
-            <x-input-with-icon-label icon="ti ti-map-pin" label="Tempat Lahir" name="tempat_lahir" />
-            <x-input-with-icon-label icon="ti ti-calendar" label="Tanggal Lahir" name="tanggal_lahir" />
+            <x-input-with-icon icon="ti ti-barcode" label="Auto" name="no_anggota" value="{{ $anggota->no_anggota }}" disabled />
+            <x-input-with-icon-label icon="ti ti-credit-card" label="Nomor Identitas" name="nik" value="{{ $anggota->nik }}" />
+            <x-input-with-icon-label icon="ti ti-user" label="Nama Anggota" name="nama_lengkap" value="{{ $anggota->nama_lengkap }}" />
+            <x-input-with-icon-label icon="ti ti-map-pin" label="Tempat Lahir" name="tempat_lahir" value="{{ $anggota->tempat_lahir }}" />
+            <x-input-with-icon-label icon="ti ti-calendar" label="Tanggal Lahir" name="tanggal_lahir" value="{{ $anggota->tanggal_lahir }}" />
             <div class="form-group mb-3">
                 <label for="exampleFormControlInput1" style="font-weight: 600" class="form-label">Jenis Kelamin</label>
                 <select name="jenis_kelamin" id="jenis_kelamin" class="form-select">
                     <option value="">Jenis Kelamin</option>
-                    <option value="L">Laki - Laki</option>
-                    <option value="P">Perempuan</option>
+                    <option value="L" {{ $anggota->jenis_kelamin == 'L' ? 'selected' : '' }}>Laki - Laki</option>
+                    <option value="P" {{ $anggota->jenis_kelamin == 'P' ? 'selected' : '' }}>Perempuan</option>
                 </select>
             </div>
             <div class="form-group mb-3">
@@ -25,7 +26,7 @@
                 <select name="pendidikan_terakhir" id="pendidikan_terakhir" class="form-select">
                     <option value="">Pendidikan Terakhir</option>
                     @foreach ($pendidikan as $p)
-                        <option value="{{ $p }}">{{ $p }}</option>
+                        <option value="{{ $p }}" {{ $anggota->pendidikan_terakhir == $p ? 'selected' : '' }}>{{ $p }}</option>
                     @endforeach
                 </select>
             </div>
@@ -33,17 +34,18 @@
                 <label style="font-weight: 600" class="form-label">Status Pernikahan</label>
                 <select name="status_pernikahan" id="status_pernikahan" class="form-select">
                     <option value="">Status Pernikahan</option>
-                    <option value="M">Menikah</option>
-                    <option value="BM">Belum Menikah</option>
-                    <option value="JD">Janda/Duda</option>
+                    <option value="M" {{ $anggota->status_pernikahan == 'M' ? 'selected' : '' }}>Menikah</option>
+                    <option value="BM" {{ $anggota->status_pernikahan == 'BM' ? 'selected' : '' }}>Belum Menikah</option>
+                    <option value="JD" {{ $anggota->status_pernikahan == 'JD' ? 'selected' : '' }}>Janda/Duda</option>
                 </select>
             </div>
-            <x-input-with-icon-label icon="ti ti-users" label="Jumlah Tanggungan" name="jml_tanggungan" />
-            <x-input-with-icon-label icon="ti ti-user" label="Nama Pasangan" name="nama_pasangan" />
-            <x-input-with-icon-label icon="ti ti-briefcase" label="Pekerjaan Pasangan" name="pekerjaan_pasangan" />
-            <x-input-with-icon-label icon="ti ti-user" label="Nama Ibu" name="nama_ibu" />
-            <x-input-with-icon-label icon="ti ti-user" label="Nama Saudara" name="nama_saudara" />
-            <x-input-with-icon-label icon="ti ti-user" label="No. HP" name="no_hp" />
+            <x-input-with-icon-label icon="ti ti-users" label="Jumlah Tanggungan" name="jml_tanggungan" value="{{ $anggota->jml_tanggungan }}" />
+            <x-input-with-icon-label icon="ti ti-user" label="Nama Pasangan" name="nama_pasangan" value="{{ $anggota->nama_pasangan }}" />
+            <x-input-with-icon-label icon="ti ti-briefcase" label="Pekerjaan Pasangan" name="pekerjaan_pasangan"
+                value="{{ $anggota->pekerjaan_pasangan }}" />
+            <x-input-with-icon-label icon="ti ti-user" label="Nama Ibu" name="nama_ibu" value="{{ $anggota->nama_ibu }}" />
+            <x-input-with-icon-label icon="ti ti-user" label="Nama Saudara" name="nama_saudara" value="{{ $anggota->nama_saudara }}" />
+            <x-input-with-icon-label icon="ti ti-user" label="No. HP" name="no_hp" value="{{ $anggota->no_hp }}" />
 
         </div>
         <div class="col-lg-1">
@@ -59,9 +61,9 @@
                     <i class="ti ti-map-pin"></i> Data Alamat
                 </div>
             </div>
-            <x-textarea-label name="alamat" label="Alamat" />
+            <x-textarea-label name="alamat" label="Alamat" value="{{ $anggota->alamat }}" />
             <x-select-label label="Provinsi" name="id_province" :data="$provinsi" key="id" textShow="name" select2="select2Provinsi"
-                upperCase="true" />
+                upperCase="true" selected="{{ $anggota->id_province }}" />
             <div class="form-group mb-3">
                 <label style="font-weight: 600" class="form-label">Kabupaten / Kota</label>
                 <select name="id_regency" id="id_regency" class="select2Regency form-select">
@@ -77,14 +79,14 @@
                 <select name="id_village" id="id_village" class="select2Village form-select">
                 </select>
             </div>
-            <x-input-with-icon-label icon="ti ti-barcode" label="Kode Pos" name="kode_pos" />
+            <x-input-with-icon-label icon="ti ti-barcode" label="Kode Pos" name="kode_pos" value="{{ $anggota->kode_pos }}" />
             <div class="form-group mb-3">
                 <label style="font-weight: 600" class="form-label">Status Tinggal</label>
                 <select name="status_tinggal" id="status_tinggal" class="form-select">
                     <option value="">Status Tinggal</option>
-                    <option value="MS">Milik Sendiri</option>
-                    <option value="MK">Milik Keluarga</option>
-                    <option value="SK">Sewa / Kontrak</option>
+                    <option value="MS" {{ $anggota->status_tinggal == 'MS' ? 'selected' : '' }}>Milik Sendiri</option>
+                    <option value="MK" {{ $anggota->status_tinggal == 'MK' ? 'selected' : '' }}>Milik Keluarga</option>
+                    <option value="SK" {{ $anggota->status_tinggal == 'SK' ? 'selected' : '' }}>Sewa / Kontrak</option>
                 </select>
             </div>
             <div class="form-group">
@@ -381,12 +383,14 @@
 
         function getRegency() {
             var id_province = $("#formAnggota").find("#id_province").val();
+            var id_regency = "{{ $anggota->id_regency }}"
             $.ajax({
                 type: 'POST',
                 url: '/regency/getregencybyprovince',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id_province: id_province,
+                    id_regency: id_regency
                 },
                 cache: false,
                 success: function(respond) {
@@ -397,13 +401,17 @@
         }
 
         function getDistrict() {
+            var id_regency_siswa = "{{ $anggota->id_regency }}"
             var id_regency = $("#formAnggota").find("#id_regency").val();
+            var id_regency = id_regency != null ? id_regency : id_regency_siswa;
+            var id_district = "{{ $anggota->id_district }}";
             $.ajax({
                 type: 'POST',
                 url: '/district/getdistrictbyregency',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id_regency: id_regency,
+                    id_district: id_district,
                 },
                 cache: false,
                 success: function(respond) {
@@ -414,13 +422,17 @@
         }
 
         function getVillage() {
+            var id_district_siswa = "{{ $anggota->id_district }}";
             var id_district = $("#formAnggota").find("#id_district").val();
+            var id_district = id_district != null ? id_district : id_district_siswa;
+            var id_village = "{{ $anggota->id_village }}";
             $.ajax({
                 type: 'POST',
                 url: '/village/getvillagebydistrict',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id_district: id_district,
+                    id_village: id_village
                 },
                 cache: false,
                 success: function(respond) {

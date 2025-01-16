@@ -11,7 +11,7 @@
 </form>
 <script src="{{ asset('assets/js/pages/biaya.js') }}"></script>
 <script>
-    $(function(){
+    $(function() {
         $('#kode_biaya').mask('A00');
     });
 </script>

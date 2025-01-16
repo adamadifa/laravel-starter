@@ -56,4 +56,8 @@
      #users-table_filter {
          margin-bottom: 10px;
      }
+
+     .btn-group {
+         cursor: pointer;
+     }
  </style>
