@@ -24,7 +24,23 @@
             </a>
         </li>
         <li
-            class="menu-item {{ request()->is(['karyawan', 'karyawan/*', 'jabatan', 'jabatan/*', 'unit', 'unit/*', 'siswa', 'siswa/*', 'jenisbiaya', 'departemen', 'ledger', 'anggota']) ? 'open' : '' }}">
+            class="menu-item {{ request()->is([
+                'karyawan',
+                'karyawan/*',
+                'jabatan',
+                'jabatan/*',
+                'unit',
+                'unit/*',
+                'siswa',
+                'siswa/*',
+                'jenisbiaya',
+                'departemen',
+                'ledger',
+                'anggota',
+                'jenissimpanan',
+            ])
+                ? 'open'
+                : '' }}">
             @if (auth()->user()->hasAnyPermission([
                         'karyawan.index',
                         'jabatan.index',
@@ -34,6 +50,7 @@
                         'ledger.index',
                         'siswa.index',
                         'anggota.index',
+                        'jenissimpanan.index',
                     ]))
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-database"></i>
@@ -94,6 +111,13 @@
                         <li class="menu-item {{ request()->is(['anggota', 'anggota/*']) ? 'active' : '' }}">
                             <a href="{{ route('anggota.index') }}" class="menu-link">
                                 <div>Anggota</div>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('jenissimpanan.index')
+                        <li class="menu-item {{ request()->is(['jenissimpanan', 'jenissimpanan/*']) ? 'active' : '' }}">
+                            <a href="{{ route('jenissimpanan.index') }}" class="menu-link">
+                                <div>Jenis Simpanan</div>
                             </a>
                         </li>
                     @endcan

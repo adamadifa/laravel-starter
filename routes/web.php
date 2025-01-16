@@ -10,6 +10,7 @@ use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\JamkerjaController;
 use App\Http\Controllers\JenisbiayaController;
+use App\Http\Controllers\JenissimpananController;
 use App\Http\Controllers\JobdeskController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KategoriledgerController;
@@ -373,11 +374,21 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(AnggotaController::class)->group(function () {
         Route::get('/anggota', 'index')->name('anggota.index')->can('anggota.index');
+        Route::get('/anggota{id}/show', 'show')->name('anggota.show')->can('anggota.index');
         Route::get('/anggota/create', 'create')->name('anggota.create')->can('anggota.create');
         Route::post('/anggota', 'store')->name('anggota.store')->can('anggota.create');
         Route::get('/anggota/{id}/edit', 'edit')->name('anggota.edit')->can('anggota.edit');
         Route::put('/anggota/{id}/update', 'update')->name('anggota.update')->can('anggota.edit');
         Route::delete('/anggota/{id}/delete', 'destroy')->name('anggota.delete')->can('anggota.delete');
+    });
+
+    Route::controller(JenissimpananController::class)->group(function () {
+        Route::get('/jenissimpanan', 'index')->name('jenissimpanan.index')->can('jenissimpanan.index');
+        Route::get('/jenissimpanan/create', 'create')->name('jenissimpanan.create')->can('jenissimpanan.create');
+        Route::post('/jenissimpanan', 'store')->name('jenissimpanan.store')->can('jenissimpanan.store');
+        Route::get('/jenissimpanan/{kode_simpanan}/edit', 'edit')->name('jenissimpanan.edit')->can('jenissimpanan.edit');
+        Route::put('/jenissimpanan/{kode_simpanan}/update', 'update')->name('jenissimpanan.update')->can('jenissimpanan.update');
+        Route::delete('/jenissimpanan/{kode_simpanan}/delete', 'destroy')->name('jenissimpanan.delete')->can('jenissimpanan.delete');
     });
 });
 
