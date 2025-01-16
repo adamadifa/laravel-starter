@@ -101,6 +101,7 @@ class JobdeskController extends Controller
             }
             return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return Redirect::back()->with(messageError($e->getMessage()));
         }
     }
