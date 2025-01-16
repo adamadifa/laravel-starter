@@ -81,8 +81,11 @@
                         <span>{{ $anggota->pendidikan_terakhir }}</span>
                     </li>
                     <li class="d-flex align-items-center mb-3">
-                        <i class="ti ti-ring text-heading"></i><span class="fw-medium mx-2 text-heading">Status Pernikahan</span>
-                        <span>{{ $anggota->status_pernikahan }}</span>
+                        <i class="ti ti-rings text-heading"></i><span class="fw-medium mx-2 text-heading">Status Pernikahan</span>
+                        @php
+                            $status_menikah = ['M' => 'Menikah', 'BM' => 'Belum Meniah', 'JD' => 'Janda / Duda'];
+                        @endphp
+                        <span>{{ $status_menikah[$anggota->status_pernikahan] }}</span>
                     </li>
                     <li class="d-flex align-items-center mb-3">
                         <i class="ti ti-users text-heading"></i><span class="fw-medium mx-2 text-heading">Jumlah Tanggungan</span>
@@ -105,28 +108,30 @@
                         <span>{{ $anggota->nama_saudara }}</span>
                     </li>
                     <li class="d-flex align-items-center mb-3">
-                        <i class="ti ti-mobile text-heading"></i><span class="fw-medium mx-2 text-heading">No. HP</span>
+                        <i class="ti ti-phone-call text-heading"></i><span class="fw-medium mx-2 text-heading">No. HP</span>
                         <span>{{ $anggota->no_hp }}</span>
                     </li>
                     <li class="d-flex align-items-center mb-3">
                         <i class="ti ti-map-pin text-heading"></i><span class="fw-medium mx-2 text-heading">Alamat</span>
-                        <span>{{ $anggota->alamat }}</span>
+                    </li>
+                    <li class="d-flex align-items-center mb-3">
+                        <span class="ms-4">{{ $anggota->alamat }}</span>
                     </li>
                     <li class="d-flex align-items-center mb-3">
                         <i class="ti ti-map-pin text-heading"></i><span class="fw-medium mx-2 text-heading">Provinsi</span>
-                        <span>{{ $anggota->id_propinsi }}</span>
+                        <span>{{ $anggota->province_name }}</span>
                     </li>
                     <li class="d-flex align-items-center mb-3">
                         <i class="ti ti-map-pin text-heading"></i><span class="fw-medium mx-2 text-heading">Kota</span>
-                        <span>{{ $anggota->id_kota }}</span>
+                        <span>{{ $anggota->regency_name }}</span>
                     </li>
                     <li class="d-flex align-items-center mb-3">
                         <i class="ti ti-map-pin text-heading"></i><span class="fw-medium mx-2 text-heading">Kecamatan</span>
-                        <span>{{ $anggota->id_kecamatan }}</span>
+                        <span>{{ $anggota->district_name }}</span>
                     </li>
                     <li class="d-flex align-items-center mb-3">
                         <i class="ti ti-map-pin text-heading"></i><span class="fw-medium mx-2 text-heading">Kelurahan</span>
-                        <span>{{ $anggota->id_kelurahan }}</span>
+                        <span>{{ $anggota->village_name }}</span>
                     </li>
                     <li class="d-flex align-items-center mb-3">
                         <i class="ti ti-envelope text-heading"></i><span class="fw-medium mx-2 text-heading">Kode Pos</span>
@@ -134,16 +139,12 @@
                     </li>
                     <li class="d-flex align-items-center mb-3">
                         <i class="ti ti-home text-heading"></i><span class="fw-medium mx-2 text-heading">Status Tinggal</span>
-                        <span>{{ $anggota->status_tinggal }}</span>
+                        @php
+                            $status_tinggal = ['MS' => 'Milik Sendiri', 'MK' => 'Milik Keluarga', 'SK' => 'Sewa / Kontrak'];
+                        @endphp
+                        <span>{{ $status_tinggal[$anggota->status_tinggal] }}</span>
                     </li>
-                    <li class="d-flex align-items-center mb-3">
-                        <i class="ti ti-id-card text-heading"></i><span class="fw-medium mx-2 text-heading">NPP</span>
-                        <span>{{ $anggota->npp }}</span>
-                    </li>
-                    <li class="d-flex align-items-center mb-3">
-                        <i class="ti ti-id-card text-heading"></i><span class="fw-medium mx-2 text-heading">ID Siswa</span>
-                        <span>{{ $anggota->id_siswa }}</span>
-                    </li>
+
 
                 </ul>
             </div>

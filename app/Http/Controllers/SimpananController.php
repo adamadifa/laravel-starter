@@ -31,7 +31,13 @@ class SimpananController extends Controller
     public function show($no_anggota)
     {
         $no_anggota = Crypt::decrypt($no_anggota);
-        $data['anggota'] = Anggota::where('no_anggota', $no_anggota)->first();
+        $data['anggota'] = Anggota::where('no_anggota', $no_anggota)
+            ->leftJoin('provinces', 'koperasi_anggota.id_province', '=', 'provinces.id')
+            ->leftJoin('regencies', 'koperasi_anggota.id_regency', '=', 'regencies.id')
+            ->leftJoin('districts', 'koperasi_anggota.id_district', '=', 'districts.id')
+            ->leftJoin('villages', 'koperasi_anggota.id_village', '=', 'villages.id')
+            ->select('koperasi_anggota.*', 'provinces.name as province_name', 'regencies.name as regency_name', 'districts.name as district_name', 'villages.name as village_name')
+            ->first();
         return view('koperasi.simpanan.show', $data);
     }
 }
