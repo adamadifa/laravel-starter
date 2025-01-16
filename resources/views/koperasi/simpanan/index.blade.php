@@ -1,23 +1,17 @@
 @extends('layouts.app')
-@section('titlepage', 'Anggota Koperasi')
+@section('titlepage', 'Data Simpanan Koperasi')
 
 @section('content')
 @section('navigasi')
-    <span>Anggota Koperasi</span>
+    <span>Data Simpanan</span>
 @endsection
 <div class="row">
     <div class="col-lg-12 col-sm-12 col-xs-12">
         <div class="card">
-            <div class="card-header">
-                @can('anggota.create')
-                    <a href="#" class="btn btn-primary" id="btncreateAnggota"><i class="fa fa-plus me-2"></i> Tambah
-                        Anggota Koperasi</a>
-                @endcan
-            </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <form action="{{ route('anggota.index') }}">
+                        <form action="{{ URL::current() }}">
                             <div class="row">
                                 <div class="col-lg-10 col-sm-12 col-md-12">
                                     <x-input-with-icon label="Cari Nama Anggota Koperasi" value="{{ Request('nama_lengkap') }}" name="nama_lengkap"
@@ -43,6 +37,7 @@
                                         <th>NAMA LENGKAP</th>
                                         <th>TTL</th>
                                         <th>No. HP</th>
+                                        <th>Saldo</th>
                                         <th>#</th>
                                     </tr>
                                 </thead>
@@ -60,27 +55,14 @@
                                             <td><a href="">{{ $d->nama_lengkap }}</a></td>
                                             <td>{{ $d->tempat_lahir }}, {{ $d->tanggal_lahir }}</td>
                                             <td>{{ $d->no_hp }}</td>
+                                            <td class="text-end">{{ formatAngka($d->jml_saldo) }}</td>
                                             <td class="table-report__action w-56">
                                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                                    @can('anggota.edit')
-                                                        <a href="#" class="btnEditAnggota me-1" no_anggota="{{ Crypt::encrypt($d->no_anggota) }}"><i
-                                                                class="ti ti-edit"></i>
+                                                    @can('simpanan.create')
+                                                        <a href="{{ route('simpanan.show', Crypt::encrypt($d->no_anggota)) }}">
+                                                            <i class="ti ti-book"></i>
                                                         </a>
                                                     @endcan
-
-                                                    <a class="me-1" href="{{ route('anggota.show', Crypt::encrypt($d->no_anggota)) }}"><i
-                                                            class="ti ti-file-description text-info"></i></a>
-                                                    @can('anggota.delete')
-                                                        <form method="POST" class="deleteform"
-                                                            action="{{ route('anggota.delete', Crypt::encrypt($d->no_anggota)) }}">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <a class="delete-confirm ml-1">
-                                                                <i class="ti ti-trash text-danger"></i>
-                                                            </a>
-                                                        </form>
-                                                    @endcan
-
                                                 </div>
                                             </td>
                                         </tr>

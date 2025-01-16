@@ -97,7 +97,7 @@ class JobdeskController extends Controller
             $agent = new Agent();
 
             if ($agent->isMobile()) {
-                return redirect(route('realisasikegiatan.index'))->with(messageSuccess('Data Berhasil Disimpan'));
+                return redirect(route('jobdesk.index'))->with(messageSuccess('Data Berhasil Disimpan'));
             }
             return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
         } catch (\Exception $e) {
