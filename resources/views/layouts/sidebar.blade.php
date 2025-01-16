@@ -38,6 +38,8 @@
                 'ledger',
                 'anggota',
                 'jenissimpanan',
+                'jenistabungan',
+                'jenispembiayaan',
             ])
                 ? 'open'
                 : '' }}">
@@ -51,6 +53,8 @@
                         'siswa.index',
                         'anggota.index',
                         'jenissimpanan.index',
+                        'jenistabungan.index',
+                        'jenispembiayaan.index',
                     ]))
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-database"></i>
@@ -121,6 +125,20 @@
                             </a>
                         </li>
                     @endcan
+                    @can('jenistabungan.index')
+                        <li class="menu-item {{ request()->is(['jenistabungan', 'jenistabungan/*']) ? 'active' : '' }}">
+                            <a href="{{ route('jenistabungan.index') }}" class="menu-link">
+                                <div>Jenis Tabungan</div>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('jenispembiayaan.index')
+                        <li class="menu-item {{ request()->is(['jenispembiayaan', 'jenispembiayaan/*']) ? 'active' : '' }}">
+                            <a href="{{ route('jenispembiayaan.index') }}" class="menu-link">
+                                <div>Jenis Pembiayaan</div>
+                            </a>
+                        </li>
+                    @endcan
                 </ul>
             @endif
         </li>
@@ -130,6 +148,26 @@
                     <i class="menu-icon tf-icons ti ti-file-description"></i>
                     <div>Pendaftaran</div>
                 </a>
+            </li>
+        @endif
+        @if (auth()->user()->hasAnyPermission(['simpanan.index']))
+            <li class="menu-item {{ request()->is(['simpanan']) ? 'open' : '' }}">
+
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons ti ti-moneybag"></i>
+                    <div>Koperasi</div>
+                </a>
+                <ul class="menu-sub">
+                    @if (auth()->user()->hasAnyPermission(['simpanan.index']))
+                        <li class="menu-item {{ request()->is(['simpanan']) ? 'active' : '' }}">
+                            <a href="{{ route('simpanan.index') }}" class="menu-link">
+                                <i class="menu-icon tf-icons ti ti-file-description"></i>
+                                <div>Simpanan</div>
+                            </a>
+                        </li>
+                    @endif
+                </ul>
+
             </li>
         @endif
         @if (auth()->user()->hasAnyPermission(['pembayaranpdd.index']))

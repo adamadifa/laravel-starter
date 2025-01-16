@@ -10,7 +10,9 @@ use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\JamkerjaController;
 use App\Http\Controllers\JenisbiayaController;
+use App\Http\Controllers\JenispembiayaanController;
 use App\Http\Controllers\JenissimpananController;
+use App\Http\Controllers\JenistabunganController;
 use App\Http\Controllers\JobdeskController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KategoriledgerController;
@@ -29,6 +31,7 @@ use App\Http\Controllers\RegencyController;
 use App\Http\Controllers\RencanasppController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SaldoawalledgerController;
+use App\Http\Controllers\SimpananController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\SumberdanaController;
 use App\Http\Controllers\TahunajaranController;
@@ -389,6 +392,33 @@ Route::middleware('auth')->group(function () {
         Route::get('/jenissimpanan/{kode_simpanan}/edit', 'edit')->name('jenissimpanan.edit')->can('jenissimpanan.edit');
         Route::put('/jenissimpanan/{kode_simpanan}/update', 'update')->name('jenissimpanan.update')->can('jenissimpanan.update');
         Route::delete('/jenissimpanan/{kode_simpanan}/delete', 'destroy')->name('jenissimpanan.delete')->can('jenissimpanan.delete');
+    });
+
+    Route::controller(JenistabunganController::class)->group(function () {
+        Route::get('/jenistabungan', 'index')->name('jenistabungan.index')->can('jenistabungan.index');
+        Route::get('/jenistabungan/create', 'create')->name('jenistabungan.create')->can('jenistabungan.create');
+        Route::post('/jenistabungan', 'store')->name('jenistabungan.store')->can('jenistabungan.store');
+        Route::get('/jenistabungan/{kode_tabungan}/edit', 'edit')->name('jenistabungan.edit')->can('jenistabungan.edit');
+        Route::put('/jenistabungan/{kode_tabungan}/update', 'update')->name('jenistabungan.update')->can('jenistabungan.update');
+        Route::delete('/jenistabungan/{kode_tabungan}/delete', 'destroy')->name('jenistabungan.delete')->can('jenistabungan.delete');
+    });
+
+    Route::controller(JenispembiayaanController::class)->group(function () {
+        Route::get('/jenispembiayaan', 'index')->name('jenispembiayaan.index')->can('jenispembiayaan.index');
+        Route::get('/jenispembiayaan/create', 'create')->name('jenispembiayaan.create')->can('jenispembiayaan.create');
+        Route::post('/jenispembiayaan', 'store')->name('jenispembiayaan.store')->can('jenispembiayaan.store');
+        Route::get('/jenispembiayaan/{kode_pembiayaan}/edit', 'edit')->name('jenispembiayaan.edit')->can('jenispembiayaan.edit');
+        Route::put('/jenispembiayaan/{kode_pembiayaan}/update', 'update')->name('jenispembiayaan.update')->can('jenispembiayaan.update');
+        Route::delete('/jenispembiayaan/{kode_pembiayaan}/delete', 'destroy')->name('jenispembiayaan.delete')->can('jenispembiayaan.delete');
+    });
+
+    Route::controller(SimpananController::class)->group(function () {
+        Route::get('/simpanan', 'index')->name('simpanan.index')->can('simpanan.index');
+        Route::get('/simpanan/create', 'create')->name('simpanan.create')->can('simpanan.create');
+        Route::post('/simpanan', 'store')->name('simpanan.store')->can('simpanan.store');
+        Route::get('/simpanan/{no_transaksi}/edit', 'edit')->name('simpanan.edit')->can('simpanan.edit');
+        Route::put('/simpanan/{no_transaksi}/update', 'update')->name('simpanan.update')->can('simpanan.update');
+        Route::delete('/simpanan/{no_transaksi}/delete', 'destroy')->name('simpanan.delete')->can('simpanan.delete');
     });
 });
 

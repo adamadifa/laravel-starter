@@ -12,8 +12,8 @@ class JenissimpananController extends Controller
     public function index(Request $request)
     {
         $query = Jenissimpanan::query();
-        if (!empty($request->jenis_simpanan)) {
-            $query->where('jenis_simpanan', 'like', '%' . $request->jenis_simpanan . '%');
+        if (!empty($request->jenis_simpanan_search)) {
+            $query->where('jenis_simpanan', 'like', '%' . $request->jenis_simpanan_search . '%');
         }
         $jenissimpan = $query->paginate(10);
         $jenissimpan->appends($request->all());

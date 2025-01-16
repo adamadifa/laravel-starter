@@ -1,23 +1,23 @@
 @extends('layouts.app')
-@section('titlepage', 'Jenis Simpanan')
+@section('titlepage', 'Jenis Tabungan')
 
 @section('content')
 @section('navigasi')
-    <span>Jenis Simpanan</span>
+    <span>Jenis Tabungan</span>
 @endsection
 <div class="row">
     <div class="col-lg-5 col-sm-12 col-xs-12">
         <div class="card">
             <div class="card-header">
-                @can('jenissimpanan.create')
-                    <a href="#" class="btn btn-primary" id="btnCreate"><i class="fa fa-plus me-2"></i>Tambah Jenis Simpanan</a>
+                @can('jenistabungan.create')
+                    <a href="#" class="btn btn-primary" id="btnCreate"><i class="fa fa-plus me-2"></i>Tambah Jenis Tabungan</a>
                 @endcan
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col">
                         <form action="{{ URL::current() }}">
-                            <x-input-with-icon label="Cari Jenis Simpanan" value="{{ Request('jenis_simpanan_search') }}" name="jenis_simpanan_search"
+                            <x-input-with-icon label="Cari Jenis Tabungan" value="{{ Request('jenis_tabungan_search') }}" name="jenis_tabungan_search"
                                 icon="ti ti-search" />
                         </form>
                     </div>
@@ -29,30 +29,30 @@
                                 <thead class="table-dark">
                                     <tr>
                                         <th>Kode</th>
-                                        <th>Jenis Simpanan</th>
+                                        <th>Jenis Tabungan</th>
                                         <th>#</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($jenissimpanan as $d)
+                                    @foreach ($jenistabungan as $d)
                                         <tr>
-                                            <td>{{ $d->kode_simpanan }}</td>
-                                            <td>{{ $d->jenis_simpanan }} </td>
+                                            <td>{{ $d->kode_tabungan }}</td>
+                                            <td>{{ $d->jenis_tabungan }} </td>
                                             <td>
                                                 <div class="d-flex">
-                                                    @can('jenissimpanan.edit')
+                                                    @can('jenistabungan.edit')
                                                         <div>
                                                             <a href="#" class="me-2 btnEdit"
-                                                                kode_simpanan="{{ Crypt::encrypt($d->kode_simpanan) }}">
+                                                                kode_tabungan="{{ Crypt::encrypt($d->kode_tabungan) }}">
                                                                 <i class="ti ti-edit text-success"></i>
                                                             </a>
                                                         </div>
                                                     @endcan
 
-                                                    @can('jenissimpanan.delete')
+                                                    @can('jenistabungan.delete')
                                                         <div>
                                                             <form method="POST" name="deleteform" class="deleteform"
-                                                                action="{{ route('jenissimpanan.delete', Crypt::encrypt($d->kode_simpanan)) }}">
+                                                                action="{{ route('jenistabungan.delete', Crypt::encrypt($d->kode_tabungan)) }}">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <a href="#" class="delete-confirm ml-1">
@@ -71,7 +71,7 @@
 
                     </div>
                 </div>
-                {{ $jenissimpanan->links() }}
+                {{ $jenistabungan->links() }}
             </div>
         </div>
     </div>
@@ -85,16 +85,16 @@
         $("#btnCreate").click(function(e) {
             e.preventDefault();
             $('#modal').modal("show");
-            $(".modal-title").text("Tambah Data Jenis Simpanan");
-            $("#loadmodal").load("{{ route('jenissimpanan.create') }}");
+            $(".modal-title").text("Tambah Data Jenis Tabungan");
+            $("#loadmodal").load("{{ route('jenistabungan.create') }}");
         });
 
         $(".btnEdit").click(function(e) {
             e.preventDefault();
-            const kode_simpanan = $(this).attr('kode_simpanan')
+            const kode_tabungan = $(this).attr('kode_tabungan')
             $('#modal').modal("show");
-            $(".modal-title").text("Edit Jenis Simpanan");
-            $("#loadmodal").load(`/jenissimpanan/${kode_simpanan}/edit`);
+            $(".modal-title").text("Edit Jenis Tabungan");
+            $("#loadmodal").load(`/jenistabungan/${kode_tabungan}/edit`);
         });
     });
 </script>
