@@ -86,7 +86,7 @@ class JobdeskController extends Controller
                 ->where('kode_dept', $kode_dept)
                 ->first();
             $last_kode_jobdesk = $lastjobdesk != null ? $lastjobdesk->kode_jobdesk : '';
-            $kode_jobdesk = buatkode($last_kode_jobdesk, $request->kode_jabatan . $request->kode_dept, 4);
+            $kode_jobdesk = buatkode($last_kode_jobdesk, $kode_jabatan . $kode_dept, 4);
             Jobdesk::create([
                 'kode_jobdesk' => $kode_jobdesk,
                 'jobdesk' => $request->jobdesk,
@@ -101,6 +101,7 @@ class JobdeskController extends Controller
             }
             return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return Redirect::back()->with(messageError($e->getMessage()));
         }
     }

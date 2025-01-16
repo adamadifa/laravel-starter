@@ -1,24 +1,24 @@
 @extends('layouts.app')
-@section('titlepage', 'Jenis Simpanan')
+@section('titlepage', 'Jenis Pembiayaan')
 
 @section('content')
 @section('navigasi')
-    <span>Jenis Simpanan</span>
+    <span>Jenis Pembiayaan</span>
 @endsection
 <div class="row">
     <div class="col-lg-5 col-sm-12 col-xs-12">
         <div class="card">
             <div class="card-header">
-                @can('jenissimpanan.create')
-                    <a href="#" class="btn btn-primary" id="btnCreate"><i class="fa fa-plus me-2"></i>Tambah Jenis Simpanan</a>
+                @can('jenispembiayaan.create')
+                    <a href="#" class="btn btn-primary" id="btnCreate"><i class="fa fa-plus me-2"></i>Tambah Jenis Pembiayaan</a>
                 @endcan
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col">
                         <form action="{{ URL::current() }}">
-                            <x-input-with-icon label="Cari Jenis Simpanan" value="{{ Request('jenis_simpanan_search') }}" name="jenis_simpanan_search"
-                                icon="ti ti-search" />
+                            <x-input-with-icon label="Cari Jenis Pembiayaan" value="{{ Request('jenis_pembiayaan_search') }}"
+                                name="jenis_pembiayaan_search" icon="ti ti-search" />
                         </form>
                     </div>
                 </div>
@@ -29,30 +29,32 @@
                                 <thead class="table-dark">
                                     <tr>
                                         <th>Kode</th>
-                                        <th>Jenis Simpanan</th>
+                                        <th>Jenis Pembiayaan</th>
+                                        <th>Persentase</th>
                                         <th>#</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($jenissimpanan as $d)
+                                    @foreach ($jenispembiayaan as $d)
                                         <tr>
-                                            <td>{{ $d->kode_simpanan }}</td>
-                                            <td>{{ $d->jenis_simpanan }} </td>
+                                            <td>{{ $d->kode_pembiayaan }}</td>
+                                            <td>{{ $d->jenis_pembiayaan }} </td>
+                                            <td class="text-center">{{ $d->persentase }} % </td>
                                             <td>
                                                 <div class="d-flex">
-                                                    @can('jenissimpanan.edit')
+                                                    @can('jenispembiayaan.edit')
                                                         <div>
                                                             <a href="#" class="me-2 btnEdit"
-                                                                kode_simpanan="{{ Crypt::encrypt($d->kode_simpanan) }}">
+                                                                kode_pembiayaan="{{ Crypt::encrypt($d->kode_pembiayaan) }}">
                                                                 <i class="ti ti-edit text-success"></i>
                                                             </a>
                                                         </div>
                                                     @endcan
 
-                                                    @can('jenissimpanan.delete')
+                                                    @can('jenispembiayaan.delete')
                                                         <div>
                                                             <form method="POST" name="deleteform" class="deleteform"
-                                                                action="{{ route('jenissimpanan.delete', Crypt::encrypt($d->kode_simpanan)) }}">
+                                                                action="{{ route('jenispembiayaan.delete', Crypt::encrypt($d->kode_pembiayaan)) }}">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <a href="#" class="delete-confirm ml-1">
@@ -71,7 +73,7 @@
 
                     </div>
                 </div>
-                {{ $jenissimpanan->links() }}
+                {{ $jenispembiayaan->links() }}
             </div>
         </div>
     </div>
@@ -85,16 +87,16 @@
         $("#btnCreate").click(function(e) {
             e.preventDefault();
             $('#modal').modal("show");
-            $(".modal-title").text("Tambah Data Jenis Simpanan");
-            $("#loadmodal").load("{{ route('jenissimpanan.create') }}");
+            $(".modal-title").text("Tambah Data Jenis Pembiayaan");
+            $("#loadmodal").load("{{ route('jenispembiayaan.create') }}");
         });
 
         $(".btnEdit").click(function(e) {
             e.preventDefault();
-            const kode_simpanan = $(this).attr('kode_simpanan')
+            const kode_pembiayaan = $(this).attr('kode_pembiayaan')
             $('#modal').modal("show");
-            $(".modal-title").text("Edit Jenis Simpanan");
-            $("#loadmodal").load(`/jenissimpanan/${kode_simpanan}/edit`);
+            $(".modal-title").text("Edit Jenis Pembiayaan");
+            $("#loadmodal").load(`/jenispembiayaan/${kode_pembiayaan}/edit`);
         });
     });
 </script>

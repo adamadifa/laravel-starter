@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('koperasi_jenis_tabungan', function (Blueprint $table) {
-            $table->char('kode_tabungan', 3)->primary();
-            $table->string('jenis_tabungan');
+        Schema::create('koperasi_jenis_pembiayaan', function (Blueprint $table) {
+            $table->char('kode_pembiayaan', 3)->primary();
+            $table->string('jenis_pembiayaan');
+            $table->smallInteger('persentase');
             $table->timestamps();
         });
     }
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jenistabungans');
+        Schema::dropIfExists('koperasi_jenis_pembiayaan');
     }
 };
