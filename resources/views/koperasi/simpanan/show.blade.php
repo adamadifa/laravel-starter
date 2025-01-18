@@ -1,6 +1,6 @@
 @extends('layouts.app')
 <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/page-profile.css') }}" />
-@section('titlepage', 'Anggota')
+@section('titlepage', 'Data Simpanan')
 
 @section('content')
 @section('navigasi')
@@ -85,7 +85,7 @@
                         @php
                             $status_menikah = ['M' => 'Menikah', 'BM' => 'Belum Meniah', 'JD' => 'Janda / Duda'];
                         @endphp
-                        <span>{{ $status_menikah[$anggota->status_pernikahan] }}</span>
+                        <span>{{ in_array($anggota->status_pernikahan, array_keys($status_menikah)) ? $status_menikah[$anggota->status_pernikahan] : 'Belum Diisi' }}</span>
                     </li>
                     <li class="d-flex align-items-center mb-3">
                         <i class="ti ti-users text-heading"></i><span class="fw-medium mx-2 text-heading">Jumlah Tanggungan</span>
@@ -142,7 +142,7 @@
                         @php
                             $status_tinggal = ['MS' => 'Milik Sendiri', 'MK' => 'Milik Keluarga', 'SK' => 'Sewa / Kontrak'];
                         @endphp
-                        <span>{{ $status_tinggal[$anggota->status_tinggal] }}</span>
+                        <span>{{ in_array($anggota->status_tinggal, array_keys($status_tinggal)) ? $status_tinggal[$anggota->status_tinggal] : 'Belum Diisi' }}</span>
                     </li>
 
 
@@ -150,7 +150,200 @@
             </div>
         </div>
         <!--/ About User -->
+    </div>
+    <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12">
+        <div class="row">
+            <div class="col">
+                <div
+                    class="swiper-container cardswiper swiper-container-initialized swiper-container-horizontal swiper-container-ios swiper-container-pointer-events">
+                    <div class="swiper-wrapper" id="swiper-wrapper-e7c52537e6cf4732" aria-live="polite"
+                        style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">
 
+                        @foreach ($saldo_simpanan as $l)
+                            <div class="swiper-slide {{ $loop->first ? 'swiper-slide-active' : '' }}" role="group"
+                                aria-label="{{ $loop->index }} / {{ count($saldo_simpanan) }} }}">
+                                <div class="card dark-bg">
+                                    <div class="card-body p-3 pb-2">
+                                        <div class="row mb-1">
+                                            <div class="col-auto align-self-center">
+                                                <img src="https://sip.persisalamin.com/assets-mobile/img/masterocard.png" alt="">
+                                            </div>
+                                            <div class=" col align-self-center text-end">
+                                                <p class="small">
+                                                    <span class="text-uppercase size-10">Validity</span><br>
+                                                    <span class="text-muted">Unlimited</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4 class="fw-normal mb-1">
+                                                    {{ formatRupiah($l->jumlah) }}
+                                                    <span class="small text-muted">Rp</span>
+                                                </h4>
+                                                <p class="mb-0 text-muted size-12">
+                                                    {{ $l->kode_simpanan }}</p>
+                                                <p class="text-muted size-12">{{ $l->jenis_simpanan }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                    <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col">
+                <button class="btn btn-primary w-100" id="createSetoran">
+                    <i class="ti ti-arrow-up-left me-1"></i>
+                    Setoran
+                </button>
+            </div>
+            <div class="col">
+                <button class="btn btn-danger w-100" id="createPenarikan">
+                    <i class="ti ti-arrow-down-right me-1"></i>
+                    Penarikan
+                </button>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Data Mutasi</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <form action="#" method="GET">
+                                    <div class="row">
+                                        <div class="col">
+                                            <x-input-with-icon label="Dari Tanggal" name="dari" icon="ti ti-calendar"
+                                                datepicker="flatpickr-date" value="{{ Request('dari') }}" />
+                                        </div>
+                                        <div class="col">
+                                            <x-input-with-icon label="Sampai Tanggal" name="sampai" icon="ti ti-calendar"
+                                                datepicker="flatpickr-date" value="{{ Request('sampai') }}" />
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <button type="submit" class="btn btn-primary w-100"><i class="ti ti-search"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>No. Transaksi</th>
+                                            <th>Tanggal</th>
+                                            <th>Jenis Simpanan</th>
+                                            <th>Setor</th>
+                                            <th>Tarik</th>
+                                            <th>Saldo</th>
+                                            <th>Petugas</th>
+                                            <th>#</th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="4" style="text-align: center">SALDO AWAL</th>
+                                            <td class="text-end" id="saldoawal">{{ formatRupiah($saldo_awal) }}</td>
+                                            <th colspan="3"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach ($simpanan as $d)
+                                            @php
+                                                $setor = $d->jenis_transaksi == 'S' ? $d->jumlah : 0;
+                                                $tarik = $d->jenis_transaksi == 'T' ? $d->jumlah : 0;
+                                                // $i = $loop->iteration + $simpanan->firstItem() - 1;
+                                            @endphp
+                                            <tr>
+                                                <td>{{ $d->no_transaksi }} </td>
+                                                <td>{{ date('d-m-Y', strtotime($d->tanggal)) }}</td>
+                                                <td>{{ $d->jenis_simpanan }}</td>
+                                                <td class="text-end">{{ formatAngka($setor) }}</td>
+                                                <td class="text-end text-danger">{{ formatAngka($tarik) }}</td>
+                                                <td class="text-end">{{ formatAngka($d->saldo) }}</td>
+                                                <td>{{ $d->name }}</td>
+                                                <td class="table-report__action w-56">
+                                                    <div class="d-flex">
+                                                        <a href="{{ route('simpanan.cetak', Crypt::encrypt($d->no_transaksi)) }}" class="me-1">
+                                                            <i class="ti ti-printer text-primary"></i>
+                                                        </a>
+                                                        <a href="#" class="btnShowberita" berita="{{ $d->berita }}"><i
+                                                                class="ti ti-file-description text-info">
+                                                            </i>
+                                                        </a>
+                                                        @can('simpanan.delete')
+                                                            @if ($d->no_transaksi == $lasttransaksi->no_transaksi && $d->tanggal == date('Y-m-d'))
+                                                                <form method="POST" class="deleteform m-0"
+                                                                    action="{{ route('simpanan.delete', Crypt::encrypt($d->no_transaksi)) }}">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <a class="delete-confirm ml-1">
+                                                                        <i class="ti ti-trash text-danger"></i>
+                                                                    </a>
+                                                                </form>
+                                                            @endif
+                                                        @endcan
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+<x-modal-form id="mdlBerita" size="" show="loadmodalberita" title="" />
+<x-modal-form id="mdlSetoran" size="" show="loadmodalSetoran" title="" />
 @endsection
+@push('myscript')
+<script>
+    $(function() {
+        $(document).on('click', '.btnShowberita', function(e) {
+            e.preventDefault();
+            var berita = $(this).attr("berita");
+            $("#mdlBerita").modal("show");
+            $("#loadmodalberita").html(`<div class="sk-wave sk-primary" style="margin:auto">
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                </div>`);
+            $("#mdlBerita").find(".modal-title").text("Detail Berita");
+            $("#loadmodalberita").html(berita);
+        });
+
+        $(document).on('click', '#createSetoran', function(e) {
+            e.preventDefault();
+            let no_anggota = "{{ Crypt::encrypt($anggota->no_anggota) }}";
+            let jenis_transaksi = "S";
+            $('#mdlSetoran').modal("show");
+            $("#loadmodalSetoran").html(`<div class="sk-wave sk-primary" style="margin:auto">
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                </div>`);
+            $("#mdlSetoran").find(".modal-title").text("Input Data Setoran");
+            $("#loadmodalSetoran").load("/simpanan/" + no_anggota + "/" + jenis_transaksi + "/create");
+        });
+    });
+</script>
+@endpush

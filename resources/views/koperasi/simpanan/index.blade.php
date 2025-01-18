@@ -80,39 +80,5 @@
     </div>
 </div>
 <x-modal-form id="mdlAnggota" size="modal-lg" show="loadmodalAnggota" title="" />
-@endsection
-@push('myscript')
-{{-- <script src="{{ asset('assets/js/pages/roles/create.js') }}"></script> --}}
-<script>
-    $(function() {
-        $("#btncreateAnggota").click(function(e) {
-            e.preventDefault();
-            $('#mdlAnggota').modal("show");
-            $("#loadmodalAnggota").html(`<div class="sk-wave sk-primary" style="margin:auto">
-                <div class="sk-wave-rect"></div>
-                <div class="sk-wave-rect"></div>
-                <div class="sk-wave-rect"></div>
-                <div class="sk-wave-rect"></div>
-                <div class="sk-wave-rect"></div>
-                </div>`);
-            $("#modalAnggota").find(".modal-title").text("Tambah Anggota Koperasi");
-            $("#loadmodalAnggota").load('/anggota/create');
-        });
 
-        $(".btnEditAnggota").click(function(e) {
-            var no_anggota = $(this).attr("no_anggota");
-            e.preventDefault();
-            $('#mdlAnggota').modal("show");
-            $("#loadmodalAnggota").html(`<div class="sk-wave sk-primary" style="margin:auto">
-                <div class="sk-wave-rect"></div>
-                <div class="sk-wave-rect"></div>
-                <div class="sk-wave-rect"></div>
-                <div class="sk-wave-rect"></div>
-                <div class="sk-wave-rect"></div>
-                </div>`);
-            $("#modalAnggota").find(".modal-title").text("Edit Anggota Koperasi");
-            $("#loadmodalAnggota").load('/anggota/' + no_anggota + '/edit');
-        });
-    });
-</script>
-@endpush
+@endsection
