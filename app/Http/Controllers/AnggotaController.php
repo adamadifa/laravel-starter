@@ -162,4 +162,11 @@ class AnggotaController extends Controller
             return Redirect::back()->with(messageError($e->getMessage()));
         }
     }
+
+    public function show($no_anggota)
+    {
+        $no_anggota = Crypt::decrypt($no_anggota);
+        $data['anggota'] = Anggota::where('no_anggota', $no_anggota)->first();
+        return view('koperasi.anggota.show', $data);
+    }
 }
