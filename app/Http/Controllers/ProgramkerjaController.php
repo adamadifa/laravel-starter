@@ -230,11 +230,11 @@ class ProgramkerjaController extends Controller
         $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : auth()->user()->kode_dept;
         $ta_aktif = Tahunajaran::where('status', 1)->first();
         $qprogramkerja = Programkerja::query();
-        $qprogramkerja->where('program_kerja.kode_jabatan', $kode_jabatan);
+        // $qprogramkerja->where('program_kerja.kode_jabatan', $kode_jabatan);
         $qprogramkerja->where('program_kerja.kode_dept', $kode_dept);
-        if (!empty($request->cari)) {
-            $qprogramkerja->where('program_kerja.program_kerja', 'like', '%' . $request->cari . '%');
-        }
+        // if (!empty($request->cari)) {
+        //     $qprogramkerja->where('program_kerja.program_kerja', 'like', '%' . $request->cari . '%');
+        // }
         $qprogramkerja->where('program_kerja.kode_ta', $ta_aktif->kode_ta);
         $program_kerja = $qprogramkerja->get();
         return response()->json($program_kerja);
