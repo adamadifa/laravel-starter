@@ -65,7 +65,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-12 col-sm-12 col-md-12">
-                                    <x-input-with-icon icon="ti ti-search" label="Job Desk" name="programkerja_search" />
+                                    <x-input-with-icon icon="ti ti-search" label="Program Kerja" name="programkerja_search" />
                                 </div>
                             </div>
                             <div class="row">
