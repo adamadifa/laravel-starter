@@ -32,7 +32,7 @@ class ProgramkerjaController extends Controller
                 $query->where('program_kerja.kode_dept', $request->kode_dept);
             }
         } else {
-            $query->where('program_kerja.kode_jabatan', $user->kode_jabatan);
+            // $query->where('program_kerja.kode_jabatan', $user->kode_jabatan);
             $query->where('program_kerja.kode_dept', $user->kode_dept);
         }
 
