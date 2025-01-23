@@ -33,6 +33,11 @@
         </select>
     </div>
     <div class="form-group mb-3">
+        <select name="kode_program_kerja" id="kode_program_kerja" class="form-select select2Kodeprogramkerja">
+            <option value="">Program Kerja</option>
+        </select>
+    </div>
+    <div class="form-group mb-3">
         <textarea name="uraian_kegiatan" id="uraian_kegiatan" class="form-control" rows="30">{{ $realisasikegiatan->uraian_kegiatan }}</textarea>
     </div>
     <div class="form-group">
@@ -215,10 +220,36 @@
             })
         }
 
+        function getProgramkerja() {
+            let kode_jabatan = $("#formEditerealisasikegiatan").find('#kode_jabatan').val();
+            let kode_dept = $("#formEditerealisasikegiatan").find('#kode_dept').val();
+            let kode_program_kerja = "{{ $realisasikegiatan->kode_program_kerja }}";
+            $.ajax({
+                url: "{{ route('programkerja.getprogramkerja') }}",
+                type: "GET",
+                data: {
+                    kode_jabatan: kode_jabatan,
+                    kode_dept: kode_dept
+                },
+                cache: false,
+                success: function(response) {
+                    for (let i = 0; i < response.length; i++) {
+                        $("#formEditerealisasikegiatan").find("#kode_program_kerja").append('<option value="' + response[i]
+                            .kode_program_kerja + '" selected>' + response[i].kode_program_kerja + ' - ' + response[i]
+                            .program_kerja +
+                            '</option>');
+                    }
+                }
+            })
+        }
+
+
         $("#formEditerealisasikegiatan").find('#kode_jabatan, #kode_dept').on('change', function() {
             getJobdesk();
+            getProgramkerja();
         });
 
         getJobdesk();
+        getProgramkerja();
     });
 </script>
