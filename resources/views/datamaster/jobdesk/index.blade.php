@@ -6,7 +6,7 @@
     <span>Jobdesk</span>
 @endsection
 <div class="row">
-    <div class="col-lg-10 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
         <div class="card">
             <div class="card-header">
                 @can('jobdesk.create')
@@ -18,7 +18,7 @@
                 <div class="row">
                     <div class="col-12">
                         <form action="{{ route('jobdesk.index') }}">
-                            @hasanyrole(['superadmin'])
+                            @hasrole(['superadmin', 'pimpinan pesantren', 'sekretaris'])
                                 <div class="row">
                                     <div class="col-lg-5 col-sm-12 col-md-12">
                                         <div class="form-group">
@@ -44,7 +44,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            @endhasanyrole
+                            @endhasrole
                             <div class="row">
                                 <div class="col-lg-12 col-sm-12 col-md-12">
                                     <x-input-with-icon icon="ti ti-search" label="Job Desk" name="jobdesk_search" />
