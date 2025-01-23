@@ -20,7 +20,7 @@
                         <form action="{{ route('jobdesk.index') }}">
                             @hasrole(['superadmin', 'pimpinan pesantren', 'sekretaris'])
                                 <div class="row">
-                                    <div class="col-lg-5 col-sm-12 col-md-12">
+                                    <div class="col-lg-6 col-sm-12 col-md-12">
                                         <div class="form-group">
                                             <select name="kode_jabatan" id="kode_jabatan" class="form-select select2Kodejabatansearch">
                                                 <option value="">Jabatan</option>
@@ -32,7 +32,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-5 col-sm-12 col-md-12">
+                                    <div class="col-lg-6 col-sm-12 col-md-12">
                                         <div class="form-group">
                                             <select name="kode_dept" id="kode_dept" class="form-select select2Kodedeptsearc">
                                                 <option value="">Departemen</option>
@@ -67,7 +67,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Kode Jobdesk</th>
-                                        <th>Jobdesk</th>
+                                        <th style="width: 50%">Jobdesk</th>
                                         <th>Jabatan</th>
                                         <th>Departemen</th>
                                         <th>#</th>
