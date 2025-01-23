@@ -120,7 +120,7 @@ class ProgramkerjaController extends Controller
                 ->orderBy('kode_program_kerja', 'desc')
                 ->first();
 
-            dd($lastprogramkerja);
+            // dd($lastprogramkerja);
             $last_kode_program_kerja = $lastprogramkerja !== null ? $lastprogramkerja->kode_program_kerja : '';
             $kode_program_kerja = buatkode($last_kode_program_kerja, $format, 4);
             // dd($kode_program_kerja);
