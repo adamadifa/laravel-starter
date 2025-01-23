@@ -119,6 +119,8 @@ class ProgramkerjaController extends Controller
                 ->where('kode_ta', $ta_aktif->kode_ta)
                 ->orderBy('kode_program_kerja')
                 ->first();
+
+            dd($lastprogramkerja);
             $last_kode_program_kerja = $lastprogramkerja !== null ? $lastprogramkerja->kode_program_kerja : '';
             $kode_program_kerja = buatkode($last_kode_program_kerja, $format, 4);
             Programkerja::create([
