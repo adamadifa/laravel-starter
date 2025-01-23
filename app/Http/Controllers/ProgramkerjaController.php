@@ -117,7 +117,7 @@ class ProgramkerjaController extends Controller
         try {
             $lastprogramkerja = Programkerja::where('kode_dept', $kode_dept)
                 ->where('kode_ta', $ta_aktif->kode_ta)
-                ->orderBy('kode_program_kerja')
+                ->orderBy('kode_program_kerja', 'desc')
                 ->first();
 
             dd($lastprogramkerja);
