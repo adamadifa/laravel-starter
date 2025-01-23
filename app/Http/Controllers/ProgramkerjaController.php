@@ -43,7 +43,7 @@ class ProgramkerjaController extends Controller
         }
 
         if (!empty($request->cari)) {
-            $query->where('program_kerja.program_kerja', 'like', '%' . $request->cari . '%');
+            $query->where('program_kerja.program_kerja', 'like', '%' . $request->programkerja_search . '%');
         }
         $query->orderBy('created_at', 'desc');
         $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : $user->kode_jabatan;

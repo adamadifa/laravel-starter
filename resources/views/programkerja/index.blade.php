@@ -64,6 +64,11 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="col-lg-12 col-sm-12 col-md-12">
+                                    <x-input-with-icon icon="ti ti-search" label="Job Desk" name="programkerja_search" />
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-lg-11 col-sm-12 col-md-12 ">
                                     <button class="btn btn-primary w-100" type="submit" value="1" name="cari"><i class="ti ti-search"></i>
                                         Cari</button>
