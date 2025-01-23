@@ -247,7 +247,7 @@ class ProgramkerjaController extends Controller
         $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : auth()->user()->kode_dept;
 
         $qprogramkerja = Programkerja::query();
-        $qprogramkerja->where('program_kerja.kode_jabatan', $kode_jabatan);
+        // $qprogramkerja->where('program_kerja.kode_jabatan', $kode_jabatan);
         $qprogramkerja->where('program_kerja.kode_dept', $kode_dept);
         if (!empty($request->cari)) {
             $qprogramkerja->where('program_kerja.program_kerja', 'like', '%' . $request->cari . '%');
