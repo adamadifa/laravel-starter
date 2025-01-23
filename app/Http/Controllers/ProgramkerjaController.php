@@ -123,7 +123,7 @@ class ProgramkerjaController extends Controller
             // dd($lastprogramkerja);
             $last_kode_program_kerja = $lastprogramkerja !== null ? $lastprogramkerja->kode_program_kerja : '';
             $kode_program_kerja = buatkode($last_kode_program_kerja, $format, 4);
-            dd($kode_program_kerja);
+            // dd($kode_program_kerja);
             Programkerja::create([
                 'kode_program_kerja' => $kode_program_kerja,
                 'program_kerja' => $request->program_kerja,
