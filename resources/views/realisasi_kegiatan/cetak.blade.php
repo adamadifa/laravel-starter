@@ -89,7 +89,7 @@
                             <td>{{ date('d-m-Y', strtotime($d->tanggal)) }}</td>
                             <td>{{ removeHtmltag($d->nama_kegiatan) }}</td>
                             <td>{{ removeHtmltag($d->uraian_kegiatan) }}</td>
-                            <td>{{ $d->jobdesk }}</td>
+                            <td>{{ removeHtmltag($d->jobdesk) }}</td>
                             <td>{{ $d->program_kerja }}</td>
                             <td>{{ formatNama1($d->name) }}</td>
                         </tr>
