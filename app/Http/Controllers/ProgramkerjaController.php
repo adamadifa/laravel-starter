@@ -23,7 +23,7 @@ class ProgramkerjaController extends Controller
         $query->join('departemen', 'program_kerja.kode_dept', '=', 'departemen.kode_dept');
         $query->join('jabatan', 'program_kerja.kode_jabatan', '=', 'jabatan.kode_jabatan');
         $query->join('users', 'program_kerja.id_user', '=', 'users.id');
-        if ($user->hasRole('super admin')) {
+        if ($user->hasRole(['super admin', 'pimpinan pesantren', 'sekretaris'])) {
             if (!empty($request->kode_jabatan)) {
                 $query->where('program_kerja.kode_jabatan', $request->kode_jabatan);
             }
