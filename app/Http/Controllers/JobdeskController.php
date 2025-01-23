@@ -20,7 +20,7 @@ class JobdeskController extends Controller
         $query->join('departemen', 'jobdesk.kode_dept', '=', 'departemen.kode_dept');
         $query->join('jabatan', 'jobdesk.kode_jabatan', '=', 'jabatan.kode_jabatan');
         $query->orderBy('kode_jobdesk');
-        if ($user->hasRole('super admin')) {
+        if ($user->hasRole(['super admin', 'pimpinan pesantren', 'sekretaris'])) {
             if (!empty($request->kode_jabatan)) {
                 $query->where('jobdesk.kode_jabatan', $request->kode_jabatan);
             }
