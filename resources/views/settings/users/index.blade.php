@@ -39,7 +39,7 @@
                                         <th>Username</th>
                                         <th>Email</th>
                                         <th>Role</th>
-                                        <th>Unit</th>
+                                        <th>Units</th>
                                         <th>#</th>
                                     </tr>
                                 </thead>
