@@ -6,7 +6,7 @@
     <span>Users</span>
 @endsection
 <div class="row">
-    <div class="col-lg-8 col-sm-12 col-xs-12">
+    <div class="col-lg-10 col-sm-12 col-xs-12">
         <div class="card">
             <div class="card-header">
                 <a href="#" class="btn btn-primary" id="btncreateUser"><i class="fa fa-plus me-2"></i> Tambah
@@ -18,8 +18,7 @@
                         <form action="{{ route('permissions.index') }}">
                             <div class="row">
                                 <div class="col-lg-10 col-sm-12 col-md-12">
-                                    <x-input-with-icon label="Search Name" value="{{ Request('name') }}" name="name"
-                                        icon="ti ti-search" />
+                                    <x-input-with-icon label="Search Name" value="{{ Request('name') }}" name="name" icon="ti ti-search" />
                                 </div>
                                 <div class="col-lg-2 col-sm-12 col-md-12">
                                     <button class="btn btn-primary">Cari</button>
@@ -60,8 +59,7 @@
                                             <td>
                                                 <div class="d-flex">
                                                     <div>
-                                                        <a href="#" class="me-2 editUser"
-                                                            id="{{ Crypt::encrypt($d->id) }}">
+                                                        <a href="#" class="me-2 editUser" id="{{ Crypt::encrypt($d->id) }}">
                                                             <i class="fa fa-edit text-success"></i>
                                                         </a>
                                                     </div>
