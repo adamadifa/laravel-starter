@@ -192,6 +192,9 @@
                 })
             }
 
+
+            
+
             $("#formEditerealisasikegiatan").find('#kode_jabatan, #kode_dept').on('change', function() {
                 getJobdesk();
             });
