@@ -18,7 +18,7 @@ class UserController extends Controller
         $query = User::query();
         $query->with('roles');
         $query->leftjoin('unit', 'users.kode_unit', '=', 'unit.kode_unit');
-        $users = $query->paginate(10);
+        $users = $query->paginate(20);
         return view('settings.users.index', compact('users'));
     }
 
