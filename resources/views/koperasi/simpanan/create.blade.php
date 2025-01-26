@@ -1,4 +1,5 @@
-<form action="{{ route('simpanan.store', ['no_anggota' => $no_anggota, 'jenis_transaksi', $jenis_transaksi]) }}" id="formSimpanan" method="POST">
+<form action="{{ route('simpanan.store', ['no_anggota' => Crypt::encrypt($no_anggota), 'jenis_transaksi' => $jenis_transaksi]) }}" id="formSimpanan"
+    method="POST">
     @csrf
     <x-input-with-icon icon="ti ti-barcode" label="No. Transaksi (Auto)" name="no_transaksi" disabled="true" />
     <x-input-with-icon icon="ti ti-calendar" label="Tanggal Transaksi" name="tanggal" datepicker="flatpickr-date" />
@@ -63,7 +64,7 @@
                     }
                 });
                 return false;
-            } else if (!jumlah) {
+            } else if (!jumlah || parseInt(jumlah) <= 0) {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Oops...',
@@ -73,6 +74,17 @@
                     }
                 });
                 return false;
+            } else if (berita == "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Berita tidak boleh kosong!',
+                    didClose: () => {
+                        $(this).find('textarea[name="berita"]').focus();
+                    },
+                });
+                return false;
+
             } else {
                 $(this).find("#btnSimpan").prop("disabled", true);
                 $(this).find("#btnSimpan").html(

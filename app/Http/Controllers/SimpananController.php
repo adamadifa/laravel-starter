@@ -9,6 +9,7 @@ use App\Models\Simpanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class SimpananController extends Controller
 {
@@ -86,91 +87,125 @@ class SimpananController extends Controller
         return view('koperasi.simpanan.create', $data);
     }
 
-    // public function store(Request $request)
-    // {
-    //     $no_anggota = Crypt::decrypt($request->no_anggota);
-    //     $tanggal = $request->tgl_transaksi;
-    //     $tgl = explode("-", $tanggal);
-    //     $tahun = $tgl[0];
-    //     $bulan = $tgl[1];
-    //     if (strlen($bulan) > 1) {
-    //         $bulan = $bulan;
-    //     } else {
-    //         $bulan = "0" . $bulan;
-    //     }
-    //     $format = "TS" . substr($tahun, 2, 2) . $bulan;
-    //     //Cek Simpanan Terakhir
-    //     $ceksimpanan = DB::table('koperasi_simpanan')
-    //         ->select('no_transaksi')
-    //         ->where(DB::raw('left(no_transaksi,6)'), $format)
-    //         ->orderBy('no_transaksi', 'desc')
-    //         ->first();
+    public function store($no_anggota, $jenis_transaksi, Request $request)
+    {
 
-    //     //dd($ceksimpanan);
+        $request->validate([
+            'tanggal' => 'required',
+            'kode_simpanan' => 'required',
+            'jumlah' => 'required',
+            'berita' => 'required',
+        ]);
 
-    //     if (empty($ceksimpanan->no_transaksi)) {
-    //         $no_transaksi_terakhir = $format . "-" . "0000";
-    //     } else {
-    //         $no_transaksi_terakhir = $ceksimpanan->no_transaksi;
-    //     }
+        $no_anggota = Crypt::decrypt($no_anggota);
+        $tanggal = $request->tanggal;
+        $tgl = explode("-", $tanggal);
+        $tahun = $tgl[0];
+        $bulan = $tgl[1];
+        if (strlen($bulan) > 1) {
+            $bulan = $bulan;
+        } else {
+            $bulan = "0" . $bulan;
+        }
+        $format = "TS" . substr($tahun, 2, 2) . $bulan;
 
-    //     //dd($no_transaksi_terakhir);
-    //     $no_transaksi = buatkode($no_transaksi_terakhir, $format . "-", 4);
 
-    //     $ceksaldo = DB::table('koperasi_saldo_simpanan')->where('no_anggota', $no_anggota)->where('kode_simpanan', $request->kode_simpanan)->count();
-    //     $jumlah = str_replace(".", "", $request->jumlah);
-    //     if ($request->jenis_transaksi == "S") {
-    //         $operator = "+";
-    //     } else if ($request->jenis_transaksi == "T") {
-    //         $operator = "-";
-    //     }
-    //     DB::beginTransaction();
-    //     try {
+        //Cek Simpanan Terakhir
+        $lastsimpanan = Simpanan::select('no_transaksi')
+            ->where(DB::raw('left(no_transaksi,6)'), $format)
+            ->orderBy('no_transaksi', 'desc')
+            ->first();
 
-    //         DB::table('koperasi_simpanan')->insert([
-    //             'no_transaksi' => $no_transaksi,
-    //             'tgl_transaksi' => $request->tgl_transaksi,
-    //             'no_anggota' => $no_anggota,
-    //             'kode_simpanan' => $request->kode_simpanan,
-    //             'jumlah' => str_replace(".", "", $request->jumlah),
-    //             'jenis_transaksi' => $request->jenis_transaksi,
-    //             'berita' => $request->berita,
-    //             'id_petugas' => Auth::user()->id
-    //         ]);
 
-    //         if ($ceksaldo == 0) {
-    //             DB::table('koperasi_saldo_simpanan')->insert([
-    //                 'no_anggota' => $no_anggota,
-    //                 'kode_simpanan' => $request->kode_simpanan,
-    //                 'jumlah' => str_replace(".", "", $request->jumlah)
-    //             ]);
-    //         } else {
-    //             DB::table('koperasi_saldo_simpanan')
-    //                 ->where('no_anggota', $no_anggota)
-    //                 ->where('kode_simpanan', $request->kode_simpanan)
-    //                 ->update([
-    //                     'jumlah' => DB::raw('jumlah' . $operator . $jumlah)
-    //                 ]);
-    //         }
+        //Cek  No. Transaksi Terakir
+        $last_no_transaksi = $lastsimpanan ? $lastsimpanan->no_transaksi : '';
 
-    //         $ceksaldoterakhir = DB::table('koperasi_saldo_simpanan')
-    //             ->select(DB::raw('SUM(jumlah) as jumlah'))
-    //             ->where('no_anggota', $no_anggota)
-    //             ->groupBy('no_anggota')
-    //             ->first();
+        //Buat Kode Otomatsi No. Transaksi
+        $no_transaksi = buatkode($last_no_transaksi, $format . "-", 4);
 
-    //         DB::table('koperasi_simpanan')
-    //             ->where('no_transaksi', $no_transaksi)
-    //             ->update([
-    //                 'saldo' => $ceksaldoterakhir->jumlah
-    //             ]);
+        //Cek Saldo Simpanan
+        $ceksaldo = Saldosimpanan::where('no_anggota', $no_anggota)->where('kode_simpanan', $request->kode_simpanan)->count();
+        $jumlah = toNumber($request->jumlah);
+        $operator = $jenis_transaksi == "S" ? "+" : "-";
 
-    //         DB::commit();
-    //         return redirect('/simpanan/' . Crypt::encrypt($no_anggota) . '/show')->with(['success' => 'Data Berhasil Disimpan']);
-    //     } catch (\Exception $e) {
-    //         dd($e);
-    //         DB::rollback();
-    //         return redirect('/simpanan/' . Crypt::encrypt($no_anggota) . '/show')->with(['warning' => 'Data Gagal Disimpan']);
-    //     }
-    // }
+        DB::beginTransaction();
+        try {
+
+            Simpanan::create([
+                'no_transaksi' => $no_transaksi,
+                'tanggal' => $tanggal,
+                'no_anggota' => $no_anggota,
+                'kode_simpanan' => $request->kode_simpanan,
+                'jumlah' => $jumlah,
+                'jenis_transaksi' => $jenis_transaksi,
+                'berita' => $request->berita,
+                'saldo' => 0,
+                'id_petugas' => auth()->user()->id
+            ]);
+
+            if ($ceksaldo == 0) {
+                Saldosimpanan::create([
+                    'no_anggota' => $no_anggota,
+                    'kode_simpanan' => $request->kode_simpanan,
+                    'jumlah' => $jumlah
+                ]);
+            } else {
+                Saldosimpanan::where('no_anggota', $no_anggota)
+                    ->where('kode_simpanan', $request->kode_simpanan)
+                    ->update([
+                        'jumlah' => DB::raw('jumlah' . $operator . $jumlah)
+                    ]);
+            }
+
+            //Cek Saldo Terakhir
+            $ceksaldoterakhir = Saldosimpanan::select(DB::raw('SUM(jumlah) as jumlah'))
+                ->where('no_anggota', $no_anggota)
+                ->groupBy('no_anggota')
+                ->first();
+
+            //Update Saldo Transaksi
+            Simpanan::where('no_transaksi', $no_transaksi)
+                ->update([
+                    'saldo' => $ceksaldoterakhir->jumlah
+                ]);
+
+            DB::commit();
+            return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
+            return Redirect::back()->with(messageError($e->getMessage()));
+        }
+    }
+
+
+    public function destroy($no_transaksi)
+    {
+
+        $no_transaksi = Crypt::decrypt($no_transaksi);
+
+        $cekanggota = Simpanan::where('no_transaksi', $no_transaksi)->first();
+        $no_anggota = $cekanggota->no_anggota;
+        $kode_simpanan = $cekanggota->kode_simpanan;
+        $jenis_transaksi = $cekanggota->jenis_transaksi;
+        $jumlah = $cekanggota->jumlah;
+        $operator = $jenis_transaksi == "S" ? "-" : "+";
+
+        DB::beginTransaction();
+        try {
+
+            Simpanan::where('no_transaksi', $no_transaksi)->delete();
+            Saldosimpanan::where('no_anggota', $no_anggota)
+                ->where('kode_simpanan', $kode_simpanan)
+                ->update([
+                    'jumlah' => DB::raw('jumlah' . $operator . $jumlah)
+                ]);
+            DB::commit();
+            return Redirect::back()->with(messageSuccess('Data Berhasil Dihapus'));
+        } catch (\Exception $e) {
+            //dd($e);
+            DB::rollback();
+            return Redirect::back()->with(messageError($e->getMessage()));
+        }
+    }
 }

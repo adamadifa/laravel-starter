@@ -243,7 +243,7 @@
                                         <tr>
                                             <th>No. Transaksi</th>
                                             <th>Tanggal</th>
-                                            <th>Jenis Simpanan</th>
+                                            <th>Kode</th>
                                             <th>Setor</th>
                                             <th>Tarik</th>
                                             <th>Saldo</th>
@@ -267,11 +267,11 @@
                                             <tr>
                                                 <td>{{ $d->no_transaksi }} </td>
                                                 <td>{{ date('d-m-Y', strtotime($d->tanggal)) }}</td>
-                                                <td>{{ $d->jenis_simpanan }}</td>
+                                                <td>{{ $d->kode_simpanan }}</td>
                                                 <td class="text-end">{{ formatAngka($setor) }}</td>
                                                 <td class="text-end text-danger">{{ formatAngka($tarik) }}</td>
                                                 <td class="text-end">{{ formatAngka($d->saldo) }}</td>
-                                                <td>{{ $d->name }}</td>
+                                                <td>{{ formatNama1($d->name) }}</td>
                                                 <td class="table-report__action w-56">
                                                     <div class="d-flex">
                                                         <a href="{{ route('simpanan.cetak', Crypt::encrypt($d->no_transaksi)) }}" class="me-1">
