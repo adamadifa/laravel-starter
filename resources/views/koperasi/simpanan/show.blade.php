@@ -274,7 +274,8 @@
                                                 <td>{{ formatNama1($d->name) }}</td>
                                                 <td class="table-report__action w-56">
                                                     <div class="d-flex">
-                                                        <a href="{{ route('simpanan.cetak', Crypt::encrypt($d->no_transaksi)) }}" class="me-1">
+                                                        <a href="{{ route('simpanan.cetakkwitansi', Crypt::encrypt($d->no_transaksi)) }}"
+                                                            class="me-1" target="_blank">
                                                             <i class="ti ti-printer text-primary"></i>
                                                         </a>
                                                         <a href="#" class="btnShowberita" berita="{{ $d->berita }}"><i
@@ -287,7 +288,7 @@
                                                                     action="{{ route('simpanan.delete', Crypt::encrypt($d->no_transaksi)) }}">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <a class="delete-confirm ml-1">
+                                                                    <a class="delete-confirm ml-1" href="#">
                                                                         <i class="ti ti-trash text-danger"></i>
                                                                     </a>
                                                                 </form>
@@ -342,6 +343,22 @@
                 <div class="sk-wave-rect"></div>
                 </div>`);
             $("#mdlSetoran").find(".modal-title").text("Input Data Setoran");
+            $("#loadmodalSetoran").load("/simpanan/" + no_anggota + "/" + jenis_transaksi + "/create");
+        });
+
+        $(document).on('click', '#createPenarikan', function(e) {
+            e.preventDefault();
+            let no_anggota = "{{ Crypt::encrypt($anggota->no_anggota) }}";
+            let jenis_transaksi = "T";
+            $('#mdlSetoran').modal("show");
+            $("#loadmodalSetoran").html(`<div class="sk-wave sk-primary" style="margin:auto">
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                </div>`);
+            $("#mdlSetoran").find(".modal-title").text("Input Data Penarikan");
             $("#loadmodalSetoran").load("/simpanan/" + no_anggota + "/" + jenis_transaksi + "/create");
         });
     });

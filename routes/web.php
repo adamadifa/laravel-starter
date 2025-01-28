@@ -34,6 +34,7 @@ use App\Http\Controllers\SaldoawalledgerController;
 use App\Http\Controllers\SimpananController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\SumberdanaController;
+use App\Http\Controllers\TabunganController;
 use App\Http\Controllers\TahunajaranController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
@@ -420,7 +421,17 @@ Route::middleware('auth')->group(function () {
         Route::get('/simpanan/{no_transaksi}/edit', 'edit')->name('simpanan.edit')->can('simpanan.edit');
         Route::put('/simpanan/{no_transaksi}/update', 'update')->name('simpanan.update')->can('simpanan.update');
         Route::delete('/simpanan/{no_transaksi}/delete', 'destroy')->name('simpanan.delete')->can('simpanan.delete');
-        Route::delete('/simpanan/{no_transaksi}/cetak', 'cetak')->name('simpanan.cetak')->can('simpanan.create');
+        Route::get('/simpanan/{no_transaksi}/cetak', 'cetakkwitansi')->name('simpanan.cetakkwitansi')->can('simpanan.create');
+    });
+
+    Route::controller(TabunganController::class)->group(function () {
+        Route::get('/tabungan', 'index')->name('tabungan.index')->can('tabungan.index');
+        Route::get('/tabungan/create', 'create')->name('tabungan.create')->can('tabungan.create');
+        Route::get('/tabungan/{no_rekening}/show', 'show')->name('tabungan.show')->can('simpanan.create');
+        Route::post('/tabungan', 'store')->name('tabungan.store')->can('tabungan.create');
+        Route::get('/tabungan/{no_rekening}/edit', 'edit')->name('tabungan.edit')->can('tabungan.edit');
+        Route::put('/tabungan/{no_rekening}/update', 'update')->name('tabungan.update')->can('tabungan.edit');
+        Route::delete('/tabungan/{no_rekening}/delete', 'destroy')->name('tabungan.delete')->can('tabungan.delete');
     });
 });
 

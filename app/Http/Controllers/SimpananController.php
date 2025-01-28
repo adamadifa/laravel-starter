@@ -124,10 +124,15 @@ class SimpananController extends Controller
         $no_transaksi = buatkode($last_no_transaksi, $format . "-", 4);
 
         //Cek Saldo Simpanan
-        $ceksaldo = Saldosimpanan::where('no_anggota', $no_anggota)->where('kode_simpanan', $request->kode_simpanan)->count();
+        $saldo = Saldosimpanan::where('no_anggota', $no_anggota)->where('kode_simpanan', $request->kode_simpanan);
+        $ceksaldo = $saldo->count();
+        $datasaldo = $saldo->first();
         $jumlah = toNumber($request->jumlah);
         $operator = $jenis_transaksi == "S" ? "+" : "-";
 
+        if ($datasaldo->jumlah < $jumlah) {
+            return Redirect::back()->with(messageError('Saldo  Tidak Mencukupi'));
+        }
         DB::beginTransaction();
         try {
 
@@ -207,5 +212,14 @@ class SimpananController extends Controller
             DB::rollback();
             return Redirect::back()->with(messageError($e->getMessage()));
         }
+    }
+
+    public function cetakkwitansi($no_transaksi)
+    {
+        $no_transaksi = Crypt::decrypt($no_transaksi);
+        $data['transaksi'] = Simpanan::where('no_transaksi', $no_transaksi)
+            ->join('koperasi_anggota', 'koperasi_simpanan.no_anggota', '=', 'koperasi_anggota.no_anggota')
+            ->first();
+        return view('koperasi.simpanan.cetakkwitansi', $data);
     }
 }

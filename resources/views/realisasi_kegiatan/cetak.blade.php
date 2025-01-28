@@ -13,9 +13,11 @@
     <link rel="stylesheet" href="{{ asset('assets/css/report.css') }}">
     <style>
         @page {
-            size: A4,
-        }
+            size: A4 landscape;
+            margin-top: 10mm;
 
+            /* Tambahkan margin atas untuk setiap halaman dalam posisi landscape */
+        }
 
         .judul {
             font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -28,7 +30,6 @@
             font-family: Verdana, Geneva, Tahoma, sans-serif;
             font-size: 16px;
 
-
         }
 
         .huruf {
@@ -39,13 +40,13 @@
             font-size: 12px;
         }
 
-
         hr.style2 {
             border-top: 3px double #8c8b8b;
         }
 
         .sheet {
             overflow: visible ! important;
+            height: auto ! important;
         }
     </style>
 </head>
