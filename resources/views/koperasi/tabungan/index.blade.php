@@ -8,6 +8,9 @@
 <div class="row">
     <div class="col-lg-12 col-sm-12 col-xs-12">
         <div class="card">
+            <div class="card-header">
+                <a href="#" class="btn btn-primary" id="btncreateRekening"><i class="fa fa-plus me-2"></i> Buat Rekening</a>
+            </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
@@ -79,6 +82,87 @@
         </div>
     </div>
 </div>
-<x-modal-form id="mdlAnggota" size="modal-lg" show="loadmodalAnggota" title="" />
-
+<x-modal-form id="mdlRekening" size="" show="loadmodalRekening" title="" />
+<div class="modal fade" id="mdlAnggota" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel18">Data Anggota</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped" id="tabelanggota">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>No. Anggota</th>
+                            <th>NIK</th>
+                            <th>NAMA LENGKAP</th>
+                            <th>No. HP</th>
+                            <th>#</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
+@push('myscript')
+<script>
+    $(function() {
+        $(document).on('show.bs.modal', '.modal', function() {
+            const zIndex = 1090 + 10 * $('.modal:visible').length;
+            $(this).css('z-index', zIndex);
+            setTimeout(() => $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1)
+                .addClass('modal-stack'));
+        });
+
+        $("#btncreateRekening").click(function() {
+            $('#mdlRekening').modal("show");
+            $("#loadmodalRekening").html(`<div class="sk-wave sk-primary" style="margin:auto">
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                </div>`);
+            $("#mdlRekening").find(".modal-title").text("Buat Rekening");
+            $("#loadmodalRekening").load("{{ route('tabungan.createrekening') }}");
+        });
+
+        $(document).on('click', '#no_anggota_search', function() {
+            $('#mdlAnggota').modal("show");
+        })
+
+
+        $('#tabelanggota').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url()->current() }}', // memanggil route yang menampilkan data json
+            columns: [{ // mengambil & menampilkan kolom sesuai tabel database
+                    data: 'no_anggota',
+                    name: 'no_anggota'
+                },
+                {
+                    data: 'nik',
+                    name: 'nik'
+                },
+                {
+                    data: 'nama_lengkap',
+                    name: 'nama_lengkap'
+                },
+                {
+                    data: 'no_hp',
+                    name: 'no_hp'
+                },
+                {
+                    data: 'action',
+                    name: 'action'
+                }
+            ],
+
+        });
+    });
+</script>
+@endpush

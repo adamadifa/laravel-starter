@@ -427,12 +427,16 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(TabunganController::class)->group(function () {
         Route::get('/tabungan', 'index')->name('tabungan.index')->can('tabungan.index');
-        Route::get('/tabungan/create', 'create')->name('tabungan.create')->can('tabungan.create');
+        Route::get('/tabungan/{no_rekening}/{jenis_transaksi}/create', 'create')->name('tabungan.create')->can('tabungan.create');
         Route::get('/tabungan/{no_rekening}/show', 'show')->name('tabungan.show')->can('simpanan.create');
-        Route::post('/tabungan', 'store')->name('tabungan.store')->can('tabungan.create');
+        Route::post('/tabungan/{no_rekening}/{jenis_transaksi}/store', 'store')->name('tabungan.store')->can('tabungan.create');
         Route::get('/tabungan/{no_rekening}/edit', 'edit')->name('tabungan.edit')->can('tabungan.edit');
         Route::put('/tabungan/{no_rekening}/update', 'update')->name('tabungan.update')->can('tabungan.edit');
         Route::delete('/tabungan/{no_rekening}/delete', 'destroy')->name('tabungan.delete')->can('tabungan.delete');
+
+        //Buat Rekening
+
+        Route::get('/tabungan/createrekening', 'createrekening')->name('tabungan.createrekening')->can('tabungan.create');
     });
 
     Route::controller(PembiayaanController::class)->group(function () {

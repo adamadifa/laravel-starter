@@ -2,14 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Anggota;
+use App\Models\Jenistabungan;
 use App\Models\Tabungan;
+use App\Models\Transaksitabungan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use Yajra\DataTables\DataTables;
 
 class TabunganController extends Controller
 {
     public function index(Request $request)
     {
 
+        if ($request->ajax()) {
+            $anggota = Anggota::select('*');
+            return DataTables::of($anggota)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm pilihAnggota" no_anggota="' . Crypt::encrypt($row->no_anggota) . '">Pilih</a>';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make();
+        }
 
         $query = Tabungan::query();
         $query->select('koperasi_tabungan.*', 'nama_lengkap', 'jenis_tabungan');
@@ -23,5 +41,192 @@ class TabunganController extends Controller
         $tabungan->appends($request->all());
         $data['tabungan'] = $tabungan;
         return view('koperasi.tabungan.index', $data);
+    }
+
+
+    public function show($no_rekening, Request $request)
+    {
+        $no_rekening = Crypt::decrypt($no_rekening);
+        $tabungan = Tabungan::where('no_rekening', $no_rekening)
+            ->join('koperasi_jenis_tabungan', 'koperasi_tabungan.kode_tabungan', '=', 'koperasi_jenis_tabungan.kode_tabungan')
+            ->first();
+
+        $anggota = Anggota::where('no_anggota', $tabungan->no_anggota)
+            ->leftJoin('provinces', 'koperasi_anggota.id_province', '=', 'provinces.id')
+            ->leftJoin('regencies', 'koperasi_anggota.id_regency', '=', 'regencies.id')
+            ->leftJoin('districts', 'koperasi_anggota.id_district', '=', 'districts.id')
+            ->leftJoin('villages', 'koperasi_anggota.id_village', '=', 'villages.id')
+            ->select('koperasi_anggota.*', 'provinces.name as province_name', 'regencies.name as regency_name', 'districts.name as district_name', 'villages.name as village_name')
+            ->first();
+
+        $dari = date('Y-m-d', strtotime('-60s days'));
+        $sampai = date('Y-m-d');
+        if (isset($request->dari) and isset($request->sampai)) {
+            $lastdata = Transaksitabungan::where('no_rekening', $no_rekening)
+                ->where('tanggal', '<', $request->dari)
+                ->orderBy('no_transaksi', 'desc')
+                ->first();
+        } else {
+            $lastdata = Transaksitabungan::where('no_rekening', $no_rekening)
+                ->where('tanggal', '<', $dari)
+                ->orderBy('no_transaksi', 'desc')
+                ->first();
+        }
+
+        $query = Transaksitabungan::query();
+
+        $query->select('koperasi_tabungan_transaksi.*', 'jenis_tabungan', 'name');
+        $query->join('koperasi_tabungan', 'koperasi_tabungan_transaksi.no_rekening', '=', 'koperasi_tabungan.no_rekening');
+        $query->join('koperasi_jenis_tabungan', 'koperasi_tabungan.kode_tabungan', '=', 'koperasi_jenis_tabungan.kode_tabungan');
+        $query->leftJoin('users', 'koperasi_tabungan_transaksi.id_petugas', '=', 'users.id');
+        $query->where('koperasi_tabungan_transaksi.no_rekening', $no_rekening);
+        $query->orderBy('created_at', 'asc')->get();
+        if (isset($request->dari) and isset($request->sampai)) {
+            $query->whereBetween('tanggal', [$request->dari, $request->sampai]);
+        } else {
+            $query->whereBetween('tanggal', [$dari, $sampai]);
+        }
+        $transaksitabungan = $query->get();
+        $data['lasttransaksi'] = Transaksitabungan::where('no_rekening', $no_rekening)->orderBy('created_at', 'desc')->first();
+        $data['transaksitabungan'] = $transaksitabungan;
+        $data['saldo_awal'] = $lastdata ? $lastdata->saldo : 0;
+
+        $data['tabungan'] = $tabungan;
+        $data['anggota'] = $anggota;
+        return view('koperasi.tabungan.show', $data);
+    }
+
+    public function create($no_rekening, $jenis_transaksi)
+    {
+        $data['no_rekening'] = Crypt::decrypt($no_rekening);
+        $data['jenis_transaksi'] = $jenis_transaksi;
+        return view('koperasi.tabungan.create', $data);
+    }
+
+
+    public function store($no_rekening, $jenis_transaksi, Request $request)
+    {
+
+        $request->validate([
+            'tanggal' => 'required',
+            'jumlah' => 'required',
+            'berita' => 'required',
+        ]);
+
+        $no_rekening = Crypt::decrypt($no_rekening);
+        $tabungan = Tabungan::where('no_rekening', $no_rekening)->first();
+        $tanggal = $request->tanggal;
+        $tgl = explode("-", $tanggal);
+        $tahun = $tgl[0];
+        $bulan = $tgl[1];
+        if (strlen($bulan) > 1) {
+            $bulan = $bulan;
+        } else {
+            $bulan = "0" . $bulan;
+        }
+
+
+        $format = $tabungan->kode_tabungan . substr($tahun, 2, 2) . $bulan;
+
+
+        //Cek Simpanan Terakhir
+        $lastransaksi = Transaksitabungan::select('no_transaksi')
+            ->where(DB::raw('left(no_transaksi,7)'), $format)
+            ->orderBy('no_transaksi', 'desc')
+            ->first();
+
+
+        //Cek  No. Transaksi Terakir
+        $last_no_transaksi = $lastransaksi ? $lastransaksi->no_transaksi : '';
+
+        //Buat Kode Otomatsi No. Transaksi
+        $no_transaksi = buatkode($last_no_transaksi, $format . "-", 3);
+
+        //Cek Saldo Simpanan
+        $saldo = Tabungan::where('no_rekening', $no_rekening);
+        $ceksaldo = $saldo->count();
+        $datasaldo = $saldo->first();
+        $jumlah = toNumber($request->jumlah);
+        $operator = $jenis_transaksi == "S" ? "+" : "-";
+
+        if ($datasaldo->saldo < $jumlah) {
+            return Redirect::back()->with(messageError('Saldo  Tidak Mencukupi'));
+        }
+
+
+        DB::beginTransaction();
+        try {
+
+            Transaksitabungan::create([
+                'no_transaksi' => $no_transaksi,
+                'tanggal' => $tanggal,
+                'no_rekening' => $no_rekening,
+                'jumlah' => $jumlah,
+                'jenis_transaksi' => $jenis_transaksi,
+                'berita' => $request->berita,
+                'saldo' => 0,
+                'id_petugas' => auth()->user()->id
+            ]);
+
+            Tabungan::where('no_rekening', $no_rekening)
+                ->update([
+                    'saldo' => DB::raw('saldo' . $operator . $jumlah)
+                ]);
+
+            //Cek Saldo Terakhir
+            $ceksaldoterakhir = Tabungan::select('saldo')
+                ->where('no_rekening', $no_rekening)
+                ->first();
+
+
+
+            //Update Saldo Transaksi
+            Transaksitabungan::where('no_transaksi', $no_transaksi)
+                ->update([
+                    'saldo' => $ceksaldoterakhir->saldo
+                ]);
+
+            DB::commit();
+            return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
+            return Redirect::back()->with(messageError($e->getMessage()));
+        }
+    }
+
+
+    public function destroy($no_transaksi)
+    {
+
+        $no_transaksi = Crypt::decrypt($no_transaksi);
+
+        $cekrekening = Transaksitabungan::where('no_transaksi', $no_transaksi)->first();
+        $no_rekening = $cekrekening->no_rekening;
+        $jenis_transaksi = $cekrekening->jenis_transaksi;
+        $jumlah = $cekrekening->jumlah;
+        $operator = $jenis_transaksi == "S" ? "-" : "+";
+
+        DB::beginTransaction();
+        try {
+
+            Transaksitabungan::where('no_transaksi', $no_transaksi)->delete();
+            Tabungan::where('no_rekening', $no_rekening)
+                ->update([
+                    'saldo' => DB::raw('saldo' . $operator . $jumlah)
+                ]);
+            DB::commit();
+            return Redirect::back()->with(messageSuccess('Data Berhasil Dihapus'));
+        } catch (\Exception $e) {
+            //dd($e);
+            DB::rollback();
+            return Redirect::back()->with(messageError($e->getMessage()));
+        }
+    }
+
+    public function createrekening(Request $request)
+    {
+        $data['jenis_tabungan'] = Jenistabungan::all();
+        return view('koperasi.tabungan.createrekening', $data);
     }
 }

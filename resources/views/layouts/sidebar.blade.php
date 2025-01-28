@@ -151,14 +151,15 @@
             </li>
         @endif
         @if (auth()->user()->hasAnyPermission(['simpanan.index', 'pembiayaan.index', 'tabungan.index']))
-            <li class="menu-item {{ request()->is(['simpanan', 'pembiayaan', 'tabungan']) ? 'open' : '' }}">
+            <li
+                class="menu-item {{ request()->is(['simpanan', 'pembiayaan', 'tabungan', 'tabungan/*', 'simpanan/*', 'pembiayaan/*']) ? 'open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-moneybag"></i>
                     <div>Koperasi</div>
                 </a>
                 <ul class="menu-sub">
                     @if (auth()->user()->hasAnyPermission(['simpanan.index']))
-                        <li class="menu-item {{ request()->is(['simpanan']) ? 'active' : '' }}">
+                        <li class="menu-item {{ request()->is(['simpanan', 'simpanan/*']) ? 'active' : '' }}">
                             <a href="{{ route('simpanan.index') }}" class="menu-link">
                                 <i class="menu-icon tf-icons ti ti-file-description"></i>
                                 <div>Simpanan</div>
@@ -166,7 +167,7 @@
                         </li>
                     @endif
                     @if (auth()->user()->hasAnyPermission(['tabungan.index']))
-                        <li class="menu-item {{ request()->is(['tabungan']) ? 'active' : '' }}">
+                        <li class="menu-item {{ request()->is(['tabungan', 'tabungan/*']) ? 'active' : '' }}">
                             <a href="{{ route('tabungan.index') }}" class="menu-link">
                                 <i class="menu-icon tf-icons ti ti-file-description"></i>
                                 <div>Tabungan</div>
@@ -175,7 +176,7 @@
                         </li>
                     @endif
                     @if (auth()->user()->hasAnyPermission(['pembiayaan.index']))
-                        <li class="menu-item {{ request()->is(['pembiayaan']) ? 'active' : '' }}">
+                        <li class="menu-item {{ request()->is(['pembiayaan', 'pembiayaan/*']) ? 'active' : '' }}">
                             <a href="{{ route('pembiayaan.index') }}" class="menu-link">
                                 <i class="menu-icon tf-icons ti ti-file-description"></i>
                                 <div>Pembiayaan</div>
