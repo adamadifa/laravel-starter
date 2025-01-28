@@ -150,9 +150,8 @@
                 </a>
             </li>
         @endif
-        @if (auth()->user()->hasAnyPermission(['simpanan.index', 'pembiayaan.index']))
-            <li class="menu-item {{ request()->is(['simpanan', 'pembiayaan']) ? 'open' : '' }}">
-
+        @if (auth()->user()->hasAnyPermission(['simpanan.index', 'pembiayaan.index', 'tabungan.index']))
+            <li class="menu-item {{ request()->is(['simpanan', 'pembiayaan', 'tabungan']) ? 'open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-moneybag"></i>
                     <div>Koperasi</div>
@@ -166,6 +165,15 @@
                             </a>
                         </li>
                     @endif
+                    @if (auth()->user()->hasAnyPermission(['tabungan.index']))
+                        <li class="menu-item {{ request()->is(['tabungan']) ? 'active' : '' }}">
+                            <a href="{{ route('tabungan.index') }}" class="menu-link">
+                                <i class="menu-icon tf-icons ti ti-file-description"></i>
+                                <div>Tabungan</div>
+
+                            </a>
+                        </li>
+                    @endif
                     @if (auth()->user()->hasAnyPermission(['pembiayaan.index']))
                         <li class="menu-item {{ request()->is(['pembiayaan']) ? 'active' : '' }}">
                             <a href="{{ route('pembiayaan.index') }}" class="menu-link">
@@ -174,6 +182,8 @@
                             </a>
                         </li>
                     @endif
+
+
                 </ul>
 
             </li>
