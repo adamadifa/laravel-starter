@@ -21,6 +21,7 @@ use App\Http\Controllers\KategoripengeluaranController;
 use App\Http\Controllers\LedgerController;
 use App\Http\Controllers\LedgertransaksiController;
 use App\Http\Controllers\PembayaranpendidikanController;
+use App\Http\Controllers\PembiayaanController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\Permission_groupController;
 use App\Http\Controllers\PermissionController;
@@ -421,6 +422,17 @@ Route::middleware('auth')->group(function () {
         Route::put('/simpanan/{no_transaksi}/update', 'update')->name('simpanan.update')->can('simpanan.update');
         Route::delete('/simpanan/{no_transaksi}/delete', 'destroy')->name('simpanan.delete')->can('simpanan.delete');
         Route::delete('/simpanan/{no_transaksi}/cetak', 'cetak')->name('simpanan.cetak')->can('simpanan.create');
+    });
+
+    Route::controller(PembiayaanController::class)->group(function () {
+        Route::get('/pembiayaan', 'index')->name('pembiayaan.index')->can('pembiayaan.index');
+        Route::get('/pembiayaan/{no_anggota}/show', 'show')->name('pembiayaan.show')->can('pembiayaan.create');
+        Route::get('/pembiayaan/{no_anggota}/{jenis_transaksi}/create', 'create')->name('pembiayaan.create')->can('pembiayaan.create');
+        Route::post('/pembiayaan/{no_anggota}/{jenis_transaksi}/store', 'store')->name('pembiayaan.store')->can('pembiayaan.store');
+        Route::get('/pembiayaan/{no_transaksi}/edit', 'edit')->name('pembiayaan.edit')->can('pembiayaan.edit');
+        Route::put('/pembiayaan/{no_transaksi}/update', 'update')->name('pembiayaan.update')->can('pembiayaan.update');
+        Route::delete('/pembiayaan/{no_transaksi}/delete', 'destroy')->name('pembiayaan.delete')->can('pembiayaan.delete');
+        Route::delete('/pembiayaan/{no_transaksi}/cetak', 'cetak')->name('pembiayaan.cetak')->can('pembiayaan.create');
     });
 });
 
