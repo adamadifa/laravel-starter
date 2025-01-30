@@ -158,6 +158,14 @@
      //          }
      //      });
      //  });
+     function toggleZoomScreen() {
+         var width = window.screen.width;
+
+         if (width <= 1366 && width >= 1024 && width != 800) {
+             document.body.style.zoom = "75%";
+         }
+     }
+     toggleZoomScreen();
  </script>
 
 
