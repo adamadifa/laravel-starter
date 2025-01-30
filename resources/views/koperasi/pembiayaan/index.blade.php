@@ -64,7 +64,15 @@
                                                 @endphp
                                                 {{ formatAngka($jumlah_pembiayaan) }}
                                             </td>
-
+                                            <td>
+                                                <div class="d-flex">
+                                                    @can('tabungan.index')
+                                                        <a href="{{ route('pembiayaan.show', Crypt::encrypt($d->no_akad)) }}" class="me-1">
+                                                            <i class="ti ti-book"></i>
+                                                        </a>
+                                                    @endcan
+                                                </div>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>

@@ -169,4 +169,12 @@ class AnggotaController extends Controller
         $data['anggota'] = Anggota::where('no_anggota', $no_anggota)->first();
         return view('koperasi.anggota.show', $data);
     }
+
+
+    public function getanggota($no_anggota)
+    {
+        $no_anggota = Crypt::decrypt($no_anggota);
+        $anggota = Anggota::where('no_anggota', $no_anggota)->first();
+        return response()->json($anggota);
+    }
 }

@@ -16,9 +16,21 @@
                     <div class="col-12">
                         <form action="{{ URL::current() }}">
                             <div class="row">
-                                <div class="col-lg-10 col-sm-12 col-md-12">
+                                <div class="col-lg-6 col-sm-12 col-md-12">
                                     <x-input-with-icon label="Cari Nama Anggota Koperasi" value="{{ Request('nama_lengkap') }}" name="nama_lengkap"
                                         icon="ti ti-search" />
+                                </div>
+                                <div class="col-lg-4 col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <select name="kode_tabungan" id="kode_tabungan" class="form-select select2Kodetabungan">
+                                            <option value="">Jenis Tabungan</option>
+                                            @foreach ($jenis_tabungan as $item)
+                                                <option {{ Request('kode_tabungan') == $item->kode_tabungan ? 'selected' : '' }}
+                                                    value="{{ $item->kode_tabungan }}">{{ $item->kode_tabungan }} {{ $item->jenis_tabungan }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="col-lg-2 col-sm-12 col-md-12">
                                     <button class="btn btn-primary">Cari</button>
@@ -62,9 +74,19 @@
                                             <td class="table-report__action w-56">
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     @can('tabungan.index')
-                                                        <a href="{{ route('tabungan.show', Crypt::encrypt($d->no_rekening)) }}">
+                                                        <a href="{{ route('tabungan.show', Crypt::encrypt($d->no_rekening)) }}" class="me-1">
                                                             <i class="ti ti-book"></i>
                                                         </a>
+                                                    @endcan
+                                                    @can('tabungan.delete')
+                                                        <form method="POST" class="deleteform"
+                                                            action="{{ route('tabungan.deleterekening', Crypt::encrypt($d->no_rekening)) }}">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <a class="delete-confirm ml-1">
+                                                                <i class="ti ti-trash text-danger"></i>
+                                                            </a>
+                                                        </form>
                                                     @endcan
                                                 </div>
                                             </td>
@@ -163,6 +185,26 @@
             ],
 
         });
+
+        function getAnggota(no_anggota) {
+            $.ajax({
+                url: `/anggota/${no_anggota}/getanggota`,
+                type: "GET",
+                cache: false,
+                success: function(response) {
+                    $(document).find("#formTabungan").find("#no_anggota").val(response.no_anggota);
+                    $(document).find("#formTabungan").find("#no_anggota_text").text(response.no_anggota);
+                    $(document).find("#formTabungan").find("#nama_lengkap_text").text(response.nama_lengkap);
+                    $("#mdlAnggota").modal("hide");
+                }
+            });
+        }
+        $('#tabelanggota tbody').on('click', '.pilihAnggota', function(e) {
+            e.preventDefault();
+            let no_anggota = $(this).attr('no_anggota');
+            getAnggota(no_anggota);
+        });
+
     });
 </script>
 @endpush

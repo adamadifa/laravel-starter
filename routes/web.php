@@ -385,6 +385,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/anggota/{id}/edit', 'edit')->name('anggota.edit')->can('anggota.edit');
         Route::put('/anggota/{id}/update', 'update')->name('anggota.update')->can('anggota.edit');
         Route::delete('/anggota/{id}/delete', 'destroy')->name('anggota.delete')->can('anggota.delete');
+
+        Route::get('/anggota/{no_anggota}/getanggota', 'getanggota')->name('anggota.getanggota');
     });
 
     Route::controller(JenissimpananController::class)->group(function () {
@@ -437,6 +439,8 @@ Route::middleware('auth')->group(function () {
         //Buat Rekening
 
         Route::get('/tabungan/createrekening', 'createrekening')->name('tabungan.createrekening')->can('tabungan.create');
+        Route::post('/tabungan/storerekening', 'storerekening')->name('tabungan.storerekening')->can('tabungan.create');
+        Route::delete('/tabungan/{no_rekening}/deleterekening', 'deleterekening')->name('tabungan.deleterekening')->can('tabungan.delete');
     });
 
     Route::controller(PembiayaanController::class)->group(function () {

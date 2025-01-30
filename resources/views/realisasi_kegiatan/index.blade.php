@@ -28,7 +28,7 @@
                                         datepicker="flatpickr-date" />
                                 </div>
                             </div>
-                            @if ($user->hasRole('super admin'))
+                            @if ($user->hasRole(['super admin', 'pimpinan pesantren', 'sekretaris']))
                                 <div class="row">
                                     <div class="col-lg-6 col-sm-12 col-md-12">
                                         <div class="form-group">

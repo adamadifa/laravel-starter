@@ -25,7 +25,7 @@ class RealisasikegiatanController extends Controller
         $query->join('jobdesk', 'realisasi_kegiatan.kode_jobdesk', '=', 'jobdesk.kode_jobdesk');
         $query->join('program_kerja', 'realisasi_kegiatan.kode_program_kerja', '=', 'program_kerja.kode_program_kerja');
         $query->join('users', 'realisasi_kegiatan.id_user', '=', 'users.id');
-        if ($user->hasRole('super admin')) {
+        if ($user->hasRole(['super admin', 'pimpinan pesanren', 'sekretaris'])) {
             if (!empty($request->kode_jabatan)) {
                 $query->where('realisasi_kegiatan.kode_jabatan', $request->kode_jabatan);
             }

@@ -130,7 +130,7 @@ class SimpananController extends Controller
         $jumlah = toNumber($request->jumlah);
         $operator = $jenis_transaksi == "S" ? "+" : "-";
 
-        if ($datasaldo->jumlah < $jumlah) {
+        if ($datasaldo->jumlah < $jumlah && $jenis_transaksi == "T") {
             return Redirect::back()->with(messageError('Saldo  Tidak Mencukupi'));
         }
         DB::beginTransaction();

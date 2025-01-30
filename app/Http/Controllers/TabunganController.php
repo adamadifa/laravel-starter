@@ -36,9 +36,14 @@ class TabunganController extends Controller
         if (!empty($request->nama_lengkap)) {
             $query->where('nama_lengkap', 'like', "%" . $request->nama_lengkap . "%");
         };
-        $query->orderBy('no_rekening', 'desc');
+
+        if (!empty($request->kode_tabungan)) {
+            $query->where('koperasi_tabungan.kode_tabungan', $request->kode_tabungan);
+        }
+        $query->orderBy('created_at', 'desc');
         $tabungan = $query->paginate(10);
         $tabungan->appends($request->all());
+        $data['jenis_tabungan'] = Jenistabungan::all();
         $data['tabungan'] = $tabungan;
         return view('koperasi.tabungan.index', $data);
     }
@@ -149,7 +154,7 @@ class TabunganController extends Controller
         $jumlah = toNumber($request->jumlah);
         $operator = $jenis_transaksi == "S" ? "+" : "-";
 
-        if ($datasaldo->saldo < $jumlah) {
+        if ($datasaldo->saldo < $jumlah && $jenis_transaksi == "T") {
             return Redirect::back()->with(messageError('Saldo  Tidak Mencukupi'));
         }
 
@@ -228,5 +233,45 @@ class TabunganController extends Controller
     {
         $data['jenis_tabungan'] = Jenistabungan::all();
         return view('koperasi.tabungan.createrekening', $data);
+    }
+
+
+    public function storerekening(Request $request)
+    {
+
+        $request->validate([
+            'no_anggota' => 'required',
+            'kode_tabungan' => 'required',
+        ]);
+
+        $norek = $request->kode_tabungan . "-" . $request->no_anggota;
+        $cek = DB::table('koperasi_tabungan')->where('no_rekening', $norek)->count();
+        if ($cek > 0) {
+            return Redirect::back()->with(messageError('Anggota Tersebut Sudah Memiliki No Rekening Untuk Tabungan ini'));
+        } else {
+            try {
+                Tabungan::create([
+                    'no_rekening' => $norek,
+                    'kode_tabungan' => $request->kode_tabungan,
+                    'no_anggota' => $request->no_anggota,
+                    'saldo' => 0,
+                    'id_petugas' => auth()->user()->id
+                ]);
+                return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
+            } catch (\Exception $e) {
+                return Redirect::back()->with(messageError($e->getMessage()));
+            }
+        }
+    }
+
+    public function deleterekening($no_rekening)
+    {
+        $no_rekening = Crypt::decrypt($no_rekening);
+        try {
+            Tabungan::where('no_rekening', $no_rekening)->delete();
+            return Redirect::back()->with(messageSuccess('Data Berhasil Dihapus'));
+        } catch (\Exception $e) {
+            return Redirect::back()->with(messageError($e->getMessage()));
+        }
     }
 }
