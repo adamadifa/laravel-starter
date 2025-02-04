@@ -170,7 +170,6 @@ class KaryawanController extends Controller
         return view('datamaster.karyawan.setharikerja', $data);
     }
 
-
     public function updateharikerja(Request $request, $npp)
     {
         $npp = Crypt::decrypt($npp);
@@ -183,5 +182,20 @@ class KaryawanController extends Controller
             dd($e);
             return Redirect::back()->with(messageError($e->getMessage()));
         }
+    }
+
+    public function getjadwalkerja(Request $request)
+    {
+
+        $hariini = date('Y-m-d');
+        $nama_hari = !empty($request->hari) ? $request->hari : getnamaHari(date('D', strtotime($hariini)));
+        $query = Karyawan::query();
+        $query->where('hari_kerja', 'like', '%' . $nama_hari . '%');
+        if (!empty($request->unit)) {
+            $query->where('kode_unit', $request->unit);
+        }
+
+        $data['jadwalkerja'] = $query->get();
+        return view('datamaster.karyawan.getjadwalkerja', $data);
     }
 }

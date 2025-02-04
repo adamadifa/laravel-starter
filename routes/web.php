@@ -124,6 +124,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/karyawan/{npp}/setharikerja', 'setharikerja')->name('karyawan.setharikerja');
         Route::put('/karyawan/{npp}/updateharikerja', 'updateharikerja')->name('karyawan.updateharikerja');
+        Route::post('/karyawan/getjadwalkerja', 'getjadwalkerja')->name('karyawan.getjadwalkerja');
     });
 
     Route::controller(SiswaController::class)->group(function () {

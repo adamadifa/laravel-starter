@@ -13,6 +13,11 @@
         .detail {
             cursor: pointer;
         }
+
+        #tab-content-main {
+            box-shadow: none !important;
+            background: none !important;
+        }
     </style>
 
 
@@ -27,6 +32,18 @@
         </div>
 
     </div> --}}
+    <div class="nav-align-top">
+        <ul class="nav nav-pills nav-scrollable" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button type="button" class="nav-link active waves-effect waves-light" role="tab" data-bs-toggle="tab" data-bs-target="#agenda-realisasi"
+                    aria-controls="agenda-realisasi" aria-selected="true">Agenda & Kegiatan</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button type="button" class="nav-link  waves-effect waves-light" role="tab" data-bs-toggle="tab" data-bs-target="#jadwal-kerja"
+                    aria-controls="jadwal-kerja" aria-selected="true">Jadwal Kerja SDM</button>
+            </li>
+        </ul>
+    </div>
     @hasanyrole(['super admin', 'pimpinan pesantren'])
         <div class="row">
             <div class="col-xl-12 col-sm-12">
@@ -123,63 +140,98 @@
             </div>
         </div>
     @endhasanyrole
-    <div class="row mt-2">
-        <div class="col-12">
-            <div class="card h-100">
-                <div class="card-header pb-2">
-                    <div class="card-title mb-1">
-                        <h5 class="m-0 me-2">Agenda & Realisasi Kegiatan</h5>
-                        <div class="form-group mt-3">
-                            <select name="kode_dept" id="kode_dept" class="form-select select2Kodedept">
-                                <option value="">Departemen</option>
-                                @foreach ($departemen as $d)
-                                    <option value="{{ $d->kode_dept }}">{{ strtoupper($d->nama_dept) }}</option>
-                                @endforeach
-                            </select>
+    <div class="tab-content p-0 m-0 bg-transparent" id="tab-content-main">
+        <div class="tab-pane fade show active" id="agenda-realisasi" role="tabpanel">
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="form-group mt-3">
+                        <select name="kode_dept" id="kode_dept" class="form-select select2Kodedept">
+                            <option value="">Departemen</option>
+                            @foreach ($departemen as $d)
+                                <option value="{{ $d->kode_dept }}">{{ strtoupper($d->nama_dept) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <x-input-with-icon icon="ti ti-calendar" label="Tanggal" name="dari" datepicker="flatpickr-date"
+                                value="{{ date('Y-m-d') }}" />
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <x-input-with-icon icon="ti ti-calendar" label="Tanggal" name="dari" datepicker="flatpickr-date"
-                                    value="{{ date('Y-m-d') }}" />
-                            </div>
-                            <div class="col">
-                                <x-input-with-icon icon="ti ti-calendar" label="Tanggal" name="sampai" datepicker="flatpickr-date"
-                                    value="{{ date('Y-m-d') }}" />
-                            </div>
+                        <div class="col">
+                            <x-input-with-icon icon="ti ti-calendar" label="Tanggal" name="sampai" datepicker="flatpickr-date"
+                                value="{{ date('Y-m-d') }}" />
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="nav-align-top">
-                        <ul class="nav nav-tabs nav-fill" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#navs-justified-new" aria-controls="navs-justified-new" aria-selected="true">Agenda
-                                    Kegiatan</button>
 
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                                    data-bs-target="#navs-justified-link-preparing" aria-controls="navs-justified-link-preparing" aria-selected="false"
-                                    tabindex="-1">Realisasi Kegiatan</button>
-                            </li>
-                        </ul>
-                        <div class="tab-content px-2 mx-1 pb-0">
-                            <div class="tab-pane fade active show" id="navs-justified-new" role="tabpanel">
-                                <ul class="timeline mb-0 pb-1" id="getagendakegiatan">
 
-                                </ul>
+                <div class="nav-align-top">
+                    <ul class="nav nav-tabs nav-fill" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-new"
+                                aria-controls="navs-justified-new" aria-selected="true">Agenda
+                                Kegiatan</button>
 
-                            </div>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                data-bs-target="#navs-justified-link-preparing" aria-controls="navs-justified-link-preparing" aria-selected="false"
+                                tabindex="-1">Realisasi Kegiatan</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content px-2 mx-1 pb-0">
+                        <div class="tab-pane fade active show" id="navs-justified-new" role="tabpanel">
+                            <ul class="timeline mb-0 pb-1" id="getagendakegiatan">
 
-                            <div class="tab-pane fade" id="navs-justified-link-preparing" role="tabpanel">
-                                <ul class="timeline mb-0 pb-1" id="getrealisasikegiatan">
+                            </ul>
 
-                                </ul>
+                        </div>
 
-                            </div>
+                        <div class="tab-pane fade" id="navs-justified-link-preparing" role="tabpanel">
+                            <ul class="timeline mb-0 pb-1" id="getrealisasikegiatan">
+
+                            </ul>
+
                         </div>
                     </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="jadwal-kerja" role="tabpanel">
+            <div class="row mt-2">
+                <div class="col">
+                    <div class="form-group">
+                        @php
+                            $hariini = date('Y-m-d');
+                            $nama_hari = getnamaHari(date('D', strtotime($hariini)));
+                        @endphp
+                        <select name="hari" id="hari" class="form-select">
+                            <option value="Senin" {{ $nama_hari == 'Senin' ? 'selected' : '' }}>Senin</option>
+                            <option value="Selasa" {{ $nama_hari == 'Selasa' ? 'selected' : '' }}>Selasa</option>
+                            <option value="Rabu" {{ $nama_hari == 'Rabu' ? 'selected' : '' }}>Rabu</option>
+                            <option value="Kamis" {{ $nama_hari == 'Kamis' ? 'selected' : '' }}>Kamis</option>
+                            <option value="Jumat" {{ $nama_hari == 'Jumat' ? 'selected' : '' }}>Jumat</option>
+                            <option value="Sabtu" {{ $nama_hari == 'Sabtu' ? 'selected' : '' }}>Sabtu</option>
+                            <option value="Minggu" {{ $nama_hari == 'Minggu' ? 'selected' : '' }}>Minggu</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select name="unit" id="unit" class="form-select">
+                            <option value="">Unit</option>
+                            @foreach ($unit as $u)
+                                <option value="{{ $u->kode_unit }}">{{ $u->nama_unit }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col" id="loadjadwalkerja">
+
                 </div>
             </div>
         </div>
@@ -249,6 +301,37 @@
                 getrealisasikegiatan();
                 getagendakegiatan();
             });
+
+            function getjadwalkerja() {
+                let hari = $('#hari').val();
+                let unit = $('#unit').val();
+                $("#loadjadwalkerja").html(`<div class="sk-wave sk-primary" style="margin:auto">
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                <div class="sk-wave-rect"></div>
+                </div>`);
+                $.ajax({
+                    method: "POST",
+                    url: "{{ route('karyawan.getjadwalkerja') }}",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        hari: hari,
+                        unit: unit
+
+                    },
+                    cache: false,
+                    success: function(data) {
+                        $('#loadjadwalkerja').html(data);
+                    }
+                })
+            }
+
+            $("#hari, #unit").on('change', function() {
+                getjadwalkerja();
+            });
+            getjadwalkerja();
             getrealisasikegiatan();
             getagendakegiatan();
         });

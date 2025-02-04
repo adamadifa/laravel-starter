@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Agendakegiatan;
 use App\Models\Departemen;
+use App\Models\Karyawan;
 use App\Models\Ledger;
 use App\Models\Realisasikegiatan;
+use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -15,6 +17,10 @@ class DashboardController extends Controller
     {
         $data['departemen'] = Departemen::orderBy('kode_dept')->get();
         $data['ledger'] = Ledger::orderBy('kode_ledger')->get();
+        $hariini = date('Y-m-d');
+        $namahari = getnamaHari(date('D', strtotime($hariini)));
+        $data['jadwalkerja'] = Karyawan::where('hari_kerja', 'like', '%' . $namahari . '%')->get();
+        $data['unit'] = Unit::orderBy('kode_unit')->get();
         return view('dashboard.index', $data);
     }
 
