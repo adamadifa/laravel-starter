@@ -160,4 +160,28 @@ class KaryawanController extends Controller
             return Redirect::back()->with(['error' => $e->getMessage()]);
         }
     }
+
+
+    public function setharikerja($npp)
+    {
+        $npp = Crypt::decrypt($npp);
+        $karyawan = Karyawan::where('npp', $npp)->first();
+        $data['karyawan'] = $karyawan;
+        return view('datamaster.karyawan.setharikerja', $data);
+    }
+
+
+    public function updateharikerja(Request $request, $npp)
+    {
+        $npp = Crypt::decrypt($npp);
+        try {
+            Karyawan::where('npp', $npp)->update([
+                'hari_kerja' => implode(",", $request->hari),
+            ]);
+            return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
+        } catch (\Exception $e) {
+            dd($e);
+            return Redirect::back()->with(messageError($e->getMessage()));
+        }
+    }
 }

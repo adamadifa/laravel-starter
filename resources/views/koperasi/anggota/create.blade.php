@@ -445,5 +445,7 @@
         $("#id_district").change(function() {
             getVillage();
         });
+
+
     });
 </script>

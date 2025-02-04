@@ -20,8 +20,8 @@
                         <form action="{{ route('karyawan.index') }}">
                             <div class="row">
                                 <div class="col-lg-10 col-sm-12 col-md-12">
-                                    <x-input-with-icon label="Cari Nama Karyawan" value="{{ Request('nama_lengkap') }}"
-                                        name="nama_lengkap" icon="ti ti-search" />
+                                    <x-input-with-icon label="Cari Nama Karyawan" value="{{ Request('nama_lengkap') }}" name="nama_lengkap"
+                                        icon="ti ti-search" />
                                 </div>
                                 <div class="col-lg-2 col-sm-12 col-md-12">
                                     <button class="btn btn-primary">Cari</button>
@@ -65,19 +65,18 @@
                                                 @if (!empty($d->foto))
                                                     @if (Storage::disk('public')->exists('/karyawan/' . $d->foto))
                                                         <div class="avatar avatar-xs me-2">
-                                                            <img src="{{ getfotoKaryawan($d->foto) }}" alt=""
-                                                                class="rounded-circle">
+                                                            <img src="{{ getfotoKaryawan($d->foto) }}" alt="" class="rounded-circle">
                                                         </div>
                                                     @else
                                                         <div class="avatar avatar-xs me-2">
-                                                            <img src="{{ asset('assets/img/avatars/No_Image_Available.jpg') }}"
-                                                                alt="" class="rounded-circle">
+                                                            <img src="{{ asset('assets/img/avatars/No_Image_Available.jpg') }}" alt=""
+                                                                class="rounded-circle">
                                                         </div>
                                                     @endif
                                                 @else
                                                     <div class="avatar avatar-xs me-2">
-                                                        <img src="{{ asset('assets/img/avatars/No_Image_Available.jpg') }}"
-                                                            alt="" class="rounded-circle">
+                                                        <img src="{{ asset('assets/img/avatars/No_Image_Available.jpg') }}" alt=""
+                                                            class="rounded-circle">
                                                     </div>
                                                 @endif
 
@@ -87,20 +86,24 @@
                                                 <div class="d-flex">
                                                     @can('karyawan.edit')
                                                         <div>
-                                                            <a href="#" class="me-2 editKaryawan"
-                                                                npp="{{ Crypt::encrypt($d->npp) }}">
+                                                            <a href="#" class="me-2 editKaryawan" npp="{{ Crypt::encrypt($d->npp) }}">
                                                                 <i class="ti ti-edit text-success"></i>
                                                             </a>
                                                         </div>
                                                     @endcan
                                                     @can('karyawan.show')
                                                         <div>
-                                                            <a href="{{ route('karyawan.show', Crypt::encrypt($d->npp)) }}"
-                                                                class="me-2">
+                                                            <a href="{{ route('karyawan.show', Crypt::encrypt($d->npp)) }}" class="me-2">
                                                                 <i class="ti ti-file-description text-info"></i>
                                                             </a>
                                                         </div>
                                                     @endcan
+                                                    <div>
+                                                        <a href="#" npp="{{ Crypt::encrypt($d->npp) }}" class="me-1 btnSetharikerja">
+                                                            <i class="ti ti-clock-check text-warning"></i>
+                                                        </a>
+                                                    </div>
+
                                                     @can('karyawan.delete')
                                                         <div>
                                                             <form method="POST" name="deleteform" class="deleteform"
@@ -133,6 +136,7 @@
 </div>
 <x-modal-form id="mdlcreateKaryawan" size="" show="loadcreateKaryawan" title="Tambah Karyawan" />
 <x-modal-form id="mdleditKaryawan" size="" show="loadeditKaryawan" title="Edit Karyawan" />
+<x-modal-form id="mdlsetharikerja" size="" show="loadsetharikerja" title="Set Hari Kerja" />
 @endsection
 @push('myscript')
 {{-- <script src="{{ asset('assets/js/pages/roles/create.js') }}"></script> --}}
@@ -149,6 +153,13 @@
             e.preventDefault();
             $('#mdleditKaryawan').modal("show");
             $("#loadeditKaryawan").load('/karyawan/' + npp + '/edit');
+        });
+
+        $(".btnSetharikerja").click(function(e) {
+            var npp = $(this).attr("npp");
+            e.preventDefault();
+            $('#mdlsetharikerja').modal("show");
+            $("#loadsetharikerja").load('/karyawan/' + npp + '/setharikerja');
         });
     });
 </script>
