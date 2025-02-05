@@ -287,7 +287,7 @@ class RealisasikegiatanController extends Controller
         // $kode_pelanggan = $request->kode_pelanggan;
         if (isset($request->image)) {
             $image = $request->image;
-            $folderPath = "public/uploads/realisasi_kegiatan/";
+            $folderPath = "/public/realisasikegiatan/";
             $formatName = $id;
             $image_parts = explode(";base64", $image);
             $image_base64 = base64_decode($image_parts[1]);
@@ -304,7 +304,7 @@ class RealisasikegiatanController extends Controller
             if (isset($request->image)) {
                 Storage::put($file, $image_base64);
             }
-            $path_image = Storage::url('uploads/realisasi_kegiatan/' . $fileName);
+
 
             return response()->json(['status' => 'success', 'message' => 'Data Berhasil Disimpan'], 200);
         } catch (\Exception $e) {
