@@ -46,6 +46,7 @@
 
         .sheet {
             overflow: visible ! important;
+            height: auto ! important;
         }
     </style>
 </head>
