@@ -239,6 +239,7 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/realisasikegiatan/getrealisasikegiatan', 'getrealisasikegiatan')->name('realisasikegiatan.getrealisasikegiatan');
         Route::get('/realisasikegiatan/{id}/takepicture', 'takepicture')->name('realisasikegiatan.takepicture');
+        Route::post('/realisasikegiatan/storepicture', 'storepicture')->name('realisasikegiatan.storepicture');
     });
 
     Route::controller(AgendakegiatanController::class)->group(function () {

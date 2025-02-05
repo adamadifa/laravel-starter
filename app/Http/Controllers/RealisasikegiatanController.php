@@ -8,6 +8,7 @@ use App\Models\Realisasikegiatan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Jenssegers\Agent\Agent;
@@ -272,5 +273,42 @@ class RealisasikegiatanController extends Controller
     {
         $id = Crypt::decrypt($id);
         return view('realisasi_kegiatan.takepicture', compact('id'));
+    }
+
+
+    public function storepicture(Request $request)
+    {
+
+        $lokasi = $request->lokasi;
+        $id = Crypt::decrypt($request->id);
+        $lok = explode(",", $lokasi);
+        $latitude = $lok[0];
+        $longitude = $lok[1];
+        // $kode_pelanggan = $request->kode_pelanggan;
+        if (isset($request->image)) {
+            $image = $request->image;
+            $folderPath = "public/uploads/realisasi_kegiatan/";
+            $formatName = $id;
+            $image_parts = explode(";base64", $image);
+            $image_base64 = base64_decode($image_parts[1]);
+            $fileName = $formatName . ".png";
+            $file = $folderPath . $fileName;
+        } else {
+            $fileName = null;
+        }
+
+        try {
+            Realisasikegiatan::where('id', $id)->update([
+                'foto' => $fileName,
+            ]);
+            if (isset($request->image)) {
+                Storage::put($file, $image_base64);
+            }
+            $path_image = Storage::url('uploads/realisasi_kegiatan/' . $fileName);
+
+            return response()->json(['status' => 'success', 'message' => 'Data Berhasil Disimpan'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 400);
+        }
     }
 }

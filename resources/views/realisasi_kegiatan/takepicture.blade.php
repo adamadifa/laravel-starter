@@ -25,7 +25,7 @@
             height: 80px;
             width: 150px;
             position: absolute;
-            top: 300px;
+            top: 250px;
             right: 20px;
             opacity: 0.5;
 
@@ -35,7 +35,7 @@
 
             background-color: #27272783;
             position: absolute;
-            top: 150px;
+            top: 100px;
             left: 20px;
             z-index: 9999;
             width: 200px;
@@ -70,16 +70,10 @@
             <div id="map"></div>
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <div class="form-group m-0">
-                <textarea name="activity" id="activity" cols="30" rows="4" class="form-control" placeholder="Input Aktivitas"></textarea>
-            </div>
-        </div>
-    </div>
+
     <div class="row mt-2">
         <div class="col-12">
-            <button class="btn w-100 btn-primary" type="submit" name="submit" id="sendactivity"><i class="ti ti-send me-2"></i>Kirim</button>
+            <button class="btn w-100 btn-primary" type="submit" name="submit" id="sendactivity"><i class="ti ti-camera me-2"></i>Ambil Foto</button>
         </div>
     </div>
 @endsection
@@ -151,7 +145,7 @@
             var activity = $("#activity").val();
             if (activity == "") {
                 Swal.fire({
-                    title: 'Berhasil !',
+                    title: 'Opps !',
                     text: 'Aktifitas Harus Diisi',
                     icon: 'error'
                 })
@@ -160,11 +154,11 @@
                 $("#sendactivity").text('Loading..');
                 $.ajax({
                     type: 'POST',
-                    url: '/aktifitassmm/store',
+                    url: '/realisasikegiatan/storepicture',
                     data: {
                         _token: "{{ csrf_token() }}",
                         lokasi: lokasi,
-                        activity: activity,
+                        id: "{{ $id }}",
                         image: image
                     },
                     cache: false,
@@ -174,7 +168,7 @@
                             text: respond.message,
                             icon: 'success'
                         })
-                        setTimeout("location.href='/aktifitassmm'", 2000);
+                        setTimeout("location.href='/realisasikegiatan'", 2000);
                     },
                     error: function(xhr) {
                         $("#sendactivity").prop('disabled', false);

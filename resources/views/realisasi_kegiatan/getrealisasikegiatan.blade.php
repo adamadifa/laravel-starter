@@ -19,7 +19,7 @@
                         <a href="{{ route('realisasikegiatan.edit', Crypt::encrypt($d->id)) }}" class=" me-1">
                             <i class="ti ti-edit text-primary"></i>
                         </a>
-                        <a href="{{ route('realisasikegiatan.edit', Crypt::encrypt($d->id)) }}" class=" me-1">
+                        <a href="{{ route('realisasikegiatan.takepicture', Crypt::encrypt($d->id)) }}" class=" me-1">
                             <i class="ti ti-camera text-info"></i>
                         </a>
                         <form method="POST" name="deleteform" class="deleteform"
