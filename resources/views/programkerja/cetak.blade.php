@@ -74,10 +74,10 @@
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th>Program Kerja</th>
-                        <th>Taget Pencapaian</th>
-                        <th>Keterangan</th>
-                        <th>Pelaksanaan</th>
+                        <th style="width: 20%">Program Kerja</th>
+                        <th style="width: 30%">Taget Pencapaian</th>
+                        <th style="width: 20%">Keterangan</th>
+                        <th style="width: 30%">Pelaksanaan</th>
                     </tr>
                 </thead>
                 <tbody>
