@@ -89,16 +89,6 @@
                         }
                     });
                     return false;
-                } else if (kode_jobdesk == "") {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Oops...',
-                        text: 'Jobdesk tidak boleh kosong!',
-                        didClose: (e) => {
-                            $(this).find("#kode_jobdesk").focus();
-                        }
-                    });
-                    return false;
                 } else {
                     let file = document.getElementById('foto').files[0];
                     if (file) {
@@ -193,7 +183,7 @@
             }
 
 
-            
+
 
             $("#formEditerealisasikegiatan").find('#kode_jabatan, #kode_dept').on('change', function() {
                 getJobdesk();

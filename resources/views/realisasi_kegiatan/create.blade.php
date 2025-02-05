@@ -115,26 +115,6 @@
                     }
                 });
                 return false;
-            } else if (kode_jobdesk == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Oops...',
-                    text: 'Jobdesk tidak boleh kosong!',
-                    didClose: (e) => {
-                        $(this).find("#kode_jobdesk").focus();
-                    }
-                });
-                return false;
-            } else if (kode_program_kerja == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Oops...',
-                    text: 'Program Kerja tidak boleh kosong!',
-                    didClose: (e) => {
-                        $(this).find("#kode_program_kerja").focus();
-                    }
-                });
-                return false;
             } else {
                 let file = document.getElementById('foto').files[0];
                 if (file) {

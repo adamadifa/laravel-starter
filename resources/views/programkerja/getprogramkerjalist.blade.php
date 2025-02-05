@@ -4,7 +4,7 @@
     </div>
 @else
     @foreach ($program_kerja as $d)
-        <div class="card mb-1 border border-primary p-0 shadow" id="{{ Crypt::encrypt($d->kode_program_kerja) }} }}">
+        <div class="card mb-1  p-0 shadow" id="{{ Crypt::encrypt($d->kode_program_kerja) }} }}">
             <div class="card-body p-3">
                 <div class="d-flex">
                     <div class="detail ms-2 btnShow" id="{{ Crypt::encrypt($d->kode_program_kerja) }}">

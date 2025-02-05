@@ -9,6 +9,7 @@ use App\Models\Tahunajaran;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Jenssegers\Agent\Agent;
 
@@ -19,10 +20,18 @@ class ProgramkerjaController extends Controller
         $user = User::where('id', auth()->user()->id)->first();
         $ta_aktif = Tahunajaran::where('status', 1)->first();
         $query = Programkerja::query();
-        $query->select('program_kerja.*', 'name');
+        $query->select(
+            'program_kerja.kode_program_kerja',
+            'program_kerja.program_kerja',
+            'program_kerja.target_pencapaian',
+            'program_kerja.keterangan',
+            'program_kerja.kode_dept',
+            DB::raw("GROUP_CONCAT(CONCAT(realisasi_kegiatan.tanggal, ' / ', nama_kegiatan) ORDER BY tanggal SEPARATOR ', ') as realisasi_program")
+        );
         $query->join('departemen', 'program_kerja.kode_dept', '=', 'departemen.kode_dept');
         $query->join('jabatan', 'program_kerja.kode_jabatan', '=', 'jabatan.kode_jabatan');
         $query->join('users', 'program_kerja.id_user', '=', 'users.id');
+        $query->leftJoin('realisasi_kegiatan', 'program_kerja.kode_program_kerja', '=', 'realisasi_kegiatan.kode_program_kerja');
         if ($user->hasRole(['super admin', 'pimpinan pesantren', 'sekretaris'])) {
             if (!empty($request->kode_jabatan)) {
                 $query->where('program_kerja.kode_jabatan', $request->kode_jabatan);
@@ -45,7 +54,14 @@ class ProgramkerjaController extends Controller
         if (!empty($request->cari)) {
             $query->where('program_kerja.program_kerja', 'like', '%' . $request->programkerja_search . '%');
         }
-        $query->orderBy('created_at', 'desc');
+        $query->groupBy(
+            'program_kerja.kode_program_kerja',
+            'program_kerja.program_kerja',
+            'program_kerja.target_pencapaian',
+            'program_kerja.keterangan',
+            'program_kerja.kode_dept'
+        );
+        // $query->orderBy('program_kerja.created_at', 'desc');
         $kode_jabatan = $user->hasRole('super admin') ? $request->kode_jabatan : $user->kode_jabatan;
         $kode_dept = $user->hasRole('super admin') ? $request->kode_dept : $user->kode_dept;
         $data['programkerja'] = $query->get();

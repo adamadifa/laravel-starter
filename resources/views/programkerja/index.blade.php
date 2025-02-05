@@ -93,7 +93,7 @@
                                         <th>Program Kerja</th>
                                         <th>Target Pencapaian</th>
                                         <th style="width: 5%">Dept</th>
-                                        <th style="width: 10%">User</th>
+                                        {{-- <th style="width: 10%">User</th> --}}
                                         <th style="width: 5%">#</th>
                                     </tr>
                                 </thead>
@@ -104,7 +104,7 @@
                                             <td>{{ $d->program_kerja }}</td>
                                             <td>{{ removeHtmltag($d->target_pencapaian) }}</td>
                                             <td>{{ $d->kode_dept }}</td>
-                                            <td>{{ formatNama1($d->name) }}</td>
+                                            {{-- <td>{{ formatNama1($d->name) }}</td> --}}
                                             <td>
                                                 <div class="d-flex">
                                                     @can('programkerja.edit')

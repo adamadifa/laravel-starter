@@ -238,6 +238,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/realisasikegiatan/{id}/delete', 'destroy')->name('realisasikegiatan.delete')->can('realkegiatan.delete');
 
         Route::post('/realisasikegiatan/getrealisasikegiatan', 'getrealisasikegiatan')->name('realisasikegiatan.getrealisasikegiatan');
+        Route::get('/realisasikegiatan/{id}/takepicture', 'takepicture')->name('realisasikegiatan.takepicture');
     });
 
     Route::controller(AgendakegiatanController::class)->group(function () {

@@ -117,16 +117,6 @@
                     }
                 });
                 return false;
-            } else if (kode_jobdesk == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Oops...',
-                    text: 'Jobdesk tidak boleh kosong!',
-                    didClose: (e) => {
-                        $(this).find("#kode_jobdesk").focus();
-                    }
-                });
-                return false;
             } else {
                 let file = document.getElementById('foto').files[0];
                 if (file) {
@@ -198,6 +188,18 @@
             });
         }
 
+        const select2Kodeprogramkerja = $('.select2Kodeprogramkerja');
+        if (select2Kodeprogramkerja.length) {
+            select2Kodeprogramkerja.each(function() {
+                var $this = $(this);
+                $this.wrap('<div class="position-relative"></div>').select2({
+                    placeholder: 'Pilih  Program Kerja',
+                    allowClear: true,
+                    dropdownParent: $this.parent()
+                });
+            });
+        }
+
 
         function getJobdesk() {
             let kode_jabatan = $("#formEditerealisasikegiatan").find('#kode_jabatan').val();
@@ -212,9 +214,11 @@
                 },
                 cache: false,
                 success: function(response) {
+                    $("#formEditerealisasikegiatan").find("#kode_jobdesk").append('<option value="">Pilih Jobdesk</option>');
                     for (let i = 0; i < response.length; i++) {
+                        let selected = kode_jobdesk == response[i].kode_jobdesk ? 'selected' : '';
                         $("#formEditerealisasikegiatan").find("#kode_jobdesk").append('<option value="' + response[i]
-                            .kode_jobdesk + '" selected>' + response[i].jobdesk + '</option>');
+                            .kode_jobdesk + '" ' + selected + '>' + response[i].jobdesk + '</option>');
                     }
                 }
             })
@@ -234,8 +238,9 @@
                 cache: false,
                 success: function(response) {
                     for (let i = 0; i < response.length; i++) {
+                        let selected = kode_program_kerja == response[i].kode_program_kerja ? 'selected' : '';
                         $("#formEditerealisasikegiatan").find("#kode_program_kerja").append('<option value="' + response[i]
-                            .kode_program_kerja + '" selected>' + response[i].kode_program_kerja + ' - ' + response[i]
+                            .kode_program_kerja + '" ' + selected + '>' + response[i].kode_program_kerja + ' - ' + response[i]
                             .program_kerja +
                             '</option>');
                     }

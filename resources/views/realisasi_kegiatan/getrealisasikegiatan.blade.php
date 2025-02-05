@@ -1,5 +1,5 @@
 @foreach ($realisasikegiatan as $d)
-    <div class="card mb-1 border border-primary p-0 shadow" id="{{ Crypt::encrypt($d->id) }} }}">
+    <div class="card mb-1 p-0 shadow" id="{{ Crypt::encrypt($d->id) }} }}">
         <div class="card-body p-3">
             <div class="d-flex">
                 <div class="img-thumbnail">
@@ -16,15 +16,18 @@
                 </div>
                 <div class="ms-auto">
                     <div class="d-flex">
-                        <a href="{{ route('realisasikegiatan.edit', Crypt::encrypt($d->id)) }}" class="btn btn-primary btn-xs me-1">
-                            <i class="ti ti-edit"></i>
+                        <a href="{{ route('realisasikegiatan.edit', Crypt::encrypt($d->id)) }}" class=" me-1">
+                            <i class="ti ti-edit text-primary"></i>
+                        </a>
+                        <a href="{{ route('realisasikegiatan.edit', Crypt::encrypt($d->id)) }}" class=" me-1">
+                            <i class="ti ti-camera text-info"></i>
                         </a>
                         <form method="POST" name="deleteform" class="deleteform"
                             action="{{ route('realisasikegiatan.delete', Crypt::encrypt($d->id)) }}">
                             @csrf
                             @method('DELETE')
-                            <a href="#" class="delete-confirm ml-1 btn btn-danger btn-xs">
-                                <i class="ti ti-trash"></i>
+                            <a href="#" class="delete-confirm ml-1">
+                                <i class="ti ti-trash text-danger"></i>
                             </a>
                         </form>
                     </div>

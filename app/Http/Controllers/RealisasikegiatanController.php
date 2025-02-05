@@ -22,8 +22,8 @@ class RealisasikegiatanController extends Controller
         $query->select('realisasi_kegiatan.*', 'name', 'jobdesk', 'program_kerja');
         $query->join('departemen', 'realisasi_kegiatan.kode_dept', '=', 'departemen.kode_dept');
         $query->join('jabatan', 'realisasi_kegiatan.kode_jabatan', '=', 'jabatan.kode_jabatan');
-        $query->join('jobdesk', 'realisasi_kegiatan.kode_jobdesk', '=', 'jobdesk.kode_jobdesk');
-        $query->join('program_kerja', 'realisasi_kegiatan.kode_program_kerja', '=', 'program_kerja.kode_program_kerja');
+        $query->leftJoin('jobdesk', 'realisasi_kegiatan.kode_jobdesk', '=', 'jobdesk.kode_jobdesk');
+        $query->leftJoin('program_kerja', 'realisasi_kegiatan.kode_program_kerja', '=', 'program_kerja.kode_program_kerja');
         $query->join('users', 'realisasi_kegiatan.id_user', '=', 'users.id');
         if ($user->hasRole(['super admin', 'pimpinan pesantren', 'sekretaris'])) {
             if (!empty($request->kode_jabatan)) {
@@ -93,17 +93,17 @@ class RealisasikegiatanController extends Controller
                 'nama_kegiatan' => 'required',
                 'kode_jabatan' => 'required',
                 'kode_dept' => 'required',
-                'kode_jobdesk' => 'required',
+                // 'kode_jobdesk' => 'required',
                 'uraian_kegiatan' => 'required',
-                'kode_program_kerja' => 'required',
+                // 'kode_program_kerja' => 'required',
                 'file' => 'mimes:jpg,jpeg,png|max:1024',
             ]);
         } else {
             $request->validate([
                 'tanggal' => 'required',
                 'nama_kegiatan' => 'required',
-                'kode_jobdesk' => 'required',
-                'kode_program_kerja' => 'required',
+                // 'kode_jobdesk' => 'required',
+                // 'kode_program_kerja' => 'required',
                 'uraian_kegiatan' => 'required',
                 'file' => 'mimes:jpg,jpeg,png|max:1024',
             ]);
@@ -196,8 +196,8 @@ class RealisasikegiatanController extends Controller
                 'nama_kegiatan' => 'required',
                 'kode_jabatan' => 'required',
                 'kode_dept' => 'required',
-                'kode_jobdesk' => 'required',
-                'kode_program_kerja' => 'required',
+                // 'kode_jobdesk' => 'required',
+                // 'kode_program_kerja' => 'required',
                 'uraian_kegiatan' => 'required',
                 'file' => 'mimes:jpg,jpeg,png|max:1024',
             ]);
@@ -205,8 +205,8 @@ class RealisasikegiatanController extends Controller
             $request->validate([
                 'tanggal' => 'required',
                 'nama_kegiatan' => 'required',
-                'kode_jobdesk' => 'required',
-                'kode_program_kerja' => 'required',
+                // 'kode_jobdesk' => 'required',
+                // 'kode_program_kerja' => 'required',
                 'uraian_kegiatan' => 'required',
                 'file' => 'mimes:jpg,jpeg,png|max:1024',
             ]);
@@ -267,4 +267,10 @@ class RealisasikegiatanController extends Controller
     }
     //Mobile
 
+
+    public function takepicture($id)
+    {
+        $id = Crypt::decrypt($id);
+        return view('realisasi_kegiatan.takepicture', compact('id'));
+    }
 }

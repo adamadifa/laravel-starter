@@ -75,18 +75,27 @@
                         <th>No.</th>
                         <th>Program Kerja</th>
                         <th>Taget Pencapaian</th>
-                        <th>Waktu</th>
                         <th>Keterangan</th>
+                        <th>Pelaksanaan</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($programkerja as $d)
+                        @php
+                            $realisasi_program = explode(',', $d->realisasi_program);
+                        @endphp
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $d->program_kerja }}</td>
                             <td>{{ removeHtmltag($d->target_pencapaian) }}</td>
                             <td>{{ removeHtmltag($d->keterangan) }}</td>
-                            <td>{{ $d->tanggal_pelaksanaan }}</td>
+                            <td class="m-0 p-0">
+                                <ol type="1" class="m-0 p-0">
+                                    @foreach ($realisasi_program as $rp)
+                                        <li>{{ $rp }}</li>
+                                    @endforeach
+                                </ol>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
