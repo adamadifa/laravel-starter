@@ -34,8 +34,8 @@
             --fimobile-input-rounded: 10px;
             /* radial gradient colors */
             --fimobile-theme-color-grad-1: #2bc277;
-            --fimobile-theme-color-grad-2: #179a4d;
-            --fimobile-theme-color-grad-3: #0eb65f;
+            --fimobile-theme-color-grad-2: #32745e;
+            --fimobile-theme-color-grad-3: #32745e;
             /* color schemes */
             --fimobile-theme-color: #092c9f;
             --fimobile-theme-color-2: #001c77;
