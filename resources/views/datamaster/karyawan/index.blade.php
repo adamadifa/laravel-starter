@@ -106,7 +106,7 @@
 
                                                     @can('karyawan.delete')
                                                         <div>
-                                                            <form method="POST" name="deleteform" class="deleteform"
+                                                            <form method="POST" name="deleteform" class="deleteform me-1"
                                                                 action="{{ route('karyawan.delete', Crypt::encrypt($d->npp)) }}">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -116,7 +116,15 @@
                                                             </form>
                                                         </div>
                                                     @endcan
-
+                                                    @can('karyawan.createuser')
+                                                        @if (empty($d->id_user))
+                                                            <a href="{{ route('karyawan.createuser', Crypt::encrypt($d->npp)) }}">
+                                                                <i class="ti ti-user-plus text-danger"></i>
+                                                            </a>
+                                                        @else
+                                                            <i class="ti ti-user text-success"></i>
+                                                        @endif
+                                                    @endcan
 
                                                 </div>
                                             </td>

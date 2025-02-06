@@ -21,8 +21,10 @@ class KaryawanController extends Controller
         if (auth()->user()->kode_unit != 'U06') {
             $query->where('karyawan.kode_unit', auth()->user()->kode_unit);
         }
+        $query->select('karyawan.*', 'jabatan.nama_jabatan', 'unit.nama_unit', 'id_user');
         $query->join('jabatan', 'karyawan.kode_jabatan', '=', 'jabatan.kode_jabatan');
         $query->join('unit', 'karyawan.kode_unit', '=', 'unit.kode_unit');
+        $query->leftJoin('user_karyawan', 'karyawan.npp', '=', 'user_karyawan.npp');
         $query->orderBy('karyawan.created_at', 'desc');
         $karyawan = $query->paginate(15);
         $karyawan->appends(request()->all());

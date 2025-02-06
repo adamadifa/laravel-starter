@@ -154,9 +154,12 @@ class TabunganController extends Controller
         $jumlah = toNumber($request->jumlah);
         $operator = $jenis_transaksi == "S" ? "+" : "-";
 
-        if ($datasaldo->saldo < $jumlah && $jenis_transaksi == "T") {
-            return Redirect::back()->with(messageError('Saldo  Tidak Mencukupi'));
+        if ($datasaldo && $jenis_transaksi == 'T') {
+            if ($datasaldo->saldo < $jumlah && $jenis_transaksi == "T") {
+                return Redirect::back()->with(messageError('Saldo  Tidak Mencukupi'));
+            }
         }
+
 
 
         DB::beginTransaction();

@@ -43,6 +43,7 @@ class RealisasikegiatanController extends Controller
         }
 
         // $query->orderBy('tanggal', 'DESC');
+        $query->orderBy('tanggal', 'desc');
         $realisasikegiatan = $query->paginate(30);
         $realisasikegiatan->appends($request->all());
 
@@ -66,7 +67,7 @@ class RealisasikegiatanController extends Controller
             $data['sampai'] = $request->sampai;
             return view('realisasi_kegiatan.cetak', $data);
         }
-        $query->orderBy('tanggal', 'desc');
+
         return view('realisasi_kegiatan.index', $data);
     }
 

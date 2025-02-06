@@ -54,13 +54,25 @@ use Spatie\Permission\Models\Role;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
+
+
+// Route::middleware('guest')->group(function () {
+//     Route::get('/', function () {
+//         return view('auth.loginuser');
+//     })->name('login');
+// });
+
+
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware(['auth', 'verified']);
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -125,6 +137,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/karyawan/{npp}/setharikerja', 'setharikerja')->name('karyawan.setharikerja');
         Route::put('/karyawan/{npp}/updateharikerja', 'updateharikerja')->name('karyawan.updateharikerja');
         Route::post('/karyawan/getjadwalkerja', 'getjadwalkerja')->name('karyawan.getjadwalkerja');
+
+        Route::get('/karyawan/{npp}/createuser', 'createuser')->name('karyawan.createuser');
     });
 
     Route::controller(SiswaController::class)->group(function () {
