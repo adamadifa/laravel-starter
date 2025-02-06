@@ -33,7 +33,7 @@
         }
 
         .swiper-slide {
-            width: 80% !important;
+            width: 85% !important;
         }
     </style>
     <div id="header">
@@ -94,7 +94,7 @@
                                 @foreach ($saldo_simpanan as $s)
                                     <div class="swiper-slide {{ $loop->first ? 'swiper-slide-active' : '' }}" role="group"
                                         aria-label="{{ $loop->index }} / {{ count($saldo_simpanan) }} }}">
-                                        <div class="card" style="width: 300px; margin-right:30px">
+                                        <div class="card theme-radial-gradient" style="width: 300px; margin-right:30px">
                                             <div class="card-body p-3 pb-2">
                                                 <div class="row mb-1">
                                                     <div class="col-auto align-self-center">
@@ -102,20 +102,20 @@
                                                     </div>
                                                     <div class=" col align-self-center text-right">
                                                         <p class="small">
-                                                            <span class="text-uppercase size-10">Validity</span><br>
-                                                            <span class="text-muted">Unlimited</span>
+                                                            <span class="text-uppercase text-white" style="font-size: 16px">Validity</span><br>
+                                                            <span class="text-white" style="font-size: 14px">Unlimited</span>
                                                         </p>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-12">
-                                                        <h4 class="fw-normal mb-1">
+                                                        <h2 class="fw-normal mb-1 text-white">
                                                             {{ formatAngka($s->jumlah) }}
-                                                            <span class="small text-muted">Rp</span>
-                                                        </h4>
-                                                        <p class="mb-0 text-muted size-12">
+                                                            <span class="text-white" style="font-size: 12px">Rp</span>
+                                                        </h2>
+                                                        <p class="mb-0 text-white" style="font-weight: 24px">
                                                             {{ $s->kode_simpanan }}</p>
-                                                        <p class="text-muted size-12">{{ $s->jenis_simpanan }}</p>
+                                                        <p class="text-white" style="font-weight: 24px;">{{ $s->jenis_simpanan }}</p>
                                                     </div>
                                                 </div>
                                             </div>

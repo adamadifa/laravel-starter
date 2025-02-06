@@ -23,6 +23,42 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/swiper/swiper-bundle.min.css') }}" />
     <style>
+        :root {
+            --fimobile-green: #3ac79b;
+            --fimobile-red: #f73563;
+            --fimobile-yellow: #ffbd17;
+            --fimobile-blue: #3c63e2;
+            --fimobile-rounded: 15px;
+            --fimobile-padding: 15px;
+            --bs-gutter-x: var(--fimobile-padding);
+            --fimobile-input-rounded: 10px;
+            /* radial gradient colors */
+            --fimobile-theme-color-grad-1: #2bc277;
+            --fimobile-theme-color-grad-2: #179a4d;
+            --fimobile-theme-color-grad-3: #0eb65f;
+            /* color schemes */
+            --fimobile-theme-color: #092c9f;
+            --fimobile-theme-color-2: #001c77;
+            --fimobile-theme-color-light: #d3ddfd;
+            --fimobile-theme-bordercolor: #dadff6;
+            --fimobile-theme-text: #ffffff;
+            --fimobile-header: transparent;
+            --fimobile-header-active: #ffffff;
+            --fimobile-header-text: #000000;
+            --fimobile-footer: #ffffff;
+            --fimobile-footer-text: #999999;
+            --fimobile-footer-text-active: var(--fimobile-theme-color);
+            --fimobile-sidebar: var(--fimobile-theme-color);
+            --fimobile-sidebar-text: #ffffff;
+            --fimobile-sidebar-text-active: #ffffff;
+            --fimobile-card-color: rgba(255, 255, 255, 0.85);
+            --fimobile-card-text: #000000;
+            --fimobile-page-bg-1: #f1f3f8;
+            --fimobile-page-bg-2: #e5ecfe;
+            --fimobile-page-text: #000000;
+            --fimobile-page-link: var(--fimobile-theme-color);
+        }
+
         .historicontent {
             display: flex;
             justify-content: space-between;
@@ -75,7 +111,6 @@
         .card.bg-warning,
         .card.bg-info,
         .card.bg-dark,
-        .card.theme-radial-gradient,
         .card.bg-opac {
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07), inset 0 1px 0px rgba(255, 255, 255, 0.18);
             -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07), inset 0 1px 0px rgba(255, 255, 255, 0.18);
@@ -92,6 +127,15 @@
         .cardswiper .swiper-wrapper .swiper-slide {
             width: 270px;
             padding: 0 5px 10px 15px;
+        }
+
+        .theme-radial-gradient {
+            background: var(--fimobile-theme-color-grad-1);
+            background: -moz-radial-gradient(30% 30%, ellipse cover, var(--fimobile-theme-color-grad-1) 0%, var(--fimobile-theme-color-grad-2) 50%, var(--fimobile-theme-color-grad-3) 100%);
+            background: -webkit-radial-gradient(30% 30%, ellipse cover, var(--fimobile-theme-color-grad-1) 0%, var(--fimobile-theme-color-grad-2) 50%, var(--fimobile-theme-color-grad-3) 100%);
+            background: radial-gradient(ellipse at 30% 30%, var(--fimobile-theme-color-grad-1) 0%, var(--fimobile-theme-color-grad-2) 50%, var(--fimobile-theme-color-grad-3) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='var(--fimobile-theme-color-grad-1)', endColorstr='var(--fimobile-theme-color-grad-3)', GradientType=1);
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
         }
     </style>
     {{-- <style>
