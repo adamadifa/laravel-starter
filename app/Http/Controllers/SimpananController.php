@@ -76,6 +76,11 @@ class SimpananController extends Controller
         }
         $simpanan = $query->get();
 
+        $data['saldosimpanan'] = Saldosimpanan::where('no_anggota', $no_anggota)
+            ->select('no_anggota', DB::raw('SUM(jumlah) as total_saldo'))
+            ->groupBy('no_anggota')
+            ->first();
+
         $data['lasttransaksi'] = Simpanan::where('no_anggota', $no_anggota)->orderBy('created_at', 'desc')->first();
         $data['simpanan'] = $simpanan;
 

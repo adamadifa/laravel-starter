@@ -21,6 +21,7 @@
     <link rel="manifest" href="{{ asset('manifest.json') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/swiper/swiper-bundle.min.css') }}" />
     <style>
         .historicontent {
             display: flex;
@@ -81,6 +82,16 @@
             -moz-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07), inset 0 1px 0px rgba(255, 255, 255, 0.18);
             background-color: #086c29;
             color: #ffffff;
+
+        }
+
+        .cardswiper .swiper-wrapper .swiper-slide:first-child {
+            padding-left: var(--fimobile-padding);
+        }
+
+        .cardswiper .swiper-wrapper .swiper-slide {
+            width: 270px;
+            padding: 0 5px 10px 15px;
         }
     </style>
     {{-- <style>

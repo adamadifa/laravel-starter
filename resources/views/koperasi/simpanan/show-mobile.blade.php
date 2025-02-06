@@ -31,6 +31,10 @@
         #section-card {
             padding: 0px 20px 0px 20px;
         }
+
+        .swiper-slide {
+            width: 80% !important;
+        }
     </style>
     <div id="header">
         <div id="section-user">
@@ -61,32 +65,63 @@
                             <p class="text-white" style="font-size: 16px; line-height: 0px">Unlimited</p>
                         </div>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col" style="margin-left:120px">
+                    <div class="row align-items-center mt-5">
+                        <div class="col text-center">
                             <h1 class="text-white mb-2" style="line-height: 0px">
-                                200.000
+                                {{ formatAngka($saldosimpanan->total_saldo) }}
                             </h1>
                             <h3 class="mb-0 text-white">
-                                1222-12211-12112
+                                {{ $saldosimpanan->no_anggota }}
                             </h3>
-                            <span class="text-white" style="font-size: 18px">
+                            <span class="text-white mt-5" style="font-size: 18px">
                                 SIMPANAN KOPERASI
                             </span>
                         </div>
                     </div>
-                    <div class="row mt-3" style="padding-top:30px">
+                    <div class="row mt-3" style="padding-top:10px">
                         <div class="col align-self-center text-center">
                             <h4 class="text-white">KOPONTREN TSARWAH AL AMIN</h4>
                         </div>
                     </div>
 
                 </div>
-                <div class="row">
+                <div class="row mt-3">
                     <div class="col">
                         <div
                             class="swiper-container cardswiper swiper-container-initialized swiper-container-horizontal swiper-container-ios swiper-container-pointer-events">
                             <div class="swiper-wrapper" id="swiper-wrapper-e7c52537e6cf4732" aria-live="polite"
                                 style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">
+                                @foreach ($saldo_simpanan as $s)
+                                    <div class="swiper-slide {{ $loop->first ? 'swiper-slide-active' : '' }}" role="group"
+                                        aria-label="{{ $loop->index }} / {{ count($saldo_simpanan) }} }}">
+                                        <div class="card" style="width: 300px; margin-right:30px">
+                                            <div class="card-body p-3 pb-2">
+                                                <div class="row mb-1">
+                                                    <div class="col-auto align-self-center">
+                                                        <img src="https://sip.persisalamin.com/assets-mobile/img/masterocard.png" alt="">
+                                                    </div>
+                                                    <div class=" col align-self-center text-right">
+                                                        <p class="small">
+                                                            <span class="text-uppercase size-10">Validity</span><br>
+                                                            <span class="text-muted">Unlimited</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <h4 class="fw-normal mb-1">
+                                                            {{ formatAngka($s->jumlah) }}
+                                                            <span class="small text-muted">Rp</span>
+                                                        </h4>
+                                                        <p class="mb-0 text-muted size-12">
+                                                            {{ $s->kode_simpanan }}</p>
+                                                        <p class="text-muted size-12">{{ $s->jenis_simpanan }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
