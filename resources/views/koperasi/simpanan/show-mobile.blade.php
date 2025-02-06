@@ -50,36 +50,45 @@
         </div>
     </div>
     <div id="#section-card">
-        <div class="dark-bg">
-            <div class="row mb-1">
-                <div class="col-auto align-self-center">
-                    <img src="https://sip.persisalamin.com/assets-mobile/img/masterocard.png" alt="">
-                </div>
-                <div class=" col align-self-center text-right">
-                    <p class="small">
-                        <span class="text-uppercase" style="font-size: 20px">Validity</span><br>
-                        <span class="text-white" style="font-size: 16px">Unlimited</span>
-                    </p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <h1 class="mb-1 text-white">
-                        200.000
-                        <span class="small text-muted">Rp</span>
-                    </h1>
-                    <p class="mb-0 text-muted size-12">
-                        1222-12211-12112
-                    <p class="text-muted size-12">Simpanan</p>
-                </div>
-            </div>
-        </div>
         <div class="row">
             <div class="col">
-                <div
-                    class="swiper-container cardswiper swiper-container-initialized swiper-container-horizontal swiper-container-ios swiper-container-pointer-events">
-                    <div class="swiper-wrapper" id="swiper-wrapper-e7c52537e6cf4732" aria-live="polite"
-                        style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">
+                <div class="card dark-bg">
+                    <img src="{{ asset('assets/template/img/tsarwah.png') }}" alt="" class="imaged"
+                        style="position: absolute; top:75px; right:30px; width: 55px">
+                    <div class="row mt-3 mr-3">
+                        <div class=" col align-self-center text-right">
+                            <p class="text-uppercase mb-3" style="font-size: 20px;line-height: 0px">Validity</p>
+                            <p class="text-white" style="font-size: 16px; line-height: 0px">Unlimited</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col" style="margin-left:120px">
+                            <h1 class="text-white mb-2" style="line-height: 0px">
+                                200.000
+                            </h1>
+                            <h3 class="mb-0 text-white">
+                                1222-12211-12112
+                            </h3>
+                            <span class="text-white" style="font-size: 18px">
+                                SIMPANAN KOPERASI
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mt-3" style="padding-top:30px">
+                        <div class="col align-self-center text-center">
+                            <h4 class="text-white">KOPONTREN TSARWAH AL AMIN</h4>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div
+                            class="swiper-container cardswiper swiper-container-initialized swiper-container-horizontal swiper-container-ios swiper-container-pointer-events">
+                            <div class="swiper-wrapper" id="swiper-wrapper-e7c52537e6cf4732" aria-live="polite"
+                                style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
