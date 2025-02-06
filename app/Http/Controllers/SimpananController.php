@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Anggota;
 use App\Models\Jenissimpanan;
+use App\Models\Karyawan;
 use App\Models\Karyawananggota;
 use App\Models\Saldosimpanan;
 use App\Models\Simpanan;
 use App\Models\User;
+use App\Models\Userkaryawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -242,5 +244,32 @@ class SimpananController extends Controller
             ->join('koperasi_anggota', 'koperasi_simpanan.no_anggota', '=', 'koperasi_anggota.no_anggota')
             ->first();
         return view('koperasi.simpanan.cetakkwitansi', $data);
+    }
+
+
+    public function mutasi($kode_simpanan)
+    {
+        $user = User::where('id', auth()->user()->id)->first();
+        $user_karyawan = Userkaryawan::where('id_user', $user->id)->first();
+        $user_anggota = Karyawananggota::where('npp', $user_karyawan->npp)->first();
+        $no_anggota = $user_anggota->no_anggota;
+        $kode_simpanan = Crypt::decrypt($kode_simpanan);
+
+        $dari = date('Y-m-d', strtotime('-30 days'));
+        $sampai = date('Y-m-d');
+        if (isset($request->dari) and isset($request->sampai)) {
+            $lastdata = Simpanan::where('no_anggota', $no_anggota)
+                ->where('kode_simpanna', $kode_simpanan)
+                ->where('tanggal', '<', $request->dari)
+                ->orderBy('no_transaksi', 'desc')
+                ->first();
+        } else {
+            $lastdata = Simpanan::where('no_anggota', $no_anggota)
+                ->where('tanggal', '<', $dari)
+                ->where('kode_simpanna', $kode_simpanan)
+                ->orderBy('no_transaksi', 'desc')
+                ->first();
+        }
+        $data['saldo_awal'] = $lastdata ? $lastdata->saldo : 0;
     }
 }

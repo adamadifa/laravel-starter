@@ -445,6 +445,9 @@ Route::middleware('auth')->group(function () {
         Route::put('/simpanan/{no_transaksi}/update', 'update')->name('simpanan.update')->can('simpanan.update');
         Route::delete('/simpanan/{no_transaksi}/delete', 'destroy')->name('simpanan.delete')->can('simpanan.delete');
         Route::get('/simpanan/{no_transaksi}/cetak', 'cetakkwitansi')->name('simpanan.cetakkwitansi')->can('simpanan.create');
+
+
+        Route::get('/simpanan/{kode_simpanan}/mutasi', 'mutasi')->name('simpanan.mutasi')->can('simpanan.index');
     });
 
     Route::controller(TabunganController::class)->group(function () {
