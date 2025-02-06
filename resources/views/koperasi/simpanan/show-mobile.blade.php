@@ -95,27 +95,27 @@
                                     <div class="swiper-slide {{ $loop->first ? 'swiper-slide-active' : '' }}" role="group"
                                         aria-label="{{ $loop->index }} / {{ count($saldo_simpanan) }} }}">
                                         <div class="card theme-radial-gradient" style="width: 300px; margin-right:30px">
-                                            <div class="card-body p-3 pb-2">
-                                                <div class="row mb-1">
+                                            <div class="card-body p-0">
+                                                <div class="row pl-2 pr-2 pt-2">
                                                     <div class="col-auto align-self-center">
                                                         <img src="https://sip.persisalamin.com/assets-mobile/img/masterocard.png" alt="">
                                                     </div>
                                                     <div class=" col align-self-center text-right">
                                                         <p class="small">
-                                                            <span class="text-uppercase text-white" style="font-size: 16px">Validity</span><br>
+                                                            <span class="text-uppercase text-white" style="font-size: 14px">Validity</span><br>
                                                             <span class="text-white" style="font-size: 14px">Unlimited</span>
                                                         </p>
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row ml-2">
                                                     <div class="col-12">
                                                         <h2 class="fw-normal mb-1 text-white">
                                                             {{ formatAngka($s->jumlah) }}
                                                             <span class="text-white" style="font-size: 24px">Rp</span>
                                                         </h2>
-                                                        <p class="mb-0 text-white" style="font-size: 18px">
+                                                        <p class="mb-0 text-white" style="font-size: 14px">
                                                             {{ $s->kode_simpanan }}</p>
-                                                        <p class="text-white" style="font-size: 20px;">{{ $s->jenis_simpanan }}</p>
+                                                        <p class="text-white" style="font-size: 16px;">{{ $s->jenis_simpanan }}</p>
                                                     </div>
                                                 </div>
                                             </div>
