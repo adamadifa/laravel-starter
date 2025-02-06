@@ -111,11 +111,11 @@
                                                     <div class="col-12">
                                                         <h2 class="fw-normal mb-1 text-white">
                                                             {{ formatAngka($s->jumlah) }}
-                                                            <span class="text-white" style="font-size: 12px">Rp</span>
+                                                            <span class="text-white" style="font-size: 24px">Rp</span>
                                                         </h2>
-                                                        <p class="mb-0 text-white" style="font-weight: 24px">
+                                                        <p class="mb-0 text-white" style="font-size: 18px">
                                                             {{ $s->kode_simpanan }}</p>
-                                                        <p class="text-white" style="font-weight: 24px;">{{ $s->jenis_simpanan }}</p>
+                                                        <p class="text-white" style="font-size: 20px;">{{ $s->jenis_simpanan }}</p>
                                                     </div>
                                                 </div>
                                             </div>
