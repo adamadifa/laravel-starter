@@ -438,7 +438,7 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(SimpananController::class)->group(function () {
         Route::get('/simpanan', 'index')->name('simpanan.index')->can('simpanan.index');
-        Route::get('/simpanan/{no_anggota}/show', 'show')->name('simpanan.show')->can('simpanan.create');
+        Route::get('/simpanan/{no_anggota}/show', 'show')->name('simpanan.show')->can('simpanan.index');
         Route::get('/simpanan/{no_anggota}/{jenis_transaksi}/create', 'create')->name('simpanan.create')->can('simpanan.create');
         Route::post('/simpanan/{no_anggota}/{jenis_transaksi}/store', 'store')->name('simpanan.store')->can('simpanan.store');
         Route::get('/simpanan/{no_transaksi}/edit', 'edit')->name('simpanan.edit')->can('simpanan.edit');

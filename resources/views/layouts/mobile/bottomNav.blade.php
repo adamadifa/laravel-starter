@@ -20,7 +20,7 @@
             </div>
         </div>
     </a>
-    <a href="{{ route('pengajuanizin.index') }}" class="item {{ request()->is('pengajuanizin') ? 'active' : '' }}">
+    <a href="#" class="item {{ request()->is('pengajuanizin') ? 'active' : '' }}">
         <div class="col">
             <ion-icon name="calendar-outline"></ion-icon>
             <strong>Pengajuan Izin</strong>

@@ -158,7 +158,7 @@
                     data: {
                         _token: "{{ csrf_token() }}",
                         lokasi: lokasi,
-                        id: "{{ $id }}",
+                        id: "{{ Crypt::encrypt($id) }}",
                         image: image
                     },
                     cache: false,

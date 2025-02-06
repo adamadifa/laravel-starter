@@ -8005,3 +8005,9 @@ body.dark-mode-active .cart-item .cart-item-footer {
 .text-primary {
     color: var(--bg-indicator) !important;
 }
+
+.dark-bg {
+    background-color: #086c29 !important;
+    background-image: url("../img/creditcardbg.webp");
+    background-size: cover
+}

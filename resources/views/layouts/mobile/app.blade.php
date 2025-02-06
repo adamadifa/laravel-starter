@@ -59,6 +59,29 @@
         .timepresence {
             font-size: 14px;
         }
+
+        #header-section {
+            height: 180px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .card.theme-bg,
+        .card.dark-bg,
+        .card.bg-danger,
+        .card.bg-success,
+        .card.bg-primary,
+        .card.bg-warning,
+        .card.bg-info,
+        .card.bg-dark,
+        .card.theme-radial-gradient,
+        .card.bg-opac {
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07), inset 0 1px 0px rgba(255, 255, 255, 0.18);
+            -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07), inset 0 1px 0px rgba(255, 255, 255, 0.18);
+            -moz-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07), inset 0 1px 0px rgba(255, 255, 255, 0.18);
+            background-color: #086c29;
+            color: #ffffff;
+        }
     </style>
     {{-- <style>
         .selectmaterialize,

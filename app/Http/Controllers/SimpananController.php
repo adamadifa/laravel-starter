@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Anggota;
 use App\Models\Jenissimpanan;
+use App\Models\Karyawananggota;
 use App\Models\Saldosimpanan;
 use App\Models\Simpanan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -33,6 +35,7 @@ class SimpananController extends Controller
 
     public function show($no_anggota, Request $request)
     {
+        $user = User::where('id', auth()->user()->id)->first();
         $no_anggota = Crypt::decrypt($no_anggota);
         $data['anggota'] = Anggota::where('no_anggota', $no_anggota)
             ->leftJoin('provinces', 'koperasi_anggota.id_province', '=', 'provinces.id')
@@ -75,6 +78,14 @@ class SimpananController extends Controller
 
         $data['lasttransaksi'] = Simpanan::where('no_anggota', $no_anggota)->orderBy('created_at', 'desc')->first();
         $data['simpanan'] = $simpanan;
+
+        if ($user->hasRole('karyawan')) {
+            $data['karyawan'] = Karyawananggota::join('karyawan', 'karyawan_anggota.npp', '=', 'karyawan.npp')
+                ->join('jabatan', 'karyawan.kode_jabatan', '=', 'jabatan.kode_jabatan')
+                ->join('unit', 'karyawan.kode_unit', '=', 'unit.kode_unit')
+                ->where('karyawan_anggota.no_anggota', $no_anggota)->first();
+            return view('koperasi.simpanan.show-mobile', $data);
+        }
         return view('koperasi.simpanan.show', $data);
     }
 

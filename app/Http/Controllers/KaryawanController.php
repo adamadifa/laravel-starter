@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Jabatan;
 use App\Models\Karyawan;
 use App\Models\Unit;
+use App\Models\User;
+use App\Models\Userkaryawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 
 class KaryawanController extends Controller
@@ -199,5 +203,34 @@ class KaryawanController extends Controller
 
         $data['jadwalkerja'] = $query->get();
         return view('datamaster.karyawan.getjadwalkerja', $data);
+    }
+
+    public function createuser($npp)
+    {
+        $npp = Crypt::decrypt($npp);
+        $karyawan = Karyawan::where('npp', $npp)->first();
+        DB::beginTransaction();
+        try {
+            //code...
+            $user = User::create([
+                'name' => $karyawan->nama_lengkap,
+                'kode_unit' => $karyawan->kode_unit,
+                'username' => $karyawan->npp,
+                'password' => Hash::make(12345678),
+                'email' => strtolower(removeTitik($karyawan->npp)) . '@persisalamin.com',
+            ]);
+
+            Userkaryawan::create([
+                'npp' => $npp,
+                'id_user' => $user->id
+            ]);
+
+            $user->assignRole('karyawan');
+            DB::commit();
+            return Redirect::back()->with(messageSuccess('User Berhasil Dibuat'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return Redirect::back()->with(messageError($e->getMessage()));
+        }
     }
 }

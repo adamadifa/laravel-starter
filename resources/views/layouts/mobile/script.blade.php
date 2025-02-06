@@ -22,18 +22,24 @@
 <script src="{{ asset('assets/template/js/base.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/rolldate@3.1.3/dist/rolldate.min.js"></script>
 <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
+<script src="{{ asset('assets/vendor/libs/swiper/swiper-bundle.min.js') }}"></script>
 <style>
     .toast-bottom-full-width {
         bottom: 5rem
     }
 </style>
 <script>
-    toastr.options.showEasing = 'swing';
-    toastr.options.hideEasing = 'linear';
-    toastr.options.progressBar = true;
-    toastr.options.positionClass = 'toast-bottom-full-width';
-    toastr.success("Berhasil", "Data Berhasil Disimpan", {
-        timeOut: 3000
+    var swiper1 = new Swiper(".cardswiper", {
+        slidesPerView: "auto",
+        spaceBetween: 0,
+        pagination: false
+    });
+
+    /* swiper carousel connectionwiper */
+    var swiper2 = new Swiper(".connectionwiper", {
+        slidesPerView: "auto",
+        spaceBetween: 0,
+        pagination: false
     });
 </script>
 @if ($message = Session::get('success'))
@@ -56,18 +62,19 @@
         toastr.options.positionClass = 'toast-bottom-full-width';
         toastr.error("Gagal", "{{ $message }}", {
             timeOut: 3000
-        });
-    </script>
-@endif
+        }); <
+        />
+        @endif
 
-@if ($message = Session::get('warning'))
-    <script>
-        toastr.options.showEasing = 'swing';
-        toastr.options.hideEasing = 'linear';
-        toastr.options.progressBar = true;
-        toastr.warning("Warning", "{{ $message }}", {
-            timeOut: 3000
-        });
+        @if ($message = Session::get('warning'))
+            <
+            script >
+                toastr.options.showEasing = 'swing';
+            toastr.options.hideEasing = 'linear';
+            toastr.options.progressBar = true;
+            toastr.warning("Warning", "{{ $message }}", {
+                timeOut: 3000
+            });
     </script>
 @endif
 

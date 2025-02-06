@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Departemen;
 use App\Models\Jabatan;
+use App\Models\Karyawan;
 use App\Models\Realisasikegiatan;
 use App\Models\User;
+use App\Models\Userkaryawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Jenssegers\Agent\Agent;
@@ -282,13 +285,15 @@ class RealisasikegiatanController extends Controller
 
         $lokasi = $request->lokasi;
         $id = Crypt::decrypt($request->id);
+        $realisasikegiatan = Realisasikegiatan::find($id);
+        $kode_dept = $realisasikegiatan->kode_dept;
         $lok = explode(",", $lokasi);
         $latitude = $lok[0];
         $longitude = $lok[1];
         // $kode_pelanggan = $request->kode_pelanggan;
         if (isset($request->image)) {
             $image = $request->image;
-            $folderPath = "/public/realisasikegiatan/";
+            $folderPath = "/public/realisasikegiatan/" . $kode_dept . "/";
             $formatName = $id;
             $image_parts = explode(";base64", $image);
             $image_base64 = base64_decode($image_parts[1]);

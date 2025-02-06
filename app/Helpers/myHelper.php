@@ -280,3 +280,9 @@ function getnamaHari($hari)
 
     return $hari_ini;
 }
+
+
+function removeTitik($value)
+{
+    return str_replace('.', '', $value);
+}
