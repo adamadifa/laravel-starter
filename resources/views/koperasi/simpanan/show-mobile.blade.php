@@ -35,6 +35,17 @@
         .swiper-slide {
             width: 85% !important;
         }
+
+        .logout-btn {
+            color: var(--bg-indicator);
+            font-size: 30px;
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            color: var(--color-nav-hover);
+
+        }
     </style>
     <div id="header">
         <div id="section-user">
@@ -65,7 +76,7 @@
                             <p class="text-white" style="font-size: 16px; line-height: 0px">Unlimited</p>
                         </div>
                     </div>
-                    <div class="row align-items-center mt-5">
+                    <div class="row align-items-center">
                         <div class="col text-center">
                             <h1 class="text-white mb-2" style="line-height: 0px">
                                 {{ formatAngka($saldosimpanan->total_saldo) }}
@@ -78,7 +89,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="row mt-3" style="padding-top:10px">
+                    <div class="row mt-3">
                         <div class="col align-self-center text-center">
                             <h4 class="text-white">KOPONTREN TSARWAH AL AMIN</h4>
                         </div>
@@ -94,7 +105,7 @@
                                 @foreach ($saldo_simpanan as $s)
                                     <div class="swiper-slide {{ $loop->first ? 'swiper-slide-active' : '' }}" role="group"
                                         aria-label="{{ $loop->index }} / {{ count($saldo_simpanan) }} }}">
-                                        <a href="#">
+                                        <a href="{{ route('simpanan.mutasi', Crypt::encrypt($s->kode_simpanan)) }}">
                                             <div class="card theme-radial-gradient" style="width: 300px; margin-right:30px">
                                                 <div class="card-body p-0">
                                                     <div class="row pl-2 pr-2 pt-2">

@@ -259,17 +259,22 @@ class SimpananController extends Controller
         $sampai = date('Y-m-d');
         if (isset($request->dari) and isset($request->sampai)) {
             $lastdata = Simpanan::where('no_anggota', $no_anggota)
-                ->where('kode_simpanna', $kode_simpanan)
+                ->where('kode_simpanan', $kode_simpanan)
                 ->where('tanggal', '<', $request->dari)
                 ->orderBy('no_transaksi', 'desc')
                 ->first();
         } else {
             $lastdata = Simpanan::where('no_anggota', $no_anggota)
                 ->where('tanggal', '<', $dari)
-                ->where('kode_simpanna', $kode_simpanan)
+                ->where('kode_simpanan', $kode_simpanan)
                 ->orderBy('no_transaksi', 'desc')
                 ->first();
         }
         $data['saldo_awal'] = $lastdata ? $lastdata->saldo : 0;
+        $data['saldo_simpanan'] = Saldosimpanan::where('no_anggota', $no_anggota)
+            ->where('koperasi_saldo_simpanan.kode_simpanan', $kode_simpanan)
+            ->join('koperasi_jenis_simpanan', 'koperasi_saldo_simpanan.kode_simpanan', '=', 'koperasi_jenis_simpanan.kode_simpanan')
+            ->first();
+        return view('koperasi.simpanan.mutasi-mobile', $data);
     }
 }
