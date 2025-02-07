@@ -41,6 +41,10 @@
 
     }
 
+    .transactions {
+        padding: 0px 10px
+    }
+
     .transactions .item {
         background: #ffffff;
         box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.09);
@@ -106,7 +110,7 @@
             <span class="text-white">Saldo {{ $saldo_simpanan->jenis_simpanan }}</span>
         </div>
     </div>
-    <div class="transactions mt-5">
+    <div class="transactions mt-3">
         <!-- item -->
         <a href="app-transaction-detail.html" class="item">
             <div class="detail">
