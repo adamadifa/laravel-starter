@@ -42,7 +42,10 @@
     }
 
     .transactions {
-        padding: 0px 10px
+        padding: 0px 10px;
+        /* background-color: red; */
+        height: calc(100vh - 270px);
+        overflow: scroll;
     }
 
     .transactions .item {
@@ -50,10 +53,11 @@
         box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.09);
         border-radius: 10px;
         padding: 20px 24px;
-        margin-bottom: 10px;
+        margin-bottom: 7px;
         display: flex;
         align-items: center;
-        justify-content: space-between
+        justify-content: space-between;
+
     }
 
     .transactions .item:last-child {
@@ -61,7 +65,7 @@
     }
 
     .transactions .item p {
-        font-size: 11px;
+        font-size: 14px;
         margin: 0;
         color: #958d9e;
         font-weight: 500
@@ -71,7 +75,8 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        line-height: 1.2em
+        line-height: 1.2em;
+        gap: 10px
     }
 
     .transactions .item .detail .image-block {
@@ -94,6 +99,46 @@
         color: #27173E;
         letter-spacing: -0.03em
     }
+
+    .avatar {
+        position: relative;
+        width: 2.5rem;
+        height: 2.5rem;
+        cursor: pointer;
+    }
+
+    .avatar-sm {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .avatar-sm .avatar-initial {
+        font-size: .8125rem;
+    }
+
+    .avatar .avatar-initial {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        background-color: #eeedf0;
+        font-size: .9375rem;
+    }
+
+    .rounded-circle {
+        border-radius: 50% !important;
+    }
+
+    .bg-label-warning {
+        background-color: #fff0e1 !important;
+        color: #ff9f43 !important;
+    }
 </style>
 @section('content')
     <div id="section-header">
@@ -110,62 +155,25 @@
             <span class="text-white">Saldo {{ $saldo_simpanan->jenis_simpanan }}</span>
         </div>
     </div>
-    <div class="transactions mt-3">
+    <div class="transactions mt-2">
         <!-- item -->
-        <a href="app-transaction-detail.html" class="item">
-            <div class="detail">
-                <img src="assets/img/sample/brand/1.jpg" alt="img" class="image-block imaged w48">
-                <div>
-                    <strong>Amazon</strong>
-                    <p>Shopping</p>
+        @foreach ($mutasi as $d)
+            <a href="app-transaction-detail.html" class="item">
+                <div class="detail">
+                    <div class="avatar-wrapper">
+                        <div class="avatar avatar-sm me-4"><span class="avatar-initial rounded-circle bg-label-warning">VK</span></div>
+                    </div>
+                    <div>
+                        <strong>{{ DateToIndo($d->tanggal) }}</strong>
+                        <p>{{ $d->jenis_transaksi == 'S' ? 'Setoran' : 'Penarikan' }}</p>
+                    </div>
                 </div>
-            </div>
-            <div class="right">
-                <div class="price text-danger"> - $ 150</div>
-            </div>
-        </a>
-        <!-- * item -->
-        <!-- item -->
-        <a href="app-transaction-detail.html" class="item">
-            <div class="detail">
-                <img src="assets/img/sample/brand/2.jpg" alt="img" class="image-block imaged w48">
-                <div>
-                    <strong>Apple</strong>
-                    <p>Appstore Purchase</p>
+                <div class="right">
+                    <div class="price {{ $d->jenis_transaksi == 'S' ? 'text-success' : 'text-dangger' }}"> {{ $d->jenis_transaksi == 'S' ? '+' : '-' }}
+                        {{ formatAngka($d->jumlah) }}</div>
                 </div>
-            </div>
-            <div class="right">
-                <div class="price text-danger">- $ 29</div>
-            </div>
-        </a>
-        <!-- * item -->
-        <!-- item -->
-        <a href="app-transaction-detail.html" class="item">
-            <div class="detail">
-                <img src="assets/img/sample/avatar/avatar3.jpg" alt="img" class="image-block imaged w48">
-                <div>
-                    <strong>Alex Ljung</strong>
-                    <p>Transfer</p>
-                </div>
-            </div>
-            <div class="right">
-                <div class="price">+ $ 1,000</div>
-            </div>
-        </a>
-        <!-- * item -->
-        <!-- item -->
-        <a href="app-transaction-detail.html" class="item">
-            <div class="detail">
-                <img src="assets/img/sample/avatar/avatar4.jpg" alt="img" class="image-block imaged w48">
-                <div>
-                    <strong>Beatriz Brito</strong>
-                    <p>Transfer</p>
-                </div>
-            </div>
-            <div class="right">
-                <div class="price text-danger">- $ 186</div>
-            </div>
-        </a>
-        <!-- * item -->
+            </a>
+        @endforeach
+
     </div>
 @endsection

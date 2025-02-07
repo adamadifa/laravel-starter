@@ -275,6 +275,12 @@ class SimpananController extends Controller
             ->where('koperasi_saldo_simpanan.kode_simpanan', $kode_simpanan)
             ->join('koperasi_jenis_simpanan', 'koperasi_saldo_simpanan.kode_simpanan', '=', 'koperasi_jenis_simpanan.kode_simpanan')
             ->first();
+        $data['mutasi'] = Simpanan::where('no_anggota', $no_anggota)
+            ->where('koperasi_simpanan.kode_simpanan', $kode_simpanan)
+            ->join('koperasi_jenis_simpanan', 'koperasi_simpanan.kode_simpanan', '=', 'koperasi_jenis_simpanan.kode_simpanan')
+            ->orderBy('tanggal', 'desc')
+            ->limit(15)
+            ->get();
         return view('koperasi.simpanan.mutasi-mobile', $data);
     }
 }
