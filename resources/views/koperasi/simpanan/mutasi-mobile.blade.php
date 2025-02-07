@@ -44,7 +44,7 @@
     .transactions {
         padding: 0px 10px;
         /* background-color: red; */
-        height: calc(100vh - 275px);
+        height: calc(100vh - 300px);
         overflow: scroll;
     }
 
