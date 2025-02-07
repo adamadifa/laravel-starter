@@ -292,13 +292,15 @@
                 </div>
             </div>
             <div class="col-3">
-                <div class="card">
-                    <div class="card-body text-center" style="padding: 5px 5px !important; line-height:0.8rem">
-                        <img src="{{ asset('assets/template/img/3d/slipgaji.png') }}" alt="" style="width: 50px" class="mb-1">
-                        <br>
-                        <span style="font-size: 0.8rem; font-weight:500">Slip</span>
+                <a href="{{ route('tabungan.show', Crypt::encrypt($anggota->no_anggota)) }}">
+                    <div class="card">
+                        <div class="card-body text-center" style="padding: 5px 5px !important; line-height:0.8rem">
+                            <img src="{{ asset('assets/template/img/3d/slipgaji.png') }}" alt="" style="width: 50px" class="mb-1">
+                            <br>
+                            <span style="font-size: 0.8rem; font-weight:500">Tabungan</span>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>

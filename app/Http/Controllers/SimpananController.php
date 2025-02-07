@@ -87,6 +87,12 @@ class SimpananController extends Controller
         $data['simpanan'] = $simpanan;
 
         if ($user->hasRole('karyawan')) {
+            $data['mutasi'] = Simpanan::where('no_anggota', $no_anggota)
+                ->join('koperasi_jenis_simpanan', 'koperasi_simpanan.kode_simpanan', '=', 'koperasi_jenis_simpanan.kode_simpanan')
+                ->orderBy('tanggal', 'desc')
+                ->limit(5)
+                ->get();
+
             $data['karyawan'] = Karyawananggota::join('karyawan', 'karyawan_anggota.npp', '=', 'karyawan.npp')
                 ->join('jabatan', 'karyawan.kode_jabatan', '=', 'jabatan.kode_jabatan')
                 ->join('unit', 'karyawan.kode_unit', '=', 'unit.kode_unit')

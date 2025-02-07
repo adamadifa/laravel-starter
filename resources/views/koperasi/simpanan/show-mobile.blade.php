@@ -46,6 +46,55 @@
             color: var(--color-nav-hover);
 
         }
+
+        .transactions {
+            padding: 0px 10px;
+            /* background-color: red; */
+            height: calc(67vh - 300px);
+            overflow: scroll;
+        }
+
+        .avatar {
+            position: relative;
+            width: 2.5rem;
+            height: 2.5rem;
+            cursor: pointer;
+        }
+
+
+
+        .avatar-sm {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        .avatar-sm .avatar-initial {
+            font-size: .8125rem;
+        }
+
+        .avatar .avatar-initial {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background-color: #eeedf0;
+            font-size: .9375rem;
+        }
+
+        .rounded-circle {
+            border-radius: 50% !important;
+        }
+
+        .bg-label-warning {
+            background-color: #fff0e1 !important;
+            color: #ff9f43 !important;
+        }
     </style>
     <div id="header">
         <div id="section-user">
@@ -72,8 +121,8 @@
                         style="position: absolute; top:75px; right:30px; width: 55px">
                     <div class="row mt-3 mr-3">
                         <div class=" col align-self-center text-right">
-                            <p class="text-uppercase mb-3" style="font-size: 20px;line-height: 0px">Validity</p>
-                            <p class="text-white" style="font-size: 16px; line-height: 0px">Unlimited</p>
+                            <p class="text-uppercase mb-3" style="font-size: 16px;line-height: 0px">Validity</p>
+                            <p class="text-white" style="font-size: 14px; line-height: 0px">Unlimited</p>
                         </div>
                     </div>
                     <div class="row align-items-center">
@@ -141,5 +190,29 @@
                 </div>
             </div>
         </div>
+    </div>
+    <h4 style="padding: 3px 20px">5 Transaksi Terakhir</h4>
+    <div class="transactions">
+        <!-- item -->
+
+        @foreach ($mutasi as $d)
+            <a href="#" class="item">
+                <div class="detail">
+                    <div class="avatar avatar-sm me-4"><span
+                            class="avatar-initial rounded-circle {{ $d->jenis_transaksi == 'S' ? 'bg-success' : 'bg-danger' }}">
+                            {{ $d->jenis_transaksi == 'S' ? 'S' : 'T' }}
+                        </span></div>
+                    <div>
+                        <strong>{{ DateToIndo($d->tanggal) }}</strong>
+                        <p>{{ $d->jenis_transaksi == 'S' ? 'Setoran' : 'Penarikan' }} {{ $d->jenis_simpanan }}</p>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="price {{ $d->jenis_transaksi == 'S' ? 'text-success' : 'text-dangger' }}"> {{ $d->jenis_transaksi == 'S' ? '+' : '-' }}
+                        {{ formatAngka($d->jumlah) }}</div>
+                </div>
+            </a>
+        @endforeach
+
     </div>
 @endsection

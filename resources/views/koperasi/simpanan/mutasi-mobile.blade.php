@@ -48,64 +48,13 @@
         overflow: scroll;
     }
 
-    .transactions .item {
-        background: #ffffff;
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.09);
-        border-radius: 10px;
-        padding: 20px 24px;
-        margin-bottom: 7px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-    }
-
-    .transactions .item:last-child {
-        margin-bottom: 0
-    }
-
-    .transactions .item p {
-        font-size: 14px;
-        margin: 0;
-        color: #958d9e;
-        font-weight: 500
-    }
-
-    .transactions .item .detail {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        line-height: 1.2em;
-        gap: 10px
-    }
-
-    .transactions .item .detail .image-block {
-        margin-right: 16px
-    }
-
-    .transactions .item .detail strong {
-        display: block;
-        font-weight: 500;
-        color: #27173E;
-        margin-bottom: 3px
-    }
-
-    .transactions .item .right {
-        padding-left: 10px
-    }
-
-    .transactions .item .right .price {
-        font-weight: 700;
-        color: #27173E;
-        letter-spacing: -0.03em
-    }
-
     .avatar {
         position: relative;
         width: 2.5rem;
         height: 2.5rem;
         cursor: pointer;
     }
+
 
     .avatar-sm {
         width: 2rem;
@@ -143,7 +92,7 @@
 @section('content')
     <div id="section-header">
         <div id="section-logout">
-            <a href="/proseslogout" class="back-btn">
+            <a href="{{ url()->previous() }}" class="back-btn">
                 <ion-icon name="arrow-back-outline"></ion-icon>
             </a>
             <a href="/proseslogout" class="logout-btn">
@@ -158,10 +107,13 @@
     <div class="transactions mt-2">
         <!-- item -->
         @foreach ($mutasi as $d)
-            <a href="app-transaction-detail.html" class="item">
+            <a href="#" class="item">
                 <div class="detail">
                     <div class="avatar-wrapper">
-                        <div class="avatar avatar-sm me-4"><span class="avatar-initial rounded-circle bg-label-warning">VK</span></div>
+                        <div class="avatar avatar-sm me-4"><span
+                                class="avatar-initial rounded-circle {{ $d->jenis_transaksi == 'S' ? 'bg-success' : 'bg-danger' }}">
+                                {{ $d->jenis_transaksi == 'S' ? 'S' : 'T' }}
+                            </span></div>
                     </div>
                     <div>
                         <strong>{{ DateToIndo($d->tanggal) }}</strong>
