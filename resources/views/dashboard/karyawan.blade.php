@@ -129,9 +129,14 @@
     </style>
     <div id="header-section">
         <div id="section-logout">
-            <a href="/proseslogout" class="logout-btn">
-                <ion-icon name="exit-outline"></ion-icon>
-            </a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <a href="#" class="logout-btn"
+                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                    <ion-icon name="exit-outline"></ion-icon>
+                </a>
+            </form>
         </div>
         <div id="section-user">
             <div id="user-info">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Anggota;
 use App\Models\Jenistabungan;
+use App\Models\Karyawananggota;
 use App\Models\Tabungan;
 use App\Models\Transaksitabungan;
 use Illuminate\Http\Request;
@@ -287,6 +288,21 @@ class TabunganController extends Controller
             ->groupBy('no_anggota')
             ->first();
 
-        return view('koperasi.tabungan.showmobile', $data);
+        $data['saldo_tabungan'] = Tabungan::where('no_anggota', $no_anggota)
+            ->join('koperasi_jenis_tabungan', 'koperasi_tabungan.kode_tabungan', '=', 'koperasi_jenis_tabungan.kode_tabungan')
+            ->get();
+
+        $data['karyawan'] = Karyawananggota::join('karyawan', 'karyawan_anggota.npp', '=', 'karyawan.npp')
+            ->join('jabatan', 'karyawan.kode_jabatan', '=', 'jabatan.kode_jabatan')
+            ->join('unit', 'karyawan.kode_unit', '=', 'unit.kode_unit')
+            ->where('karyawan_anggota.no_anggota', $no_anggota)->first();
+
+        $data['mutasi'] = Tabungan::where('no_anggota', $no_anggota)
+            ->join('koperasi_jenis_tabungan', 'koperasi_tabungan.kode_tabungan', '=', 'koperasi_jenis_tabungan.kode_tabungan')
+            ->orderBy('tanggal', 'desc')
+            ->limit(5)
+            ->get();
+
+        return view('koperasi.tabungan.show-mobile', $data);
     }
 }
