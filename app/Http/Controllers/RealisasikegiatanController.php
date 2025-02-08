@@ -110,7 +110,7 @@ class RealisasikegiatanController extends Controller
                 // 'kode_jobdesk' => 'required',
                 // 'kode_program_kerja' => 'required',
                 'uraian_kegiatan' => 'required',
-                'file' => 'mimes:jpg,jpeg,png|max:1024',
+                'file' => 'mimes:jpg,jpeg,png',
             ]);
         }
 
