@@ -292,7 +292,7 @@
                 </div>
             </div>
             <div class="col-3">
-                <a href="{{ route('tabungan.show', Crypt::encrypt($anggota->no_anggota)) }}">
+                <a href="{{ route('tabungan.showmobile', Crypt::encrypt($anggota->no_anggota)) }}">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 5px 5px !important; line-height:0.8rem">
                             <img src="{{ asset('assets/template/img/3d/slipgaji.png') }}" alt="" style="width: 50px" class="mb-1">

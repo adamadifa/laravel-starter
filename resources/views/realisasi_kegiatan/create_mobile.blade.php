@@ -107,16 +107,6 @@
                                 }
                             });
                             return false;
-                        } else if (file.size > 1048576) { // 1MB
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Ukuran file terlalu besar. Maksimal 1MB.',
-                                didClose: (e) => {
-                                    document.getElementById('file').focus();
-                                }
-                            });
-                            return false;
                         } else {
                             $("#btnSimpan").attr("disabled", true);
                             $("#btnSimpan").html(

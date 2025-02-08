@@ -464,6 +464,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/tabungan/createrekening', 'createrekening')->name('tabungan.createrekening')->can('tabungan.create');
         Route::post('/tabungan/storerekening', 'storerekening')->name('tabungan.storerekening')->can('tabungan.create');
         Route::delete('/tabungan/{no_rekening}/deleterekening', 'deleterekening')->name('tabungan.deleterekening')->can('tabungan.delete');
+
+
+        Route::get('/tabungan/{no_anggota}/showmobile', 'showmobile')->name('tabungan.showmobile');
     });
 
     Route::controller(PembiayaanController::class)->group(function () {

@@ -277,4 +277,16 @@ class TabunganController extends Controller
             return Redirect::back()->with(messageError($e->getMessage()));
         }
     }
+
+
+    public function showmobile($no_anggota)
+    {
+        $no_anggota = Crypt::decrypt($no_anggota);
+        $data['saldotabungan'] = Tabungan::where('no_anggota', $no_anggota)
+            ->select('no_anggota', DB::raw('SUM(saldo) as total_saldo'))
+            ->groupBy('no_anggota')
+            ->first();
+
+        return view('koperasi.tabungan.showmobile', $data);
+    }
 }
