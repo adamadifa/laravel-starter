@@ -97,4 +97,9 @@
         });
     </script>
 @endif
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.body.classList.add("loaded");
+    });
+</script>
 @stack('myscript')
