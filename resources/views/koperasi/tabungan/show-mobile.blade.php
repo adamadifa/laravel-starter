@@ -50,7 +50,8 @@
         .transactions {
             padding: 0px 10px;
             /* background-color: red; */
-            height: calc(67vh - 300px);
+            height: calc(100vh - 300px);
+            /* Diubah untuk membuat tinggi transactions di atas bottom nav */
             overflow: scroll;
         }
 
@@ -145,7 +146,7 @@
                     </div>
 
                 </div>
-                <div class="row mt-3">
+                <div class="row mt-1">
                     <div class="col">
                         <div
                             class="swiper-container cardswiper swiper-container-initialized swiper-container-horizontal swiper-container-ios swiper-container-pointer-events">
@@ -154,8 +155,8 @@
                                 @foreach ($saldo_tabungan as $s)
                                     <div class="swiper-slide {{ $loop->first ? 'swiper-slide-active' : '' }}" role="group"
                                         aria-label="{{ $loop->index }} / {{ count($saldo_tabungan) }} }}">
-                                        <a href="#">
-                                            <div class="card theme-radial-gradient" style="width: 300px; margin-right:30px">
+                                        <a href="{{ route('tabungan.mutasi', Crypt::encrypt($s->no_rekening)) }}">
+                                            <div class="card theme-radial-gradient">
                                                 <div class="card-body p-0">
                                                     <div class="row pl-2 pr-2 pt-2">
                                                         <div class="col-auto align-self-center">
@@ -199,16 +200,16 @@
             <a href="#" class="item">
                 <div class="detail">
                     <div class="avatar avatar-sm me-4"><span
-                            class="avatar-initial rounded-circle {{ $d->jenis_tabungan == 'S' ? 'bg-success' : 'bg-danger' }}">
-                            {{ $d->jenis_tabungan == 'S' ? 'S' : 'T' }}
+                            class="avatar-initial rounded-circle {{ $d->jenis_transaksi == 'S' ? 'bg-success' : 'bg-danger' }}">
+                            {{ $d->jenis_transaksi == 'S' ? 'S' : 'T' }}
                         </span></div>
                     <div>
                         <strong>{{ DateToIndo($d->tanggal) }}</strong>
-                        <p>{{ $d->jenis_tabungan == 'S' ? 'Setoran' : 'Penarikan' }} {{ $d->jenis_tabungan }}</p>
+                        <p>{{ $d->jenis_transaksi == 'S' ? 'Setoran' : 'Penarikan' }} {{ $d->jenis_tabungan }}</p>
                     </div>
                 </div>
                 <div class="right">
-                    <div class="price {{ $d->jenis_tabungan == 'S' ? 'text-success' : 'text-dangger' }}"> {{ $d->jenis_tabungan == 'S' ? '+' : '-' }}
+                    <div class="price {{ $d->jenis_transaksi == 'S' ? 'text-success' : 'text-dangger' }}"> {{ $d->jenis_transaksi == 'S' ? '+' : '-' }}
                         {{ formatAngka($d->jumlah) }}</div>
                 </div>
             </a>

@@ -50,7 +50,7 @@
         .transactions {
             padding: 0px 10px;
             /* background-color: red; */
-            height: calc(67vh - 300px);
+            height: calc(65vh - 300px);
             overflow: scroll;
         }
 
@@ -155,7 +155,7 @@
                                     <div class="swiper-slide {{ $loop->first ? 'swiper-slide-active' : '' }}" role="group"
                                         aria-label="{{ $loop->index }} / {{ count($saldo_simpanan) }} }}">
                                         <a href="{{ route('simpanan.mutasi', Crypt::encrypt($s->kode_simpanan)) }}">
-                                            <div class="card theme-radial-gradient" style="width: 300px; margin-right:30px">
+                                            <div class="card theme-radial-gradient">
                                                 <div class="card-body p-0">
                                                     <div class="row pl-2 pr-2 pt-2">
                                                         <div class="col-auto align-self-center">

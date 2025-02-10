@@ -467,6 +467,7 @@ Route::middleware('auth')->group(function () {
 
 
         Route::get('/tabungan/{no_anggota}/showmobile', 'showmobile')->name('tabungan.showmobile');
+        Route::get('/tabungan/{no_rekening}/mutasi', 'mutasi')->name('tabungan.mutasi');
     });
 
     Route::controller(PembiayaanController::class)->group(function () {

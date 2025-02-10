@@ -7,6 +7,8 @@ use App\Models\Jenistabungan;
 use App\Models\Karyawananggota;
 use App\Models\Tabungan;
 use App\Models\Transaksitabungan;
+use App\Models\User;
+use App\Models\Userkaryawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -297,12 +299,37 @@ class TabunganController extends Controller
             ->join('unit', 'karyawan.kode_unit', '=', 'unit.kode_unit')
             ->where('karyawan_anggota.no_anggota', $no_anggota)->first();
 
-        $data['mutasi'] = Tabungan::where('no_anggota', $no_anggota)
+        $data['mutasi'] = Transaksitabungan::where('no_anggota', $no_anggota)
+            ->join('koperasi_tabungan', 'koperasi_tabungan_transaksi.no_rekening', '=', 'koperasi_tabungan.no_rekening')
             ->join('koperasi_jenis_tabungan', 'koperasi_tabungan.kode_tabungan', '=', 'koperasi_jenis_tabungan.kode_tabungan')
             ->orderBy('tanggal', 'desc')
             ->limit(5)
             ->get();
 
         return view('koperasi.tabungan.show-mobile', $data);
+    }
+
+    public function mutasi($no_rekening)
+    {
+        $user = User::where('id', auth()->user()->id)->first();
+        $user_karyawan = Userkaryawan::where('id_user', $user->id)->first();
+        $user_anggota = Karyawananggota::where('npp', $user_karyawan->npp)->first();
+        $no_anggota = $user_anggota->no_anggota;
+        $no_rekening = Crypt::decrypt($no_rekening);
+
+
+
+        $data['saldo_tabungan'] = Tabungan::where('no_rekening', $no_rekening)
+            ->join('koperasi_jenis_tabungan', 'koperasi_tabungan.kode_tabungan', '=', 'koperasi_jenis_tabungan.kode_tabungan')
+            ->first();
+
+        //dd($data['saldo_tabungan']);
+        $data['mutasi'] = Transaksitabungan::where('no_anggota', $no_anggota)
+            ->join('koperasi_tabungan', 'koperasi_tabungan_transaksi.no_rekening', '=', 'koperasi_tabungan.no_rekening')
+            ->join('koperasi_jenis_tabungan', 'koperasi_tabungan.kode_tabungan', '=', 'koperasi_jenis_tabungan.kode_tabungan')
+            ->orderBy('tanggal', 'desc')
+            ->limit(15)
+            ->get();
+        return view('koperasi.tabungan.mutasi-mobile', $data);
     }
 }
