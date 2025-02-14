@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
 use Jenssegers\Agent\Agent;
-
+use Intervention\Image\Drivers\Gd\Driver; // Gunakan driver GD (bawaan PHP)
+use Intervention\Image\Drivers\Gd\Encoders\JpegEncoder;
 
 class RealisasikegiatanController extends Controller
 {
@@ -125,11 +127,28 @@ class RealisasikegiatanController extends Controller
 
         try {
             if ($request->file('foto')) {
+
+                $image = $request->file('foto');
+                // $filename = time() . '.' . $image->getClientOriginalExtension();
+                // Resize dan Kompres gambar
+                // Gunakan ImageManager
+                // Buat instance ImageManager dengan driver GD
+                $imageManager = new ImageManager(new Driver());
+
+                // Proses gambar
+                $img = $imageManager->read($image->getRealPath());
+                $img = $img->resize(800, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->encode(new JpegEncoder(quality: 70)); // Kompres ke 70% kualitas
+
+
                 $namafile = $request->file('foto')->getClientOriginalName();
                 $file_name =  $namafile . "." . $request->file('foto')->getClientOriginalExtension();
                 $destination_foto_path = "/public/realisasikegiatan/" . $kode_dept . "/";
                 $file = $file_name;
-                $request->file('foto')->storeAs($destination_foto_path, $file_name);
+
+                Storage::put($destination_foto_path . $file_name, (string) $img);
+                //$request->file('foto')->storeAs($destination_foto_path, $file_name);
             } else {
                 $file = null;
             }
@@ -153,6 +172,9 @@ class RealisasikegiatanController extends Controller
             return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
         } catch (\Exception $e) {
             if ($request->file('foto')) {
+
+
+
                 $namafile = $request->file('foto')->getClientOriginalName();
                 $file_name =  $namafile . "." . $request->file('foto')->getClientOriginalExtension();
                 $destination_foto_path = "/public/realisasikegiatan/" . $kode_dept . "/";

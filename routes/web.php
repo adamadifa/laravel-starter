@@ -485,6 +485,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/pembiayaan/{no_akad}/storebayar', 'storebayar')->name('pembiayaan.storebayar')->can('pembiayaan.create');
         Route::delete('/pembiayaan/{no_transaksi}/deletebayar', 'deletebayar')->name('pembiayaan.deletebayar')->can('pembiayaan.delete');
         Route::get('/pembiayaan/{no_akad}/updaterencana', 'updaterencana')->name('pembiayaan.updaterencana')->can('pembiayaan.edit');
+
+        Route::get('/pembiayaan/{no_anggota}/showmobile', 'showmobile')->name('pembiayaan.showmobile');
     });
 });
 

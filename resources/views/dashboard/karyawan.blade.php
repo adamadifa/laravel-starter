@@ -288,13 +288,15 @@
                 </a>
             </div>
             <div class="col-3">
-                <div class="card">
-                    <div class="card-body text-center" style="padding: 5px 5px !important; line-height:0.8rem">
-                        <img src="{{ asset('assets/template/img/3d/pinjaman.png') }}" alt="" style="width: 50px" class="mb-1">
-                        <br>
-                        <span style="font-size: 0.8rem; font-weight:500">Pinjaman</span>
+                <a href="{{ route('pembiayaan.showmobile', Crypt::encrypt($anggota->no_anggota)) }}">
+                    <div class="card">
+                        <div class="card-body text-center" style="padding: 5px 5px !important; line-height:0.8rem">
+                            <img src="{{ asset('assets/template/img/3d/pinjaman.png') }}" alt="" style="width: 50px" class="mb-1">
+                            <br>
+                            <span style="font-size: 0.8rem; font-weight:500">Pinjaman</span>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-3">
                 <a href="{{ route('tabungan.showmobile', Crypt::encrypt($anggota->no_anggota)) }}">

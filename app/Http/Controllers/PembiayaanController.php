@@ -674,4 +674,13 @@ class PembiayaanController extends Controller
 
         return view('koperasi.pembiayaan.cetakkwitansi', $data);
     }
+
+
+    public function showmobile($no_anggota)
+    {
+        $no_anggota = Crypt::decrypt($no_anggota);
+        $pembiayaan = Pembiayaan::where('no_anggota', $no_anggota)->get();
+        $data['pembiayaan'] = $pembiayaan;
+        return view('koperasi.pembiayaan.showmobile', $data);
+    }
 }
