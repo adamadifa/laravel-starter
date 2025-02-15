@@ -41,10 +41,10 @@ class Presensipermissionseeder extends Seeder
 
         $permissions = Permission::where('id_permission_group', $permissiongroup->id)->get();
         $roleID = 1;
-        $roleKaryawan = 3;
+        // $roleKaryawan = 3;
         $role = Role::findById($roleID);
-        $rolekar = Role::findById($roleKaryawan);
+        // $rolekar = Role::findById($roleKaryawan);
         $role->givePermissionTo($permissions);
-        $rolekar->givePermissionTo($permissions);
+        // $rolekar->givePermissionTo($permissions);
     }
 }
