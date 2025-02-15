@@ -58,9 +58,47 @@
         </div>
     </div>
     <div id="content-section">
-        <div class="row" style="margin-top: 60px">
+        <div class="row mb-2" style="margin-top: 70px">
             <div class="col">
-                test
+                <a href="#" class="btn btn-primary w-100">
+                    <ion-icon name="document-outline"></ion-icon>
+                    Ajukan Pembiayaan</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="transactions">
+                    <!-- item -->
+                    @foreach ($pembiayaan as $d)
+                        <a href="{{ route('pembiayaan.showdetail', Crypt::encrypt($d->no_akad)) }}" class="item">
+                            <div class="detail">
+                                <div class="avatar avatar-sm me-4"><span class="avatar-initial rounded-circle bg-success">
+                                        PB
+                                    </span></div>
+                                <div>
+                                    <strong>{{ DateToIndo($d->tanggal) }}</strong>
+                                    <p>{{ $d->keperluan }} ({{ $d->jenis_pembiayaan }})</p>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <div class="price">
+                                    @php
+                                        $jumlah_pembiayaan = $d->jumlah + $d->jumlah * ($d->persentase / 100);
+                                    @endphp
+                                    {{ formatAngka($jumlah_pembiayaan) }}
+                                </div>
+                                <div class="status">
+                                    @if ($d->jmlbayar == $jumlah_pembiayaan)
+                                        <span class="badge bg-success">LUNAS</span>
+                                    @else
+                                        <span class="badge bg-danger">BELUM LUNAS</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </a>
+                    @endforeach
+
+                </div>
             </div>
         </div>
     </div>

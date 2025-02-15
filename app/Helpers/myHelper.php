@@ -27,6 +27,10 @@ function messageError($message)
 {
     return ['error' => $message];
 }
+function messageWarning($message)
+{
+    return ['warning' => $message];
+}
 
 
 // Mengubah ke Huruf Besar
@@ -285,4 +289,69 @@ function getnamaHari($hari)
 function removeTitik($value)
 {
     return str_replace('.', '', $value);
+}
+
+function hitungjarak($lat1, $lon1, $lat2, $lon2)
+{
+    $theta = $lon1 - $lon2;
+    $miles = (sin(deg2rad($lat1)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)));
+    $miles = acos($miles);
+    $miles = rad2deg($miles);
+    $miles = $miles * 60 * 1.1515;
+    $feet = $miles * 5280;
+    $yards = $feet / 3;
+    $kilometers = $miles * 1.609344;
+    $meters = $kilometers * 1000;
+    return compact('meters');
+}
+
+
+function hitungjamterlambat($jam_in, $jam_mulai)
+{
+
+    // $jam_in = date('Y-m-d H:i', strtotime($jam_in));
+    // $jam_mulai = date('Y-m-d H:i', strtotime($jam_mulai));
+    if (!empty($jam_in)) {
+        if ($jam_in > $jam_mulai) {
+            $j1 = strtotime($jam_mulai);
+            $j2 = strtotime($jam_in);
+
+            $diffterlambat = $j2 - $j1;
+
+            $jamterlambat = floor($diffterlambat / (60 * 60));
+            $menitterlambat = floor(($diffterlambat - $jamterlambat * (60 * 60)) / 60);
+
+            $jterlambat = $jamterlambat <= 9 ? '0' . $jamterlambat : $jamterlambat;
+            $mterlambat = $menitterlambat <= 9 ? '0' . $menitterlambat : $menitterlambat;
+
+            $keterangan_terlambat =  $jterlambat . ':' . $mterlambat;
+            $desimal_terlambat = $jamterlambat +   ROUND(($menitterlambat / 60), 2);
+
+
+            // if ($jamterlambat < 1 && $menitterlambat <= 5) {
+            //     $color_terlambat = 'text-success';
+            //     $desimal_terlambat = 0;
+            // } elseif ($jamterlambat < 1 && $menitterlambat > 5) {
+            //     $color_terlambat = 'text-warning';
+            //     $desimal_terlambat = 0;
+            // } else {
+            //     $color_terlambat = 'text-danger';
+            //     $desimal_terlambat = $desimal_terlambat;
+            // }
+
+
+            return [
+                'keterangan_terlambat' => $keterangan_terlambat,
+                'jamterlambat' => $jamterlambat,
+                'menitterlambat' => $menitterlambat,
+                'desimal_terlambat' => $desimal_terlambat,
+                'show' =>  $desimal_terlambat < 1 ? $menitterlambat . " Menit" : formatAngkaDesimal($desimal_terlambat) . " Jam",
+                // 'color_terlambat' => $color_terlambat
+            ];
+        } else {
+            return [];
+        }
+    } else {
+        return [];
+    }
 }

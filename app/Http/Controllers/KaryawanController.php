@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jabatan;
+use App\Models\Jamkerja;
 use App\Models\Karyawan;
+use App\Models\Setjamkerjabydate;
+use App\Models\Setjamkerjabyday;
 use App\Models\Unit;
 use App\Models\User;
 use App\Models\Userkaryawan;
@@ -231,6 +234,94 @@ class KaryawanController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return Redirect::back()->with(messageError($e->getMessage()));
+        }
+    }
+
+    public function setjamkerja($npp)
+    {
+        $npp = Crypt::decrypt($npp);
+        $data['karyawan'] = Karyawan::where('npp', $npp)
+            ->first();
+        $data['list_bulan'] = config('global.list_bulan');
+        $data['start_year'] = config('global.start_year');
+        $data['jamkerja'] = Jamkerja::orderBy('kode_jam_kerja')->get();
+        $data['jamkerjabyday'] = Setjamkerjabyday::where('npp', $npp)->pluck('kode_jam_kerja', 'hari')->toArray();
+        // dd($data['jamkerjabyday']);
+        return view('datamaster.karyawan.setjamkerja', $data);
+    }
+
+    public function storejamkerjabyday(Request $request, $npp)
+    {
+        $npp = Crypt::decrypt($npp);
+        $hari = $request->hari;
+        $kode_jam_kerja = $request->kode_jam_kerja;
+        DB::beginTransaction();
+        try {
+            Setjamkerjabyday::where('npp', $npp)->delete();
+            for ($i = 0; $i < count($hari); $i++) {
+                if (!empty($kode_jam_kerja[$i])) {
+                    Setjamkerjabyday::create([
+                        'npp' => $npp,
+                        'hari' => $hari[$i],
+                        'kode_jam_kerja' => $kode_jam_kerja[$i]
+                    ]);
+                }
+            }
+            DB::commit();
+            return Redirect::back()->with(messageSuccess('Data Berhasil Disimpan'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e);
+            return Redirect::back()->with(messageError($e->getMessage()));
+        }
+    }
+
+
+    public function storejamkerjabydate(Request $request)
+    {
+        $cek = Setjamkerjabydate::where('npp', $request->npp)->where('tanggal', $request->tanggal)->first();
+        if (!empty($cek)) {
+            return response()->json(['success' => false, 'message' => 'Karyawan Sudah Memiliki Jadwal pada Tanggal Ini']);
+        }
+        try {
+            Setjamkerjabydate::create([
+                'npp' => $request->npp,
+                'tanggal' => $request->tanggal,
+                'kode_jam_kerja' => $request->kode_jam_kerja
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Data Berhasil Disimpan']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    public function getjamkerjabydate(Request $request)
+    {
+        $npp = $request->npp;
+        $tanggal = $request->tanggal;
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+
+        $jamkerjabydate = Setjamkerjabydate::where('npp', $npp)
+            ->join('konfigurasi_jam_kerja', 'presensi_jamkerja_bydate.kode_jam_kerja', '=', 'konfigurasi_jam_kerja.kode_jam_kerja')
+            ->whereRaw('MONTH(tanggal) = ' . $bulan . ' AND YEAR(tanggal) = ' . $tahun)
+            ->orderBy('tanggal', 'asc')
+            ->get();
+
+
+        return response()->json($jamkerjabydate);
+    }
+
+    public function deletejamkerjabydate(Request $request)
+
+    {
+        // dd($request);
+        try {
+            Setjamkerjabydate::where('npp', $request->npp)->where('tanggal', $request->tanggal)->delete();
+            return response()->json(['success' => true, 'message' => 'Data Berhasil Dihapus']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 }

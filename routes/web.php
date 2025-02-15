@@ -25,6 +25,7 @@ use App\Http\Controllers\PembiayaanController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\Permission_groupController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramkerjaController;
 use App\Http\Controllers\RealisasikegiatanController;
@@ -123,6 +124,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/users/{id}/edit', 'edit')->name('users.edit');
         Route::put('/users/{id}/update', 'update')->name('users.update');
         Route::delete('/users/{id}/delete', 'destroy')->name('users.delete');
+
+        Route::get('/users/{id}/editpassword', 'editpassword')->name('users.editpassword');
+        Route::put('/users/{id}/updatepassword', 'updatepassword')->name('users.updatepassword');
     });
 
     Route::controller(KaryawanController::class)->group(function () {
@@ -137,6 +141,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/karyawan/{npp}/setharikerja', 'setharikerja')->name('karyawan.setharikerja');
         Route::put('/karyawan/{npp}/updateharikerja', 'updateharikerja')->name('karyawan.updateharikerja');
         Route::post('/karyawan/getjadwalkerja', 'getjadwalkerja')->name('karyawan.getjadwalkerja');
+        Route::get('/karyawan/{npp}/setjamkerja', 'setjamkerja')->name('karyawan.setjamkerja');
+        Route::post('/karyawan/{npp}/storejamkerjabyday', 'storejamkerjabyday')->name('karyawan.storejamkerjabyday');
+        Route::post('/karyawan/storejamkerjabydate', 'storejamkerjabydate')->name('karyawan.storejamkerjabydate');
+        Route::get('/karyawan/getjamkerjabydate', 'getjamkerjabydate')->name('karyawan.getjamkerjabydate');
+        Route::post('/karyawan/getjamkerjabydate', 'getjamkerjabydate')->name('karyawan.getjamkerjabydate');
+        Route::post('/karyawa/deletejamkerjabydate', 'deletejamkerjabydate')->name('karyawan.deletejamkerjabydate');
 
         Route::get('/karyawan/{npp}/createuser', 'createuser')->name('karyawan.createuser');
     });
@@ -448,6 +458,7 @@ Route::middleware('auth')->group(function () {
 
 
         Route::get('/simpanan/{kode_simpanan}/mutasi', 'mutasi')->name('simpanan.mutasi')->can('simpanan.index');
+        Route::get('/simpanan/{npp}/showmobile', 'showmobile')->name('simpanan.showmobile')->can('simpanan.index');
     });
 
     Route::controller(TabunganController::class)->group(function () {
@@ -486,7 +497,17 @@ Route::middleware('auth')->group(function () {
         Route::delete('/pembiayaan/{no_transaksi}/deletebayar', 'deletebayar')->name('pembiayaan.deletebayar')->can('pembiayaan.delete');
         Route::get('/pembiayaan/{no_akad}/updaterencana', 'updaterencana')->name('pembiayaan.updaterencana')->can('pembiayaan.edit');
 
-        Route::get('/pembiayaan/{no_anggota}/showmobile', 'showmobile')->name('pembiayaan.showmobile');
+        Route::get('/pembiayaan/{npp}/showmobile', 'showmobile')->name('pembiayaan.showmobile');
+        Route::get('/pembiayaan/{no_akad}/showdetail', 'showdetail')->name('pembiayaan.showdetail');
+    });
+
+    Route::controller(PresensiController::class)->group(function () {
+        Route::get('/presensi', 'index')->name('presensi.index')->can('presensi.index');
+        Route::get('/presensi/create', 'create')->name('presensi.create')->can('presensi.create');
+        Route::post('/presensi', 'store')->name('presensi.store')->can('presensi.create');
+        Route::get('/presensi/{id}/edit', 'edit')->name('presensi.edit')->can('presensi.edit');
+        Route::put('/presensi/{id}', 'update')->name('presensi.update')->can('presensi.edit');
+        Route::delete('/presensi/{id}/delete', 'destroy')->name('presensi.delete')->can('presensi.delete');
     });
 });
 

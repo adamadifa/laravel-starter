@@ -126,6 +126,12 @@
             color: var(--color-nav-hover);
 
         }
+
+        #header-section {
+            height: 180px;
+            padding: 20px;
+            position: relative;
+        }
     </style>
     <div id="header-section">
         <div id="section-logout">
@@ -226,7 +232,9 @@
                         <span style="font-size: 0.8rem; font-weight:500">
                             Hadir
                         </span>
-                        <span class="badge bg-success" style="position: absolute; top: 5px; right: 5px">1</span>
+                        <span class="badge bg-success" style="position: absolute; top: 5px; right: 5px">
+                            {{ $rekappresensi ? $rekappresensi->hadir : 0 }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -236,7 +244,9 @@
                         <img src="{{ asset('assets/template/img/3d/sakit.png') }}" alt="" style="width: 50px" class="mb-1">
                         <br>
                         <span style="font-size: 0.8rem; font-weight:500">Sakit</span>
-                        <span class="badge bg-success" style="position: absolute; top: 5px; right: 5px">1</span>
+                        <span class="badge bg-success" style="position: absolute; top: 5px; right: 5px">
+                            {{ $rekappresensi ? $rekappresensi->sakit : 0 }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -246,7 +256,9 @@
                         <img src="{{ asset('assets/template/img/3d/izin.webp') }}" alt="" style="width: 50px" class="mb-1">
                         <br>
                         <span style="font-size: 0.8rem; font-weight:500">Izin</span>
-                        <span class="badge bg-success" style="position: absolute; top: 5px; right: 5px">1</span>
+                        <span class="badge bg-success" style="position: absolute; top: 5px; right: 5px">
+                            {{ $rekappresensi ? $rekappresensi->izin : 0 }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -256,7 +268,9 @@
                         <img src="{{ asset('assets/template/img/3d/cuti.png') }}" alt="" style="width: 50px" class="mb-1">
                         <br>
                         <span style="font-size: 0.8rem; font-weight:500">Cuti</span>
-                        <span class="badge bg-success" style="position: absolute; top: 5px; right: 5px">1</span>
+                        <span class="badge bg-success" style="position: absolute; top: 5px; right: 5px">
+                            {{ $rekappresensi ? $rekappresensi->cuti : 0 }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -276,8 +290,8 @@
                 </div>
             </div>
             <div class="col-3">
-                <a href="{{ route('simpanan.show', Crypt::encrypt($anggota->no_anggota)) }}">
-                    {{-- {{ $anggota->no_anggota }} --}}
+                <a href="{{ route('simpanan.showmobile', Crypt::encrypt($karyawan->npp)) }}">
+                    {{-- {{ $karyawan->nik }} --}}
                     <div class="card">
                         <div class="card-body text-center" style="padding: 5px 5px !important; line-height:0.8rem">
                             <img src="{{ asset('assets/template/img/3d/simpanan.png') }}" alt="" style="width: 50px" class="mb-1">
@@ -288,7 +302,7 @@
                 </a>
             </div>
             <div class="col-3">
-                <a href="{{ route('pembiayaan.showmobile', Crypt::encrypt($anggota->no_anggota)) }}">
+                <a href="{{ route('pembiayaan.showmobile', Crypt::encrypt($karyawan->npp)) }}">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 5px 5px !important; line-height:0.8rem">
                             <img src="{{ asset('assets/template/img/3d/pinjaman.png') }}" alt="" style="width: 50px" class="mb-1">
@@ -299,7 +313,7 @@
                 </a>
             </div>
             <div class="col-3">
-                <a href="{{ route('tabungan.showmobile', Crypt::encrypt($anggota->no_anggota)) }}">
+                <a href="{{ route('tabungan.showmobile', Crypt::encrypt($karyawan->npp)) }}">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 5px 5px !important; line-height:0.8rem">
                             <img src="{{ asset('assets/template/img/3d/slipgaji.png') }}" alt="" style="width: 50px" class="mb-1">
@@ -316,7 +330,7 @@
             <ul class="nav nav-tabs style1" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" data-toggle="tab" href="#historipresensi" role="tab">
-                        7 Hari terakhir
+                        30 Hari terakhir
                     </a>
                 </li>
                 <li class="nav-item">
@@ -331,29 +345,62 @@
                 <div class="row mb-1">
                     <div class="col">
                         {{-- {{ $d->jam_out != null ? 'historibordergreen' : 'historiborderred' }} --}}
-                        <div class="card historicard historibordergreen">
-                            <div class="historicontent">
-                                <div class="historidetail1">
-                                    <div class="iconpresence">
-                                        <ion-icon name="finger-print-outline" style="font-size: 48px"></ion-icon>
-                                    </div>
-                                    <div class="datepresence">
-                                        <h4>16 Maret 2025</h4>
-                                        <span class="timepresence">
-                                            06:41 <span class="danger"> - Belum Scan</span>
-                                        </span>
-                                        <br>
-                                        <span style="color:green">Tepat Waktu</span>
-                                    </div>
-                                </div>
-                                <div class="historidetail2">
-                                    <h4>REGULER</h4>
-                                    <span class="timepresence">
+                        @foreach ($datapresensi as $d)
+                            @php
+                                $jam_in = date('Y-m-d H:i', strtotime($d->jam_in));
+                                $jam_masuk = date('Y-m-d H:i', strtotime($d->tanggal . ' ' . $d->jam_masuk));
+                            @endphp
+                            <div class="card historicard historibordergreen">
+                                <div class="historicontent">
+                                    <div class="historidetail1">
+                                        <div class="iconpresence">
+                                            <ion-icon name="finger-print-outline" style="font-size: 48px"></ion-icon>
+                                        </div>
+                                        <div class="datepresence">
+                                            <h4>{{ DateToIndo($d->tanggal) }}</h4>
+                                            <span class="timepresence">
+                                                @if ($d->jam_in != null)
+                                                    {{ date('H:i', strtotime($d->jam_in)) }}
+                                                @else
+                                                    <ion-icon name="hourglass-outline"></ion-icon> Belum Absen
+                                                @endif
+                                                -
+                                                @if ($d->jam_out != null)
+                                                    {{ date('H:i', strtotime($d->jam_out)) }}
+                                                @else
+                                                    <span class="text-danger">
+                                                        <ion-icon name="hourglass-outline"></ion-icon> Belum Absen
+                                                    </span>
+                                                @endif
+                                            </span>
+                                            <br>
+                                            @if ($d->jam_in != null)
+                                                @php
+                                                    $terlambat = hitungjamterlambat(
+                                                        date('H:i', strtotime($jam_in)),
+                                                        date('H:i', strtotime($jam_masuk)),
+                                                    );
 
-                                    </span>
+                                                @endphp
+                                                @if (!empty($terlambat))
+                                                    <span style="color:red">Terlambat {{ $terlambat['show'] }} </span>
+                                                @else
+                                                    <span style="color:green">Tepat Waktu</span>
+                                                @endif
+                                            @endif
+
+
+                                        </div>
+                                    </div>
+                                    <div class="historidetail2">
+                                        <h4>REGULER</h4>
+                                        <span class="timepresence">
+                                            {{ date('H:i', strtotime($d->jam_masuk)) }} - {{ date('H:i', strtotime($d->jam_pulang)) }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

@@ -8,6 +8,7 @@ use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Spatie\Permission\Models\Role;
 
@@ -131,6 +132,31 @@ class UserController extends Controller
         try {
             User::where('id', $id)->delete();
             return Redirect::back()->with(['success' => 'Data Berhasil Dihapus']);
+        } catch (\Exception $e) {
+            return Redirect::back()->with(['error' => $e->getMessage()]);
+        }
+    }
+
+
+    public function editpassword($id)
+    {
+        $id = Crypt::decrypt($id);
+        $user = User::where('id', $id)->first();
+        return view('settings.users.editpassword', compact('user'));
+    }
+
+    public function updatepassword(Request $request, $id)
+    {
+        $id = Crypt::decrypt($id);
+        $request->validate([
+            'passwordbaru' => 'required',
+            'konfirmasipassword' => 'required|same:passwordbaru'
+        ]);
+        try {
+            User::where('id', $id)->update([
+                'password' => Hash::make($request->passwordbaru)
+            ]);
+            return Redirect::back()->with(['success' => 'Password Berhasil Diubah']);
         } catch (\Exception $e) {
             return Redirect::back()->with(['error' => $e->getMessage()]);
         }

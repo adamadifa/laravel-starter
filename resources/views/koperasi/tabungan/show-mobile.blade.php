@@ -129,7 +129,7 @@
                     <div class="row align-items-center">
                         <div class="col text-center">
                             <h1 class="text-white mb-2" style="line-height: 0px">
-                                {{ formatAngka($saldotabungan->total_saldo) }}
+                                {{ formatRupiah($saldotabungan->total_saldo) }}
                             </h1>
                             <h3 class="mb-0 text-white">
                                 {{ $saldotabungan->no_anggota }}
@@ -172,7 +172,7 @@
                                                     <div class="row ml-2">
                                                         <div class="col-12">
                                                             <h2 class="fw-normal mb-1 text-white">
-                                                                {{ formatAngka($s->saldo) }}
+                                                                {{ formatRupiah($s->saldo) }}
                                                                 <span class="text-white" style="font-size: 24px">Rp</span>
                                                             </h2>
                                                             <p class="mb-0 text-white" style="font-size: 14px">
@@ -210,7 +210,7 @@
                 </div>
                 <div class="right">
                     <div class="price {{ $d->jenis_transaksi == 'S' ? 'text-success' : 'text-dangger' }}"> {{ $d->jenis_transaksi == 'S' ? '+' : '-' }}
-                        {{ formatAngka($d->jumlah) }}</div>
+                        {{ formatRupiah($d->jumlah) }}</div>
                 </div>
             </a>
         @endforeach

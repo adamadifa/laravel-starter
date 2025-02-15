@@ -14,7 +14,7 @@
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+
     font-size: 15px;
     line-height: 1.55rem;
     letter-spacing: -0.015rem;
@@ -8063,4 +8063,3 @@ body.dark-mode-active .cart-item .cart-item-footer {
     color: #27173E;
     letter-spacing: -0.03em
 }
-

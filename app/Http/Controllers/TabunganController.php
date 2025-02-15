@@ -282,9 +282,16 @@ class TabunganController extends Controller
     }
 
 
-    public function showmobile($no_anggota)
+    public function showmobile($npp)
     {
-        $no_anggota = Crypt::decrypt($no_anggota);
+        $npp = Crypt::decrypt($npp);
+        $cekanggota = Karyawananggota::where('npp', $npp)->first();
+        if ($cekanggota == null) {
+            return Redirect::back()->with(messageWarning('Anda Belum Menjadi Anggota Koperasi Tsarwah'));
+        } else {
+            $no_anggota = $cekanggota->no_anggota;
+        }
+
         $data['saldotabungan'] = Tabungan::where('no_anggota', $no_anggota)
             ->select('no_anggota', DB::raw('SUM(saldo) as total_saldo'))
             ->groupBy('no_anggota')
@@ -305,6 +312,10 @@ class TabunganController extends Controller
             ->orderBy('tanggal', 'desc')
             ->limit(5)
             ->get();
+
+        if ($data['saldotabungan'] == null) {
+            return Redirect::back()->with(messageWarning('Anda Tidak memiliki Tabungan di Koperasi Tsarwah'));
+        }
 
         return view('koperasi.tabungan.show-mobile', $data);
     }

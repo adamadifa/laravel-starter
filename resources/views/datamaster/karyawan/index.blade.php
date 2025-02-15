@@ -84,6 +84,13 @@
                                             <td>{{ $d->pin }}</td>
                                             <td>
                                                 <div class="d-flex">
+                                                    @can('karyawan.create')
+                                                        <div>
+                                                            <a href="#" class="me-2 btnSetJamkerja" npp="{{ Crypt::encrypt($d->npp) }}">
+                                                                <i class="ti ti-device-watch text-primary"></i>
+                                                            </a>
+                                                        </div>
+                                                    @endcan
                                                     @can('karyawan.edit')
                                                         <div>
                                                             <a href="#" class="me-2 editKaryawan" npp="{{ Crypt::encrypt($d->npp) }}">
@@ -145,6 +152,7 @@
 <x-modal-form id="mdlcreateKaryawan" size="" show="loadcreateKaryawan" title="Tambah Karyawan" />
 <x-modal-form id="mdleditKaryawan" size="" show="loadeditKaryawan" title="Edit Karyawan" />
 <x-modal-form id="mdlsetharikerja" size="" show="loadsetharikerja" title="Set Hari Kerja" />
+<x-modal-form id="modalSetJamkerja" show="loadmodalSetJamkerja" size="modal-lg" title="Set Jam Kerja" />
 @endsection
 @push('myscript')
 {{-- <script src="{{ asset('assets/js/pages/roles/create.js') }}"></script> --}}
@@ -168,6 +176,20 @@
             e.preventDefault();
             $('#mdlsetharikerja').modal("show");
             $("#loadsetharikerja").load('/karyawan/' + npp + '/setharikerja');
+        });
+
+        $(".btnSetJamkerja").click(function() {
+            const npp = $(this).attr("npp");
+            $("#modalSetJamkerja").modal("show");
+            $("#loadmodalSetJamkerja").html(`<div class="sk-wave sk-primary" style="margin:auto">
+            <div class="sk-wave-rect"></div>
+            <div class="sk-wave-rect"></div>
+            <div class="sk-wave-rect"></div>
+            <div class="sk-wave-rect"></div>
+            <div class="sk-wave-rect"></div>
+            </div>`);
+
+            $("#loadmodalSetJamkerja").load(`/karyawan/${npp}/setjamkerja`);
         });
     });
 </script>

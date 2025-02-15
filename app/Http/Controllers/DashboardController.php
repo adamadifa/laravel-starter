@@ -13,6 +13,7 @@ use App\Models\Unit;
 use App\Models\User;
 use App\Models\Userkaryawan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -29,6 +30,19 @@ class DashboardController extends Controller
                 ->first();
             $data['anggota'] = Karyawananggota::where('npp', $userkaryawan->npp)->first();
             $data['presensi'] = Presensi::where('npp', $userkaryawan->npp)->where('tanggal', $hari_ini)->first();
+            $data['datapresensi'] = Presensi::join('konfigurasi_jam_kerja', 'presensi.kode_jam_kerja', '=', 'konfigurasi_jam_kerja.kode_jam_kerja')->where('npp', $userkaryawan->npp)
+                ->orderBy('tanggal', 'desc')
+                ->limit(30)
+                ->get();
+            $data['rekappresensi'] = Presensi::select(
+                DB::raw("SUM(IF(status='h',1,0)) as hadir"),
+                DB::raw("SUM(IF(status='i',1,0)) as izin"),
+                DB::raw("SUM(IF(status='s',1,0)) as sakit"),
+                DB::raw("SUM(IF(status='a',1,0)) as alpa"),
+                DB::raw("SUM(IF(status='c',1,0)) as cuti")
+            )
+                ->where('npp', $userkaryawan->npp)
+                ->first();
             return view('dashboard.karyawan', $data);
         } else {
             $data['departemen'] = Departemen::orderBy('kode_dept')->get();

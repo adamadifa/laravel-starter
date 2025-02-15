@@ -97,11 +97,7 @@
             font-size: 14px;
         }
 
-        #header-section {
-            height: 180px;
-            padding: 20px;
-            position: relative;
-        }
+
 
         .card.theme-bg,
         .card.dark-bg,

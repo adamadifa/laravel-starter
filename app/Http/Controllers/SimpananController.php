@@ -86,20 +86,49 @@ class SimpananController extends Controller
         $data['lasttransaksi'] = Simpanan::where('no_anggota', $no_anggota)->orderBy('created_at', 'desc')->first();
         $data['simpanan'] = $simpanan;
 
-        if ($user->hasRole('karyawan')) {
-            $data['mutasi'] = Simpanan::where('no_anggota', $no_anggota)
-                ->join('koperasi_jenis_simpanan', 'koperasi_simpanan.kode_simpanan', '=', 'koperasi_jenis_simpanan.kode_simpanan')
-                ->orderBy('tanggal', 'desc')
-                ->limit(5)
-                ->get();
 
-            $data['karyawan'] = Karyawananggota::join('karyawan', 'karyawan_anggota.npp', '=', 'karyawan.npp')
-                ->join('jabatan', 'karyawan.kode_jabatan', '=', 'jabatan.kode_jabatan')
-                ->join('unit', 'karyawan.kode_unit', '=', 'unit.kode_unit')
-                ->where('karyawan_anggota.no_anggota', $no_anggota)->first();
-            return view('koperasi.simpanan.show-mobile', $data);
+
+        if ($data['saldosimpanan'] == null) {
+            return Redirect::back()->with(messageWarning('Anda Bukan Anggota Koperasi Tsarwah'));
         }
         return view('koperasi.simpanan.show', $data);
+    }
+
+    public function showmobile($npp)
+    {
+        $npp = Crypt::decrypt($npp);
+        $cekanggota = Karyawananggota::where('npp', $npp)->first();
+        if ($cekanggota == null) {
+            return Redirect::back()->with(messageWarning('Anda Belum Menjadi Anggota Koperasi Tsarwah'));
+        } else {
+            $no_anggota = $cekanggota->no_anggota;
+        }
+
+        $data['anggota'] = Anggota::where('no_anggota', $no_anggota)
+            ->leftJoin('provinces', 'koperasi_anggota.id_province', '=', 'provinces.id')
+            ->leftJoin('regencies', 'koperasi_anggota.id_regency', '=', 'regencies.id')
+            ->leftJoin('districts', 'koperasi_anggota.id_district', '=', 'districts.id')
+            ->leftJoin('villages', 'koperasi_anggota.id_village', '=', 'villages.id')
+            ->select('koperasi_anggota.*', 'provinces.name as province_name', 'regencies.name as regency_name', 'districts.name as district_name', 'villages.name as village_name')
+            ->first();
+        $data['saldo_simpanan'] = Saldosimpanan::where('no_anggota', $no_anggota)
+            ->join('koperasi_jenis_simpanan', 'koperasi_saldo_simpanan.kode_simpanan', '=', 'koperasi_jenis_simpanan.kode_simpanan')
+            ->get();
+        $data['saldosimpanan'] = Saldosimpanan::where('no_anggota', $no_anggota)
+            ->select('no_anggota', DB::raw('SUM(jumlah) as total_saldo'))
+            ->groupBy('no_anggota')
+            ->first();
+        $data['mutasi'] = Simpanan::where('no_anggota', $no_anggota)
+            ->join('koperasi_jenis_simpanan', 'koperasi_simpanan.kode_simpanan', '=', 'koperasi_jenis_simpanan.kode_simpanan')
+            ->orderBy('tanggal', 'desc')
+            ->limit(5)
+            ->get();
+
+        $data['karyawan'] = Karyawananggota::join('karyawan', 'karyawan_anggota.npp', '=', 'karyawan.npp')
+            ->join('jabatan', 'karyawan.kode_jabatan', '=', 'jabatan.kode_jabatan')
+            ->join('unit', 'karyawan.kode_unit', '=', 'unit.kode_unit')
+            ->where('karyawan_anggota.no_anggota', $no_anggota)->first();
+        return view('koperasi.simpanan.show-mobile', $data);
     }
 
 

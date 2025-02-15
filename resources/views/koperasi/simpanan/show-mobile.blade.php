@@ -159,7 +159,7 @@
                                                 <div class="card-body p-0">
                                                     <div class="row pl-2 pr-2 pt-2">
                                                         <div class="col-auto align-self-center">
-                                                            <img src="https://sip.persisalamin.com/assets-mobile/img/masterocard.png" alt="">
+                                                            <img src="{{ asset('assets/template/img/masterocard.png') }}" alt="">
                                                         </div>
                                                         <div class=" col align-self-center text-right">
                                                             <p class="small">

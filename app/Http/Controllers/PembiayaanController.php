@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Anggota;
 use App\Models\Historibayarpembiayaan;
 use App\Models\Jenispembiayaan;
+use App\Models\Karyawananggota;
 use App\Models\Pembiayaan;
 use App\Models\Province;
 use App\Models\Rencanapembiayaan;
@@ -676,11 +677,32 @@ class PembiayaanController extends Controller
     }
 
 
-    public function showmobile($no_anggota)
+    public function showmobile($npp)
     {
-        $no_anggota = Crypt::decrypt($no_anggota);
-        $pembiayaan = Pembiayaan::where('no_anggota', $no_anggota)->get();
+        $npp = Crypt::decrypt($npp);
+        $cekanggota = Karyawananggota::where('npp', $npp)->first();
+        if ($cekanggota == null) {
+            return Redirect::back()->with(messageWarning('Anda Belum Menjadi Anggota Koperasi Tsarwah'));
+        } else {
+            $no_anggota = $cekanggota->no_anggota;
+        }
+
+        $pembiayaan = Pembiayaan::where('no_anggota', $no_anggota)
+            ->join('koperasi_jenis_pembiayaan', 'koperasi_pembiayaan.kode_pembiayaan', '=', 'koperasi_jenis_pembiayaan.kode_pembiayaan')
+            ->get();
         $data['pembiayaan'] = $pembiayaan;
         return view('koperasi.pembiayaan.showmobile', $data);
+    }
+
+    public function showdetail($no_akad)
+    {
+        $no_akad = Crypt::decrypt($no_akad);
+        $pembiayaan = Pembiayaan::where('no_akad', $no_akad)
+            ->join('koperasi_jenis_pembiayaan', 'koperasi_pembiayaan.kode_pembiayaan', '=', 'koperasi_jenis_pembiayaan.kode_pembiayaan')
+            ->first();
+        $rencanapembiayaan = Rencanapembiayaan::where('no_akad', $no_akad)->get();
+        $data['pembiayaan'] = $pembiayaan;
+        $data['rencanapembiayaan'] = $rencanapembiayaan;
+        return view('koperasi.pembiayaan.showdetail', $data);
     }
 }
