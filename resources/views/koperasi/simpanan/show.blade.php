@@ -166,7 +166,7 @@
                                     <div class="card-body p-3 pb-2">
                                         <div class="row mb-1">
                                             <div class="col-auto align-self-center">
-                                                <img src="{{ assets('assets/template/img/masterocard.png') }}" alt="">
+                                                <img src="{{ asset('assets/template/img/masterocard.png') }}" alt="">
                                             </div>
                                             <div class=" col align-self-center text-end">
                                                 <p class="small">
