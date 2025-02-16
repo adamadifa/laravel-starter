@@ -88,9 +88,9 @@ class SimpananController extends Controller
 
 
 
-        if ($data['saldosimpanan'] == null) {
-            return Redirect::back()->with(messageWarning('Anda Bukan Anggota Koperasi Tsarwah'));
-        }
+        // if ($data['saldosimpanan'] == null) {
+        //     return Redirect::back()->with(messageWarning('Anda Bukan Anggota Koperasi Tsarwah'));
+        // }
         return view('koperasi.simpanan.show', $data);
     }
 
