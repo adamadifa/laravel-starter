@@ -187,8 +187,6 @@ class SimpananController extends Controller
             if ($datasaldo->jumlah < $jumlah && $jenis_transaksi == "T") {
                 return Redirect::back()->with(messageError('Saldo  Tidak Mencukupi'));
             }
-        } else {
-            return Redirect::back()->with(messageError('Silahkan Input Setoran Terlebih Dahulu, Karena Belum memiliki simpanan pada jenis simpanan tersebut'));
         }
 
         DB::beginTransaction();
