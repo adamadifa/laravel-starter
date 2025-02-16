@@ -161,12 +161,12 @@ class PresensiController extends Controller
 
         $jam_masuk = $tanggal_presensi . " " . date('H:i', strtotime($jam_kerja->jam_masuk));
         //Jam Mulai Absen adalah 60 Menit Sebelum Jam Masuk
-        $jam_mulai_masuk = $tanggal_presensi . " " . date('H:i', strtotime('-60 minutes', strtotime($jam_masuk)));
+        // $jam_mulai_masuk = $tanggal_presensi . " " . date('H:i', strtotime('-60 minutes', strtotime($jam_masuk)));
 
-        //Jamulai Absen Pulang adalah 1 Jam dari Jam Masuk
-        $jam_mulai_pulang = $tanggal_presensi . " " . date('H:i', strtotime('+60 minutes', strtotime($jam_masuk)));
+        // //Jamulai Absen Pulang adalah 1 Jam dari Jam Masuk
+        // $jam_mulai_pulang = $tanggal_presensi . " " . date('H:i', strtotime('+60 minutes', strtotime($jam_masuk)));
 
-        $jam_pulang = $tanggal_pulang . " " . $jam_kerja->jam_pulang;
+        // $jam_pulang = $tanggal_pulang . " " . $jam_kerja->jam_pulang;
 
 
 
