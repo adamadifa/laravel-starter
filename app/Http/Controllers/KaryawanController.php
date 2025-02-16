@@ -32,7 +32,7 @@ class KaryawanController extends Controller
         $query->join('jabatan', 'karyawan.kode_jabatan', '=', 'jabatan.kode_jabatan');
         $query->join('unit', 'karyawan.kode_unit', '=', 'unit.kode_unit');
         $query->leftJoin('user_karyawan', 'karyawan.npp', '=', 'user_karyawan.npp');
-        $query->orderBy('karyawan.created_at', 'desc');
+        $query->orderBy('karyawan.nama_lengkap', 'asc');
         $karyawan = $query->paginate(15);
         $karyawan->appends(request()->all());
         return view('datamaster.karyawan.index', compact('karyawan'));
