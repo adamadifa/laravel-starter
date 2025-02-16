@@ -689,6 +689,7 @@ class PembiayaanController extends Controller
 
         $pembiayaan = Pembiayaan::where('no_anggota', $no_anggota)
             ->join('koperasi_jenis_pembiayaan', 'koperasi_pembiayaan.kode_pembiayaan', '=', 'koperasi_jenis_pembiayaan.kode_pembiayaan')
+            ->orderBy('tanggal', 'desc')
             ->get();
         $data['pembiayaan'] = $pembiayaan;
         return view('koperasi.pembiayaan.showmobile', $data);
