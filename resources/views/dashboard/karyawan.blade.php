@@ -350,7 +350,7 @@
                                 $jam_in = date('Y-m-d H:i', strtotime($d->jam_in));
                                 $jam_masuk = date('Y-m-d H:i', strtotime($d->tanggal . ' ' . $d->jam_masuk));
                             @endphp
-                            <div class="card historicard historibordergreen">
+                            <div class="card historicard historibordergreen mb-2">
                                 <div class="historicontent">
                                     <div class="historidetail1">
                                         <div class="iconpresence">
