@@ -91,11 +91,11 @@
                     </tr>
                     <tr>
                         <th>Jml Bayar</th>
-                        <td class="text-right">{{ formatAngka($pembiayaan->bayar) }}</td>
+                        <td class="text-right">{{ formatAngka($pembiayaan->jmlbayar) }}</td>
                     </tr>
                     <tr></tr>
                     <th>Sisa</th>
-                    <td class="text-right">{{ formatAngka($jumlah_pembiayaan - $pembiayaan->bayar) }}</td>
+                    <td class="text-right">{{ formatAngka($jumlah_pembiayaan - $pembiayaan->jmlbayar) }}</td>
                     </tr>
                 </table>
             </div>
@@ -118,8 +118,8 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ date('d/m/y', strtotime($d->jatuh_tempo)) }}</td>
                                 <td class="text-end">{{ formatAngka($d->jumlah) }}</td>
-                                <td class="text-end">{{ formatAngka($d->jumlah_bayar) }}</td>
-                                <td class="text-end">{{ formatAngka($d->jumlah - $d->jumlah_bayar) }}</td>
+                                <td class="text-end">{{ formatAngka($d->bayar) }}</td>
+                                <td class="text-end">{{ formatAngka($d->jumlah - $d->bayar) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
