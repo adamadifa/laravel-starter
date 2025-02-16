@@ -91,11 +91,11 @@
                     </tr>
                     <tr>
                         <th>Jml Bayar</th>
-                        <td class="text-right">{{ formatAngka($pembiayaan->jumlah_bayar) }}</td>
+                        <td class="text-right">{{ formatAngka($pembiayaan->bayar) }}</td>
                     </tr>
                     <tr></tr>
                     <th>Sisa</th>
-                    <td class="text-right">{{ formatAngka($jumlah_pembiayaan - $pembiayaan->jumlah_bayar) }}</td>
+                    <td class="text-right">{{ formatAngka($jumlah_pembiayaan - $pembiayaan->bayar) }}</td>
                     </tr>
                 </table>
             </div>
