@@ -159,7 +159,7 @@
         // alert(domain);
         // Tentukan file manifest berdasarkan domain
         if (domain === 'kabid.siprenpas.my.id') {
-            alert(manifestLink);
+            alert(manifestLink.getAttribute('href'));
         }
     });
 </script>
