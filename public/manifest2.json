@@ -21,7 +21,7 @@
     },
     "icons": [
         {
-            "src": "/images/icons/icon.png",
+            "src": "/images/icons/kabid.png",
             "type": "image/png",
             "sizes": "512x512",
             "purpose": "any"
