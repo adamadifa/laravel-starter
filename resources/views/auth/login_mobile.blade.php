@@ -66,6 +66,20 @@
     <!-- jQuery and Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            var domain = window.location.hostname;
+            var manifestLink = document.querySelector('link[rel="manifest"]');
+
+            // alert(domain);
+            // Tentukan file manifest berdasarkan domain
+            if (domain === 'kabid.siprenpas.my.id') {
+
+                manifestLink.setAttribute("href", "https://kabid.siprenpas.my.id/manifest2.json");
+                // alert(manifestLink.getAttribute('href'));
+            }
+        });
+    </script>
 </body>
 
 </html>

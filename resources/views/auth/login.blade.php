@@ -161,7 +161,7 @@
         if (domain === 'kabid.siprenpas.my.id') {
 
             manifestLink.setAttribute("href", "https://kabid.siprenpas.my.id/manifest2.json");
-            alert(manifestLink.getAttribute('href'));
+            // alert(manifestLink.getAttribute('href'));
         }
     });
 </script>
