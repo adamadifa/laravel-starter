@@ -159,6 +159,7 @@
         // alert(domain);
         // Tentukan file manifest berdasarkan domain
         if (domain === 'kabid.siprenpas.my.id') {
+            alert(domain);
             manifestLink.setAttribute('href', '/manifest2.json');
         }
     });
