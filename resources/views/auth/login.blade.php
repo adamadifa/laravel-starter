@@ -151,3 +151,19 @@
 
 <!-- Page JS -->
 <script src="{{ asset('/assets/js/pages-auth.js') }}"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        var domain = window.location.hostname;
+        var manifestLink = document.querySelector('link[rel="manifest"]');
+
+        alert(domain);
+        // // Tentukan file manifest berdasarkan domain
+        // if (domain === 'domain1.com') {
+        //     manifestLink.setAttribute('href', '/manifest.json');
+        // } else if (domain === 'domain2.com') {
+        //     manifestLink.setAttribute('href', '/manifest-domain2.json');
+        // } else {
+        //     manifestLink.setAttribute('href', '/manifest-default.json');
+        // }
+    });
+</script>
