@@ -44,6 +44,8 @@ class DashboardController extends Controller
                 ->where('npp', $userkaryawan->npp)
                 ->first();
             return view('dashboard.karyawan', $data);
+        } else if ($user->hasRole('ketua koperasi')) {
+            return view('dashboard.koperasi');
         } else {
             $data['departemen'] = Departemen::orderBy('kode_dept')->get();
             $data['ledger'] = Ledger::orderBy('kode_ledger')->get();
