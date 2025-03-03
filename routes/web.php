@@ -15,9 +15,11 @@ use App\Http\Controllers\JenissimpananController;
 use App\Http\Controllers\JenistabunganController;
 use App\Http\Controllers\JobdeskController;
 use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\KategoriibadahController;
 use App\Http\Controllers\KategoriledgerController;
 use App\Http\Controllers\KategoripemasukanController;
 use App\Http\Controllers\KategoripengeluaranController;
+use App\Http\Controllers\KegiatanibadahController;
 use App\Http\Controllers\LedgerController;
 use App\Http\Controllers\LedgertransaksiController;
 use App\Http\Controllers\PembayaranpendidikanController;
@@ -508,6 +510,24 @@ Route::middleware('auth')->group(function () {
         Route::get('/presensi/{id}/edit', 'edit')->name('presensi.edit')->can('presensi.edit');
         Route::put('/presensi/{id}', 'update')->name('presensi.update')->can('presensi.edit');
         Route::delete('/presensi/{id}/delete', 'destroy')->name('presensi.delete')->can('presensi.delete');
+    });
+
+    Route::controller(KategoriibadahController::class)->group(function () {
+        Route::get('/kategoriibadah', 'index')->name('kategoriibadah.index')->can('kategoriibadah.index');
+        Route::get('/kategoriibadah/create', 'create')->name('kategoriibadah.create')->can('kategoriibadah.create');
+        Route::post('/kategoriibadah/store', 'store')->name('kategoriibadah.store')->can('kategoriibadah.create');
+        Route::get('/kategoriibadah/{id}/edit', 'edit')->name('kategoriibadah.edit')->can('kategoriibadah.edit');
+        Route::put('/kategoriibadah/{id}', 'update')->name('kategoriibadah.update')->can('kategoriibadah.edit');
+        Route::delete('/kategoriibadah/{id}/delete', 'destroy')->name('kategoriibadah.delete')->can('kategoriibadah.delete');
+    });
+
+    Route::controller(KegiatanibadahController::class)->group(function () {
+        Route::get('/kegiatanibadah', 'index')->name('kegiatanibadah.index')->can('kegiatanibadah.index');
+        Route::get('/kegiatanibadah/create', 'create')->name('kegiatanibadah.create')->can('kegiatanibadah.create');
+        Route::post('/kegiatanibadah/store', 'store')->name('kegiatanibadah.store')->can('kegiatanibadah.create');
+        Route::get('/kegiatanibadah/{id}/edit', 'edit')->name('kegiatanibadah.edit')->can('kegiatanibadah.edit');
+        Route::put('/kegiatanibadah/{id}', 'update')->name('kegiatanibadah.update')->can('kegiatanibadah.edit');
+        Route::delete('/kegiatanibadah/{id}/delete', 'destroy')->name('kegiatanibadah.delete')->can('kegiatanibadah.delete');
     });
 });
 

@@ -40,6 +40,8 @@
                 'jenissimpanan',
                 'jenistabungan',
                 'jenispembiayaan',
+                'kategoriibadah',
+                'kegiatanibadah',
             ])
                 ? 'open'
                 : '' }}">
@@ -55,6 +57,8 @@
                         'jenissimpanan.index',
                         'jenistabungan.index',
                         'jenispembiayaan.index',
+                        'kategoriibadah.index',
+                        'kegiatanibadah.index',
                     ]))
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-database"></i>
@@ -136,6 +140,20 @@
                         <li class="menu-item {{ request()->is(['jenispembiayaan', 'jenispembiayaan/*']) ? 'active' : '' }}">
                             <a href="{{ route('jenispembiayaan.index') }}" class="menu-link">
                                 <div>Jenis Pembiayaan</div>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('kategoriibadah.index')
+                        <li class="menu-item {{ request()->is(['kategoriibadah', 'kategoriibadah/*']) ? 'active' : '' }}">
+                            <a href="{{ route('kategoriibadah.index') }}" class="menu-link">
+                                <div>Kategori Ibadah</div>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('kegiatanibadah.index')
+                        <li class="menu-item {{ request()->is(['kegiatanibadah', 'kegiatanibadah/*']) ? 'active' : '' }}">
+                            <a href="{{ route('kegiatanibadah.index') }}" class="menu-link">
+                                <div>Kegiatan Ibadah</div>
                             </a>
                         </li>
                     @endcan
