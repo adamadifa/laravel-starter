@@ -8,6 +8,7 @@ use App\Models\Karyawan;
 use App\Models\Presensi;
 use App\Models\Setjamkerjabydate;
 use App\Models\Setjamkerjabyday;
+use App\Models\Unit;
 use App\Models\User;
 use App\Models\Userkaryawan;
 use Illuminate\Http\Request;
@@ -15,6 +16,63 @@ use Illuminate\Support\Facades\Storage;
 
 class PresensiController extends Controller
 {
+
+    public function index(Request $request)
+    {
+
+        $tanggal = !empty($request->tanggal) ? $request->tanggal : date('Y-m-d');
+        $presensi = Presensi::join('konfigurasi_jam_kerja', 'presensi.kode_jam_kerja', '=', 'konfigurasi_jam_kerja.kode_jam_kerja')
+            ->select(
+                'presensi.npp',
+                'presensi.tanggal',
+                'presensi.kode_jam_kerja',
+                'nama_jam_kerja',
+                'jam_masuk',
+                'jam_pulang',
+                'jam_in',
+                'foto_in',
+                'jam_out',
+                'foto_out',
+                'status'
+            )
+            ->where('presensi.tanggal', $tanggal);
+
+        $query = Karyawan::query();
+        $query->select(
+            'karyawan.npp',
+            'nama_lengkap',
+            'presensi.tanggal as tanggal_presensi',
+            'presensi.jam_in',
+            'presensi.kode_jam_kerja',
+            'nama_jam_kerja',
+            'jam_masuk',
+            'jam_pulang',
+            'jam_in',
+            'jam_out',
+            'status',
+            'nama_jabatan',
+            'nama_unit'
+        );
+        $query->leftjoinSub($presensi, 'presensi', function ($join) {
+            $join->on('karyawan.npp', '=', 'presensi.npp');
+        });
+        $query->join('jabatan', 'karyawan.kode_jabatan', '=', 'jabatan.kode_jabatan');
+        $query->join('unit', 'karyawan.kode_unit', '=', 'unit.kode_unit');
+        if (!empty($request->kode_unit)) {
+            $query->where('karyawan.kode_unit', $request->kode_unit);
+        }
+
+        if (!empty($request->nama_karyawan)) {
+            $query->where('karyawan.nama_lengkap', 'like', '%' . $request->nama_karyawan . '%');
+        }
+        $query->orderBy('nama_lengkap', 'asc');
+        $karyawan = $query->paginate(30);
+        $karyawan->appends(request()->all());
+        $unit = Unit::orderBy('kode_unit')->get();
+        $data['karyawan'] = $karyawan;
+        $data['unit'] = $unit;
+        return view('presensi.index', $data);
+    }
     public function create($kode_jam_kerja = null)
     {
 
@@ -53,7 +111,7 @@ class PresensiController extends Controller
 
         if ($kode_jam_kerja == null) {
             //Cek Jam Kerja By Date
-            $jamkerja = Setjamkerjabydate::join('konfigurasi_jam_kerja', 'presensi_jamkerja_bydate.kode_jam_kerja', '=', 'konfigurasi_jam_kerja.kode_jam_kerja')
+            $jamkerja = Setjamkerjabydate::join('konfigurasi_jam_kerja', 'konfigurasi_jam_kerja_bydate.kode_jam_kerja', '=', 'konfigurasi_jam_kerja.kode_jam_kerja')
                 ->where('npp', $karyawan->npp)
                 ->where('tanggal', $hariini)
                 ->first();
@@ -61,7 +119,7 @@ class PresensiController extends Controller
             //Jika Tidak Memiliki Jam Kerja By Date
             if ($jamkerja == null) {
                 //Cek Jam Kerja harian / Jam Kerja Khusus / Jam Kerja Per Orangannya
-                $jamkerja = Setjamkerjabyday::join('konfigurasi_jam_kerja', 'presensi_jamkerja_byday.kode_jam_kerja', '=', 'konfigurasi_jam_kerja.kode_jam_kerja')
+                $jamkerja = Setjamkerjabyday::join('konfigurasi_jam_kerja', 'konfigurasi_jam_kerja_byday.kode_jam_kerja', '=', 'konfigurasi_jam_kerja.kode_jam_kerja')
                     ->where('npp', $karyawan->npp)->where('hari', $namahari)->first();
 
                 // Jika Jam Kerja Harian Kosong

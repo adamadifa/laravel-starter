@@ -168,6 +168,14 @@
                 </a>
             </li>
         @endif
+        @if (auth()->user()->hasAnyPermission(['presensi.index']))
+            <li class="menu-item {{ request()->is(['presensi', 'presensi/*']) ? 'active' : '' }}">
+                <a href="{{ route('presensi.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-device-desktop"></i>
+                    <div>Monitoring Presensi</div>
+                </a>
+            </li>
+        @endif
         @if (auth()->user()->hasAnyPermission(['simpanan.index', 'pembiayaan.index', 'tabungan.index']))
             <li
                 class="menu-item {{ request()->is(['simpanan', 'pembiayaan', 'tabungan', 'tabungan/*', 'simpanan/*', 'pembiayaan/*']) ? 'open' : '' }}">
