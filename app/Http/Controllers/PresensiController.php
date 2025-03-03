@@ -23,6 +23,7 @@ class PresensiController extends Controller
         $tanggal = !empty($request->tanggal) ? $request->tanggal : date('Y-m-d');
         $presensi = Presensi::join('konfigurasi_jam_kerja', 'presensi.kode_jam_kerja', '=', 'konfigurasi_jam_kerja.kode_jam_kerja')
             ->select(
+                'presensi.id',
                 'presensi.npp',
                 'presensi.tanggal',
                 'presensi.kode_jam_kerja',
@@ -51,7 +52,8 @@ class PresensiController extends Controller
             'jam_out',
             'status',
             'nama_jabatan',
-            'nama_unit'
+            'nama_unit',
+            'presensi.id'
         );
         $query->leftjoinSub($presensi, 'presensi', function ($join) {
             $join->on('karyawan.npp', '=', 'presensi.npp');

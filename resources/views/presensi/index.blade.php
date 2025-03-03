@@ -75,7 +75,14 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                {!! $d->jam_in != null ? date('H:i', strtotime($d->jam_in)) : '<i class="ti ti-hourglass-low text-warning"></i>' !!}
+                                                @if ($d->jam_in != null)
+                                                    <a href="#" class="btnShowpresensi_in" id="{{ $d->id }}" status="in">
+                                                        {{ date('H:i', strtotime($d->jam_in)) }}
+                                                    </a>
+                                                @else
+                                                    <i class="ti ti-hourglass-low text-warning"></i>
+                                                @endif
+
                                             </td>
                                             <td class="text-center">
                                                 {!! $d->jam_out != null ? date('H:i', strtotime($d->jam_out)) : '<i class="ti ti-hourglass-low text-warning"></i>' !!}
