@@ -8,6 +8,7 @@ use App\Models\Karyawan;
 use App\Models\Presensi;
 use App\Models\Setjamkerjabydate;
 use App\Models\Setjamkerjabyday;
+use App\Models\Unit;
 use App\Models\User;
 use App\Models\Userkaryawan;
 use Illuminate\Http\Request;
@@ -57,12 +58,19 @@ class PresensiController extends Controller
         });
         $query->join('jabatan', 'karyawan.kode_jabatan', '=', 'jabatan.kode_jabatan');
         $query->join('unit', 'karyawan.kode_unit', '=', 'unit.kode_unit');
+        if (!empty($request->kode_unit)) {
+            $query->where('karyawan.kode_unit', $request->kode_unit);
+        }
+
+        if (!empty($request->nama_karyawan)) {
+            $query->where('karyawan.nama_lengkap', 'like', '%' . $request->nama_karyawan . '%');
+        }
         $query->orderBy('nama_lengkap', 'asc');
         $karyawan = $query->paginate(30);
         $karyawan->appends(request()->all());
-        $cabang = Cabang::orderBy('kode_cabang')->get();
+        $unit = Unit::orderBy('kode_unit')->get();
         $data['karyawan'] = $karyawan;
-        $data['cabang'] = $cabang;
+        $data['unit'] = $unit;
         return view('presensi.index', $data);
     }
     public function create($kode_jam_kerja = null)
