@@ -51,11 +51,10 @@
 @else
     <div class="row">
         <div class="col-4 text-center">
-            @if (!empty($presensi->foto_out))
-                <img src="https://portal.pedasalami.com/storage/uploads/absensi/{{ $presensi->foto_out }}" class="card-img rounded thumbnail"
-                    alt="">
+            @if (Storage::disk('public')->exists('/uploads/absensi/' . $presensi->foto_out))
+                <img src="{{ url('/storage/uploads/absensi/' . $presensi->foto_out) }}" class="card-img rounded thumbnail" alt="">
             @else
-                <i class="ti ti-fingerprint text-danger" style="font-size: 10rem;"></i>
+                <i class="ti ti-fingerprint text-success" style="font-size: 10rem;"></i>
             @endif
         </div>
         <div class="col-8">
@@ -98,7 +97,7 @@
     var latitude_kantor = "{{ $latitude }}";
     var longitude_kantor = "{{ $longitude }}";
     console.log(latitude_kantor + "," + longitude_kantor);
-    var rd = "{{ $presensi->radius_cabang }}";
+    var rd = "{{ $cabang->radius_cabang }}";
     var map = L.map('map', {
         center: [latitude, longitude],
         zoom: 15
@@ -131,7 +130,7 @@
     var latitude_kantor = "{{ $latitude }}";
     var longitude_kantor = "{{ $longitude }}";
     console.log(latitude_kantor + "," + longitude_kantor);
-    var rd = "{{ $presensi->radius_cabang }}";
+    var rd = "{{ $cabang->radius_cabang }}";
     var map_out = L.map('map_out', {
         center: [latitude, longitude],
         zoom: 15
