@@ -322,6 +322,7 @@ class PresensiController extends Controller
         // }
         $data['presensi'] = $presensi;
         $data['status'] = $status;
+        $data['cabang'] = $cabang;
 
         return view('presensi.show', $data);
     }
