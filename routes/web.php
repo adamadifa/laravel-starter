@@ -510,6 +510,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/presensi/{id}/edit', 'edit')->name('presensi.edit')->can('presensi.edit');
         Route::put('/presensi/{id}', 'update')->name('presensi.update')->can('presensi.edit');
         Route::delete('/presensi/{id}/delete', 'destroy')->name('presensi.delete')->can('presensi.delete');
+        Route::get('/presensi/{id}/{status}/show', 'show')->name('presensi.show');
     });
 
     Route::controller(KategoriibadahController::class)->group(function () {

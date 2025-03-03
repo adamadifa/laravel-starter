@@ -134,6 +134,26 @@
 </div>
 <x-modal-form id="modal" size="" show="loadmodal" title="" />
 @endsection
+@push('myscript')
+<script>
+    $(".btnShowpresensi_in, .btnShowpresensi_out").click(function(e) {
+        e.preventDefault();
+        const id = $(this).attr("id");
+        const status = $(this).attr("status");
+        $("#loadmodal").html(`<div class="sk-wave sk-primary" style="margin:auto">
+        <div class="sk-wave-rect"></div>
+        <div class="sk-wave-rect"></div>
+        <div class="sk-wave-rect"></div>
+        <div class="sk-wave-rect"></div>
+        <div class="sk-wave-rect"></div>
+      </div>`);
+        //alert(kode_jadwal);
+        $("#modal").modal("show");
+        $(".modal-title").text("Data Presensi");
+        $("#loadmodal").load(`/presensi/${id}/${status}/show`);
+    });
+</script>
+@endpush
 {{-- @push('myscript')
 <script>
     $(function() {
