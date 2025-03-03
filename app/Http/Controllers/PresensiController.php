@@ -308,7 +308,7 @@ class PresensiController extends Controller
             ->join('karyawan', 'presensi.npp', '=', 'karyawan.npp')
             ->join('unit', 'karyawan.kode_unit', '=', 'unit.kode_unit')
             ->first();
-        $cabang = Cabang::where('kode_cabang', 'PST');
+        $cabang = Cabang::where('kode_cabang', 'PST')->first();
         $lokasi = explode(',', $cabang->lokasi_cabang);
         $data['latitude'] = $lokasi[0];
         $data['longitude'] = $lokasi[1];
