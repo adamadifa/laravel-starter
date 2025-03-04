@@ -116,11 +116,11 @@
                                             <td>
                                                 <div class="d-flex">
                                                     <a href="#" class="me-1 koreksiPresensi" nik="{{ Crypt::encrypt($d->nik) }}"
-                                                        tanggal="{{ $tanggal_presensi }}"><i class="ti ti-edit text-success"></i> t</a>
+                                                        tanggal="{{ $tanggal_presensi }}"><i class="ti ti-edit text-success"></i> </a>
 
                                                     <a href="#" class="btngetDatamesin" pin="{{ $d->pin }}"
-                                                        tanggal="{{ !empty(Request('tanggal')) ? Request('tanggal') : date('Y-m-d') }}" <i
-                                                        class="ti ti-device-desktop text-primary"></i>
+                                                        tanggal="{{ !empty(Request('tanggal')) ? Request('tanggal') : date('Y-m-d') }}"> <i
+                                                            class="ti ti-device-desktop text-primary"></i>
                                                     </a>
                                                 </div>
                                             </td>
