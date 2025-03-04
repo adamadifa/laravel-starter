@@ -121,7 +121,7 @@ class PresensiController extends Controller
             //Jika Tidak Memiliki Jam Kerja By Date
             if ($jamkerja == null) {
                 //Cek Jam Kerja harian / Jam Kerja Khusus / Jam Kerja Per Orangannya
-                $jamkerja = Setjamkerjabyday::join('konfigurasi_jam_kerja', 'konfigurasi_jam_kerja_byday.kode_jam_kerja', '=', 'konfigurasi_jam_kerja.kode_jam_kerja')
+                $jamkerja = Setjamkerjabyday::join('konfigurasi_jam_kerja', 'presensi_jamkerja_byday.kode_jam_kerja', '=', 'konfigurasi_jam_kerja.kode_jam_kerja')
                     ->where('npp', $karyawan->npp)->where('hari', $namahari)->first();
 
                 // Jika Jam Kerja Harian Kosong
