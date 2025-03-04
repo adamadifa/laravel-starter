@@ -127,7 +127,7 @@
             //alert(width);
             // $('body').css('zoom', '120%');
             if (width <= 400) { // Misalnya untuk layar kecil (mobile)
-                $('body').css('zoom', '70%'); // Zoom out ke 80%
+                $('body').css('zoom', '85%'); // Zoom out ke 80%
             } else if (width <= 768) { // Untuk tablet kecil
                 $('body').css('zoom', '90%');
             } else {
