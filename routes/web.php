@@ -511,6 +511,8 @@ Route::middleware('auth')->group(function () {
         Route::put('/presensi/{id}', 'update')->name('presensi.update')->can('presensi.edit');
         Route::delete('/presensi/{id}/delete', 'destroy')->name('presensi.delete')->can('presensi.delete');
         Route::get('/presensi/{id}/{status}/show', 'show')->name('presensi.show');
+
+        Route::post('/presensi/getdatamesin', 'getdatamesin')->name('presensi.getdatamesin');
     });
 
     Route::controller(KategoriibadahController::class)->group(function () {
