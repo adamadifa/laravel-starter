@@ -165,7 +165,13 @@
         var pin = $(this).attr("pin");
         var tanggal = $(this).attr("tanggal");
         // var kode_jadwal = $(this).attr("kode_jadwal");
-        loading();
+        $("#loadmodal").html(`<div class="sk-wave sk-primary" style="margin:auto">
+            <div class="sk-wave-rect"></div>
+            <div class="sk-wave-rect"></div>
+            <div class="sk-wave-rect"></div>
+            <div class="sk-wave-rect"></div>
+            <div class="sk-wave-rect"></div>
+        </div>`);
         //alert(kode_jadwal);
         $("#modal").modal("show");
         $(".modal-title").text("Get Data Mesin");
