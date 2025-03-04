@@ -53,7 +53,8 @@ class PresensiController extends Controller
             'status',
             'nama_jabatan',
             'nama_unit',
-            'presensi.id'
+            'presensi.id',
+            'karyawan.pin',
         );
         $query->leftjoinSub($presensi, 'presensi', function ($join) {
             $join->on('karyawan.npp', '=', 'presensi.npp');
@@ -325,5 +326,68 @@ class PresensiController extends Controller
         $data['cabang'] = $cabang;
 
         return view('presensi.show', $data);
+    }
+
+
+    public function getdatamesin(Request $request)
+    {
+        $tanggal = $request->tanggal;
+        $pin = $request->pin;
+        // $kode_jadwal = $request->kode_jadwal;
+        // if ($kode_jadwal == "JD004") {
+        //     $nextday = date('Y-m-d', strtotime('+1 day', strtotime($tanggal)));
+        // } else {
+        //     $nextday =  $tanggal;
+        // }
+        $specific_value = $pin;
+
+
+        //Mesin 1
+        $url = 'https://developer.fingerspot.io/api/get_attlog';
+        $data = '{"trans_id":"1", "cloud_id":"C2609075E32F282D", "start_date":"' . $tanggal . '", "end_date":"' . $tanggal . '"}';
+        $authorization = "Authorization: Bearer QNBCLO9OA0AWILQD";
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $res = json_decode($result);
+        $datamesin1 = $res->data;
+
+        $filtered_array = array_filter($datamesin1, function ($obj) use ($specific_value) {
+            return $obj->pin == $specific_value;
+        });
+
+
+        //Mesin 2
+        // $url = 'https://developer.fingerspot.io/api/get_attlog';
+        // $data = '{"trans_id":"1", "cloud_id":"C268909557211236", "start_date":"' . $tanggal . '", "end_date":"' . $tanggal . '"}';
+        // $authorization = "Authorization: Bearer QNBCLO9OA0AWILQD";
+
+        // $ch = curl_init($url);
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        // curl_setopt($ch, CURLOPT_POST, 1);
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        // curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        // $result2 = curl_exec($ch);
+        // curl_close($ch);
+        // $res2 = json_decode($result2);
+        // $datamesin2 = $res2->data;
+
+        // $filtered_array_2 = array_filter($datamesin2, function ($obj) use ($specific_value) {
+        //     return $obj->pin == $specific_value;
+        // });
+
+
+        return view('presensi.getdatamesin', compact('filtered_array'));
     }
 }
