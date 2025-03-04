@@ -113,7 +113,7 @@ class PresensiController extends Controller
 
         if ($kode_jam_kerja == null) {
             //Cek Jam Kerja By Date
-            $jamkerja = Setjamkerjabydate::join('konfigurasi_jam_kerja', 'konfigurasi_jam_kerja_bydate.kode_jam_kerja', '=', 'konfigurasi_jam_kerja.kode_jam_kerja')
+            $jamkerja = Setjamkerjabydate::join('konfigurasi_jam_kerja', 'presensi_jamkerja_bydate.kode_jam_kerja', '=', 'konfigurasi_jam_kerja.kode_jam_kerja')
                 ->where('npp', $karyawan->npp)
                 ->where('tanggal', $hariini)
                 ->first();
